@@ -1,0 +1,89 @@
+name: techwiz7_starter
+description: >
+  TechWiz 7 — generic, competition-ready Flutter starter project.
+  Domain-agnostic clean architecture foundation (auth, home, profile,
+  notifications, settings) built to be adapted quickly to any SRS
+  (healthcare, transport, e-commerce, delivery, education, etc.)
+  during a 5-day mobile development competition.
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # --- State management ---
+  flutter_bloc: ^8.1.6
+  equatable: ^2.0.5
+
+  # --- Navigation ---
+  go_router: ^14.2.7
+
+  # --- Firebase ---
+  firebase_core: ^3.4.0
+  firebase_auth: ^5.2.0
+  cloud_firestore: ^5.4.0
+  firebase_storage: ^12.3.0
+  firebase_messaging: ^15.1.0
+
+  # --- Networking / connectivity ---
+  connectivity_plus: ^6.0.5
+
+  # --- Persistence ---
+  shared_preferences: ^2.3.2
+  flutter_secure_storage: ^9.2.2
+
+  # --- Media / images ---
+  image_picker: ^1.1.2
+  cached_network_image: ^3.4.1
+  video_player: ^2.9.2
+
+  # --- Utilities ---
+  intl: ^0.19.0
+
+  # --- Local cache (SQLite) ---
+  # Firestore stays the source of truth for reads; sqflite mirrors writes
+  # locally to satisfy the SRS's offline-storage constraint. Wiring this
+  # up as a write-through cache layer is a follow-up task, not yet done.
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+
+  # --- Typography ---
+  # Poppins per the design system — fetched via Google Fonts' API and
+  # cached on first run rather than bundling font files.
+  google_fonts: ^6.2.1
+
+  # --- Icons (Material 3 friendly, no extra asset weight) ---
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^4.0.0
+
+  # --- Testing helpers (Bloc + mocking) ---
+  bloc_test: ^9.1.7
+  mocktail: ^1.0.4
+
+flutter:
+  uses-material-design: true
+
+  # Intro video played once at every app launch, before splash — see
+  # features/intro/presentation/screens/intro_screen.dart.
+  assets:
+    - assets/video/
+
+  # Add more paths here (assets/images/, assets/icons/) once other real
+  # assets are added post-SRS.
+
+  # fonts:
+  #   - family: AppFont
+  #     fonts:
+  #       - asset: assets/fonts/AppFont-Regular.ttf
+  #       - asset: assets/fonts/AppFont-Bold.ttf
+  #         weight: 700
