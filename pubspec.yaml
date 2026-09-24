@@ -59,6 +59,8 @@ dependencies:
 
   # --- Icons (Material 3 friendly, no extra asset weight) ---
   cupertino_icons: ^1.0.8
+  firebase_ai: ^2.3.0
+  firebase_app_check: ^0.3.2+10
 
 dev_dependencies:
   flutter_test:

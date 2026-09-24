@@ -21,6 +21,7 @@ class RouteNames {
   static const String settings = '/settings';
   static const String bookmarks = '/bookmarks';
   static const String purchaseHistory = '/purchase-history';
+  static const String aiHelper = '/ai-helper';
 
   // --- Names (used by GoRoute.name and context.goNamed) ---
   static const String introName = 'intro';
@@ -37,6 +38,7 @@ class RouteNames {
   static const String settingsName = 'settings';
   static const String bookmarksName = 'bookmarks';
   static const String purchaseHistoryName = 'purchaseHistory';
+  static const String aiHelperName = 'aiHelper';
 
   /// Routes reachable without being logged in.
   static const List<String> publicPaths = [

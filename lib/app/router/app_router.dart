@@ -18,6 +18,7 @@ import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/purchase_history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/ai_helper/presentation/screens/ai_helper_screen.dart';
 import 'route_names.dart';
 
 /// Builds and owns the app's [GoRouter] instance.
@@ -169,6 +170,11 @@ class AppRouter {
       name: RouteNames.purchaseHistoryName,
       builder: (context, state) => const PurchaseHistoryScreen(),
     ),
+    GoRoute(
+      path: RouteNames.aiHelper,
+      name: RouteNames.aiHelperName,
+      builder: (context, state) => const AiHelperScreen(),
+    ),
   ];
 }
 
@@ -191,4 +197,4 @@ class GoRouterRefreshStream extends ChangeNotifier {
     _subscription.cancel();
     super.dispose();
   }
-}y
+}
