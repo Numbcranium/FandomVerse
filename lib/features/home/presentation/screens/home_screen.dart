@@ -70,6 +70,7 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                // the profile image placeholder
                 GestureDetector(
                   onTap: () => context.go(RouteNames.profile),
                   child: AppNetworkImage.avatar(
@@ -79,10 +80,11 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: AppConstants.spaceSm),
+                // the collection button placeholder
                 IconButton(
-                  onPressed: () => context.push(RouteNames.notifications),
-                  icon: const Icon(Icons.notifications_outlined),
-                  tooltip: 'Notifications',
+                  onPressed: () => context.push(RouteNames.community),
+                  icon: const Icon(Icons.group),
+                  tooltip: 'Community',
                 ),
               ],
             ),
