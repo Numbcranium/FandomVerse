@@ -14,6 +14,7 @@ import '../../../../core/widgets/app_network_image.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../widgets/homeslider_screen.dart';
+import '../widgets/popular_fandoms.dart';
 
 /// Generic, domain-agnostic home/dashboard screen (brief section 12).
 ///
@@ -90,7 +91,14 @@ class HomeScreen extends StatelessWidget {
 
           //   ============================================================
           //   for slider
-            HomesliderScreen()
+            HomesliderScreen(),
+            const SizedBox(
+              height: AppConstants.spaceLg,
+            ),
+
+          //   =---------------------------------------------------------
+          //   popular fandoms --
+            PopularFandoms()
 
 
           ],
