@@ -13,6 +13,7 @@ import '../../../../core/widgets/app_empty_state.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../widgets/homeslider_screen.dart';
 
 /// Generic, domain-agnostic home/dashboard screen (brief section 12).
 ///
@@ -86,6 +87,10 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(
             height: AppConstants.spaceLg,
             ),
+
+          //   ============================================================
+          //   for slider
+            HomesliderScreen()
 
 
           ],
