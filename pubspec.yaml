@@ -77,6 +77,7 @@ flutter:
   # features/intro/presentation/screens/intro_screen.dart.
   assets:
     - assets/video/
+    - assets/images/homeImages/
 
   # Add more paths here (assets/images/, assets/icons/) once other real
   # assets are added post-SRS.

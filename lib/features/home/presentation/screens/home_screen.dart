@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:techwiz7_starter/features/home/presentation/widgets/trivia_card.dart';
 
 import '../../../../app/router/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -22,18 +23,6 @@ import '../../../auth/presentation/bloc/auth_bloc.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  static const _quickActions = [
-    (icon: Icons.add_circle_outline, label: 'New'),
-    (icon: Icons.search, label: 'Browse'),
-    (icon: Icons.favorite_border, label: 'Saved'),
-    (icon: Icons.help_outline, label: 'Help'),
-  ];
-
-  static const _stats = [
-    (label: 'Active', value: '—'),
-    (label: 'Pending', value: '—'),
-    (label: 'Completed', value: '—'),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -91,70 +80,14 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: AppConstants.spaceLg),
             const AppTextField.search(hint: 'Search'),
             const SizedBox(height: AppConstants.spaceLg),
-            Text('Quick actions', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: AppConstants.spaceSm),
-            SizedBox(
-              height: 88,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: _quickActions.length,
-                separatorBuilder: (_, __) => const SizedBox(width: AppConstants.spaceSm),
-                itemBuilder: (context, index) {
-                  final action = _quickActions[index];
-                  return SizedBox(
-                    width: 84,
-                    child: AppCard(
-                      padding: const EdgeInsets.all(AppConstants.spaceSm),
-                      onTap: () {},
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(action.icon, color: AppColors.primary),
-                          const SizedBox(height: 6),
-                          Text(
-                            action.label,
-                            style: Theme.of(context).textTheme.bodySmall,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
+          //   ============================================================================
+          //   for the trivia screen
+             const TriviaCard(),
+            const SizedBox(
+            height: AppConstants.spaceLg,
             ),
-            const SizedBox(height: AppConstants.spaceLg),
-            Text('Overview', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: AppConstants.spaceSm),
-            Row(
-              children: [
-                for (final stat in _stats) ...[
-                  Expanded(
-                    child: AppCard(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            stat.value,
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                          Text(stat.label, style: Theme.of(context).textTheme.bodySmall),
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (stat != _stats.last) const SizedBox(width: AppConstants.spaceSm),
-                ],
-              ],
-            ),
-            const SizedBox(height: AppConstants.spaceLg),
-            Text('Recent activity', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: AppConstants.spaceSm),
-            const AppEmptyState(
-              icon: Icons.history,
-              title: 'Nothing yet',
-              message: 'Recent activity will show up here once there is some.',
-            ),
+
+
           ],
         ),
       ),
