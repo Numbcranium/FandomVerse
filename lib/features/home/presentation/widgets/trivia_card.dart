@@ -6,7 +6,7 @@ class TriviaCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 210,
+      height: 100,
       margin: const EdgeInsets.symmetric(horizontal: 6),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
@@ -24,47 +24,49 @@ class TriviaCard extends StatelessWidget {
         children: [
           // Character image on the right
           Positioned(
-            right: -10,
+            right: -5,
             bottom: 0,
             top: 10,
             child: Image.asset(
               'assets/images/homeImages/spider-man-removebg-preview.png',
-              width: 160,
-              fit: BoxFit.cover,
+              width: 95,
+              height: 100,
+              fit: BoxFit.contain,
             ),
           ),
 
           // Text and button
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
                   "Today's Trivia",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 3),
 
                 const SizedBox(
-                  width: 230,
+                  width: 170,
                   child: Text(
                     'Which anime is the most\npopular of all time?',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 17,
+                      fontSize: 11,
                       fontWeight: FontWeight.w500,
                       height: 1.3,
                     ),
                   ),
                 ),
 
-                const Spacer(),
+                const SizedBox(height: 5),
 
                 ElevatedButton(
                   onPressed: () {
@@ -75,19 +77,19 @@ class TriviaCard extends StatelessWidget {
                     foregroundColor: Colors.white,
                     elevation: 0,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
+                      horizontal: 12,
+                      vertical: 4,
                     ),
                     minimumSize: Size.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   child: const Text(
                     'Play Now',
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 9,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
