@@ -12,6 +12,8 @@ import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/community/presentation/screens/community_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/home/presentation/widgets/fandom_screen.dart';
+import '../../features/home/presentation/widgets/popular_fandoms.dart';
 import '../../features/intro/presentation/screens/intro_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/profile/presentation/screens/bookmarks_screen.dart';
@@ -139,6 +141,11 @@ class AppRouter {
       path: RouteNames.home,
       name: RouteNames.homeName,
       builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.fandoms,
+      name: RouteNames.fandomsName,
+      builder: (context, state) => const FandomScreen(),
     ),
     GoRoute(
       path: RouteNames.community,
