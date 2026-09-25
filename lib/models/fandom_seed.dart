@@ -13,7 +13,7 @@ class FandomSeed {
         name: 'Anime',
         description:
         'Dive into legendary anime worlds, unforgettable characters, epic battles, fan theories, stunning moments and everything you love about anime.',
-        image: 'assets/images/homeImages/anime.png',
+        image: 'assets/images/homeSearch/luffy-the-one-piece.jpg',
         category: 'Anime',
       ),
 
@@ -22,7 +22,7 @@ class FandomSeed {
         name: 'Marvel',
         description:
         'Step into the Marvel Universe and discover iconic heroes, powerful villains, legendary stories, epic battles, comics, movies and fan theories.',
-        image: 'assets/images/homeImages/marvel.png',
+        image: 'assets/images/homeSearch/mervel.jpg',
         category: 'Marvel',
       ),
 
@@ -31,7 +31,7 @@ class FandomSeed {
         name: 'Gaming',
         description:
         'Level up your fandom with legendary games, unforgettable characters, epic quests, gaming moments, communities, news and everything in between.',
-        image: 'assets/images/homeImages/gaming.png',
+        image: 'assets/images/homeSearch/gtagaming.jpg',
         category: 'Gaming',
       ),
 
@@ -40,7 +40,7 @@ class FandomSeed {
         name: 'Movies',
         description:
         'Discover unforgettable movies, iconic characters, blockbuster moments, trailers, behind-the-scenes stories, fan theories and cinematic worlds.',
-        image: 'assets/images/homeImages/movies.png',
+        image: 'assets/images/homeSearch/movies.webp',
         category: 'Movies',
       ),
 
@@ -49,7 +49,7 @@ class FandomSeed {
         name: 'Pop Culture',
         description:
         'Stay in the heart of what everyone is talking about with trending stars, viral moments, iconic personalities, internet culture and fan communities.',
-        image: 'assets/images/homeImages/pop_culture.png',
+        image: 'assets/images/homeSearch/PopCulture.png',
         category: 'Pop Culture',
       ),
 
@@ -58,7 +58,7 @@ class FandomSeed {
         name: 'TV Universes',
         description:
         'Get lost in unforgettable TV worlds filled with iconic characters, shocking twists, fan theories, legendary episodes and stories worth talking about.',
-        image: 'assets/images/homeImages/tv_universes.png',
+        image: 'assets/images/homeSearch/TVUniverses.webp',
         category: 'TV Universes',
       ),
 
@@ -67,7 +67,7 @@ class FandomSeed {
         name: 'Comic Books',
         description:
         'Turn the pages of incredible comic book worlds filled with legendary heroes, fierce villains, powerful stories, rare editions and unforgettable artwork.',
-        image: 'assets/images/homeImages/comic_books.png',
+        image: 'assets/images/homeSearch/comic_books.jpg',
         category: 'Comic Books',
       ),
 
@@ -76,7 +76,7 @@ class FandomSeed {
         name: 'Music',
         description:
         'Feel the sound of fandom with legendary artists, unforgettable songs, albums, concerts, music moments, fan communities and the stories behind the music.',
-        image: 'assets/images/homeImages/music.png',
+        image: 'assets/images/homeSearch/music.jpeg',
         category: 'Music',
       ),
 
@@ -85,7 +85,7 @@ class FandomSeed {
         name: 'Idol Culture',
         description:
         'Enter the world of idols, passionate fandoms, unforgettable performances, fan moments, music, personalities and the culture that brings fans together.',
-        image: 'assets/images/homeImages/idol_culture.png',
+        image: 'assets/images/homeSearch/idolculture.jpg',
         category: 'Idol Culture',
       ),
     ];
