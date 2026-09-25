@@ -13,10 +13,10 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController =
   TextEditingController();
 
-  String searchText = '';
-
   final FirebaseFirestore _firestore =
       FirebaseFirestore.instance;
+
+  String searchText = '';
 
   @override
   void dispose() {
@@ -24,22 +24,54 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
-  // Get fandoms from Firebase
+  // ==========================================
+  // GET FANDOMS FROM FIRESTORE
+  // ==========================================
+
   Stream<QuerySnapshot<Map<String, dynamic>>> _searchFandoms() {
     return _firestore
         .collection('fandoms')
         .snapshots();
   }
 
-  // Save search history
-  Future<void> saveSearchHistory({
-    required String fandomId,
-    required String searchName,
-  }) async {
-    await _firestore.collection('search_history').add({
-      'searchText': searchName,
-      'fandomId': fandomId,
-      'createdAt': FieldValue.serverTimestamp(),
+  // ==========================================
+  // SAVE SEARCH HISTORY
+  // ==========================================
+
+  Future<void> saveSearchText(String search) async {
+    if (search.trim().isEmpty) return;
+
+    try {
+      await _firestore.collection('search_history').add({
+        'searchText': search.trim(),
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      debugPrint('Error saving search history: $e');
+    }
+  }
+
+  // ==========================================
+  // PERFORM SEARCH
+  // ==========================================
+
+  Future<void> performSearch(String value) async {
+    final search = value.trim();
+
+    if (search.isEmpty) {
+      setState(() {
+        searchText = '';
+      });
+      return;
+    }
+
+    // Save ONE search when user submits it
+    await saveSearchText(search);
+
+    if (!mounted) return;
+
+    setState(() {
+      searchText = search.toLowerCase();
     });
   }
 
@@ -47,6 +79,10 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0B0A25),
+
+      // ==========================================
+      // APP BAR
+      // ==========================================
 
       appBar: AppBar(
         backgroundColor: const Color(0xFF0B0A25),
@@ -71,15 +107,19 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
 
+      // ==========================================
+      // BODY
+      // ==========================================
+
       body: Padding(
         padding: const EdgeInsets.all(16),
 
         child: Column(
           children: [
 
-            // =========================
+            // ======================================
             // SEARCH FIELD
-            // =========================
+            // ======================================
 
             TextField(
               controller: _searchController,
@@ -88,6 +128,16 @@ class _SearchScreenState extends State<SearchScreen> {
                 color: Colors.white,
               ),
 
+              // Show search button on keyboard
+              textInputAction: TextInputAction.search,
+
+              // Search when user presses keyboard search
+              onSubmitted: (value) async {
+                await performSearch(value);
+              },
+
+              // Only update the text.
+              // DO NOT save to Firebase here.
               onChanged: (value) {
                 setState(() {
                   searchText = value.toLowerCase().trim();
@@ -107,6 +157,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   color: Colors.white70,
                 ),
 
+                // Clear button
                 suffixIcon: searchText.isNotEmpty
                     ? IconButton(
                   onPressed: () {
@@ -128,9 +179,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 fillColor: const Color(0xFF17163D),
 
                 border: OutlineInputBorder(
-                  borderRadius:
-                  BorderRadius.circular(14),
-
+                  borderRadius: BorderRadius.circular(14),
                   borderSide: BorderSide.none,
                 ),
               ),
@@ -138,11 +187,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
             const SizedBox(height: 20),
 
-            // =========================
+            // ======================================
             // NOTHING SEARCHED YET
-            // =========================
+            // ======================================
 
             if (searchText.isEmpty)
+
               const Expanded(
                 child: Center(
                   child: Text(
@@ -155,11 +205,12 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               )
 
-            // =========================
+            // ======================================
             // SEARCH RESULTS
-            // =========================
+            // ======================================
 
             else
+
               Expanded(
                 child: StreamBuilder<
                     QuerySnapshot<Map<String, dynamic>>>(
@@ -167,36 +218,45 @@ class _SearchScreenState extends State<SearchScreen> {
 
                   builder: (context, snapshot) {
 
-                    // Loading
+
+                    // LOADING
+
+
                     if (snapshot.connectionState ==
                         ConnectionState.waiting) {
                       return const Center(
-                        child:
-                        CircularProgressIndicator(),
+                        child: CircularProgressIndicator(),
                       );
                     }
 
-                    // Error
+                    // --------------------------------
+                    // ERROR
+                    // --------------------------------
+
                     if (snapshot.hasError) {
-                      return const Center(
+                      return Center(
                         child: Text(
-                          'Something went wrong',
-                          style: TextStyle(
+                          'Something went wrong:\n${snapshot.error}',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
                       );
                     }
 
+
+                    // FIRESTORE DOCUMENTS
+
+
                     final docs =
                         snapshot.data?.docs ?? [];
 
-                    // =========================
-                    // FILTER FIREBASE DATA
-                    // =========================
+
+                    // FILTER RESULTS
+
 
                     final results = docs.where((doc) {
-
                       final data = doc.data();
 
                       final name =
@@ -213,12 +273,11 @@ class _SearchScreenState extends State<SearchScreen> {
 
                       return name.contains(searchText) ||
                           category.contains(searchText);
-
                     }).toList();
 
-                    // =========================
+                    // --------------------------------
                     // NO RESULTS
-                    // =========================
+                    // --------------------------------
 
                     if (results.isEmpty) {
                       return const Center(
@@ -232,55 +291,36 @@ class _SearchScreenState extends State<SearchScreen> {
                       );
                     }
 
-                    // =========================
+                    // --------------------------------
                     // RESULTS
-                    // =========================
+                    // --------------------------------
 
                     return ListView.builder(
                       itemCount: results.length,
 
                       itemBuilder: (context, index) {
+                        final doc = results[index];
 
-                        final doc =
-                        results[index];
-
-                        final data =
-                        doc.data();
+                        final data = doc.data();
 
                         final String name =
-                            data['name']
-                                ?.toString() ??
-                                '';
+                            data['name']?.toString() ?? '';
 
                         final String image =
-                            data['image']
-                                ?.toString() ??
-                                '';
+                            data['image']?.toString() ?? '';
 
                         final String category =
-                            data['category']
-                                ?.toString() ??
-                                '';
+                            data['category']?.toString() ?? '';
+
+                        // --------------------------------
+                        // RESULT CARD
+                        // --------------------------------
 
                         return GestureDetector(
-                          onTap: () async {
-
-                            // =====================
-                            // SAVE SEARCH HISTORY
-                            // =====================
-
-                            await saveSearchHistory(
-                              fandomId: doc.id,
-                              searchName: name,
-                            );
-
-                            if (!context.mounted) {
-                              return;
-                            }
-
-                            // =====================
-                            // OPEN FANDOM
-                            // =====================
+                          onTap: () {
+                            // We DO NOT save history here.
+                            // It was already saved when
+                            // the search was submitted.
 
                             context.push(
                               '/fandom/${doc.id}',
@@ -288,36 +328,30 @@ class _SearchScreenState extends State<SearchScreen> {
                           },
 
                           child: Container(
-                            margin:
-                            const EdgeInsets.only(
+                            margin: const EdgeInsets.only(
                               bottom: 12,
                             ),
 
-                            padding:
-                            const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
 
-                            decoration:
-                            BoxDecoration(
-                              color:
-                              const Color(
-                                  0xFF17163D),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF17163D),
 
                               borderRadius:
-                              BorderRadius.circular(
-                                  14),
+                              BorderRadius.circular(14),
                             ),
 
                             child: Row(
                               children: [
 
-                                // =================
+
+
                                 // IMAGE
-                                // =================
+
 
                                 ClipRRect(
                                   borderRadius:
-                                  BorderRadius
-                                      .circular(10),
+                                  BorderRadius.circular(10),
 
                                   child: Image.asset(
                                     image,
@@ -337,36 +371,30 @@ class _SearchScreenState extends State<SearchScreen> {
                                         width: 70,
                                         height: 70,
 
-                                        color: Colors
-                                            .grey
-                                            .shade800,
+                                        color:
+                                        Colors.grey.shade800,
 
-                                        child:
-                                        const Icon(
+                                        child: const Icon(
                                           Icons
                                               .image_not_supported,
-
-                                          color: Colors
-                                              .white54,
+                                          color:
+                                          Colors.white54,
                                         ),
                                       );
                                     },
                                   ),
                                 ),
 
-                                const SizedBox(
-                                  width: 14,
-                                ),
+                                const SizedBox(width: 14),
 
-                                // =================
+
                                 // NAME + CATEGORY
-                                // =================
+
 
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
+                                    CrossAxisAlignment.start,
 
                                     children: [
 
@@ -375,29 +403,21 @@ class _SearchScreenState extends State<SearchScreen> {
 
                                         style:
                                         const TextStyle(
-                                          color:
-                                          Colors.white,
-
+                                          color: Colors.white,
                                           fontSize: 17,
-
                                           fontWeight:
-                                          FontWeight
-                                              .bold,
+                                          FontWeight.bold,
                                         ),
                                       ),
 
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
+                                      const SizedBox(height: 5),
 
                                       Text(
                                         category,
 
                                         style:
                                         const TextStyle(
-                                          color:
-                                          Colors.white60,
-
+                                          color: Colors.white60,
                                           fontSize: 13,
                                         ),
                                       ),
@@ -407,8 +427,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
                                 const Icon(
                                   Icons.chevron_right,
-                                  color:
-                                  Colors.white54,
+                                  color: Colors.white54,
                                 ),
                               ],
                             ),
