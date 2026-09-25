@@ -13,31 +13,26 @@ class TrendingFandoms extends StatefulWidget {
       _TrendingFandomsState();
 }
 
-class _TrendingFandomsState
-    extends State<TrendingFandoms> {
+class _TrendingFandomsState extends State<TrendingFandoms> {
 
-  final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  // calling firebase for the data  / connecting it to the flutter code
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // This stores the category the user currently selected
   String selectedCategory = 'All';
 
-  // ==========================================
-  // FIREBASE
-  // ==========================================
-
-  Stream<QuerySnapshot<Map<String, dynamic>>>
-  getFandoms() {
+  // FIREBASE ====================
+  Stream<QuerySnapshot<Map<String, dynamic>>> getFandoms() {
     return _firestore
+        // it goes to the collection in firestore collection name fandoms
         .collection('fandoms')
+        // this gets the data from the firebase
         .snapshots();
   }
 
-  // ==========================================
   // FILTER FIREBASE DATA
-  // ==========================================
 
-  List<QueryDocumentSnapshot<Map<String, dynamic>>>
-  filterFandoms(
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> filterFandoms(
       List<QueryDocumentSnapshot<Map<String, dynamic>>>
       docs,
       ) {
@@ -77,7 +72,7 @@ class _TrendingFandomsState
         const Color(0xFF0B0A24),
 
         elevation: 0,
-
+        // for the back button
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -88,7 +83,7 @@ class _TrendingFandomsState
             color: Colors.white,
           ),
         ),
-
+        // the app title
         title: const Text(
           'Trending Fandoms',
 
@@ -100,19 +95,15 @@ class _TrendingFandomsState
         ),
       ),
 
-      // ========================================
-      // BODY
-      // ========================================
 
-      body: StreamBuilder<
-          QuerySnapshot<Map<String, dynamic>>>(
+      // BODY ---------------
+
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: getFandoms(),
 
         builder: (context, snapshot) {
 
-          // ======================================
-          // LOADING
-          // ======================================
+          // LOADING when you click the category of the filter
 
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
@@ -123,9 +114,7 @@ class _TrendingFandomsState
             );
           }
 
-          // ======================================
-          // ERROR
-          // ======================================
+          // ERROR if it did not connect to the firestore
 
           if (snapshot.hasError) {
             return const SafeArea(
@@ -133,8 +122,7 @@ class _TrendingFandomsState
                 padding: EdgeInsets.all(16),
 
                 child: Text(
-                  'Unable to load trending fandoms',
-
+                  'Unable to load Trending fandoms, Try again later',
                   style: TextStyle(
                     color: Colors.white70,
                   ),
@@ -143,23 +131,20 @@ class _TrendingFandomsState
             );
           }
 
-          // ======================================
+
           // FIREBASE DOCUMENTS
-          // ======================================
+          // each document contains its ID and its fields
 
-          final docs =
-              snapshot.data?.docs ?? [];
+          final docs = snapshot.data?.docs ?? []; // for any error
 
-          // ======================================
           // FILTERED FANDOMS
-          // ======================================
 
-          final fandoms =
-          filterFandoms(docs);
 
-          // ======================================
-          // CONTENT
-          // ======================================
+          final fandoms = filterFandoms(docs);
+
+
+          // CONTENT --------------------------------------
+
 
           return SafeArea(
             child: SingleChildScrollView(
@@ -193,17 +178,16 @@ class _TrendingFandomsState
                     },
                   ),
 
-                  // ==================================
+
                   // SPACE BEFORE CARDS
-                  // ==================================
+
 
                   const SizedBox(
                     height: 20,
                   ),
 
-                  // ==================================
                   // FANDOM CARDS
-                  // ==================================
+
 
                   if (fandoms.isEmpty)
 
@@ -250,7 +234,7 @@ class _TrendingFandomsState
                             height: 10,
                           );
                         },
-
+                        // displaying the cards in the screen and the data you want
                         itemBuilder:
                             (context, index) {
 
@@ -288,9 +272,7 @@ class _TrendingFandomsState
                       ),
                     ),
 
-                  // ==================================
                   // BOTTOM SPACE
-                  // ==================================
 
                   const SizedBox(
                     height: 24,

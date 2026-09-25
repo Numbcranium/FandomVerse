@@ -52,6 +52,7 @@ class TrendingFandomFilter extends StatelessWidget {
             color: Colors.transparent,
 
             child: InkWell(
+              // wen tapped it goes to any category
               onTap: () {
                 onCategorySelected(category);
               },
