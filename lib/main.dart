@@ -32,7 +32,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // Seed gallery data into Firestore
-  await FandomTriviaSeed().seedTrivia();
+  // await FandomTriviaSeed().seedTrivia();
 
 
   final appRouter = AppRouter(

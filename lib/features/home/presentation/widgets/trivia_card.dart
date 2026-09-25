@@ -6,7 +6,7 @@ class TriviaCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: 110,
       margin: const EdgeInsets.symmetric(horizontal: 6),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
@@ -43,7 +43,7 @@ class TriviaCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "Today's Trivia",
+                  'Trivia Pop',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
@@ -54,9 +54,9 @@ class TriviaCard extends StatelessWidget {
                 const SizedBox(height: 3),
 
                 const SizedBox(
-                  width: 170,
+                  width: 150,
                   child: Text(
-                    'Which anime is the most\npopular of all time?',
+                    'Test your knowledge\nHow well do you know your fandoms??',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 11,
