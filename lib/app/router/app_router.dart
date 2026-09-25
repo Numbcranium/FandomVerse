@@ -16,6 +16,7 @@ import '../../features/home/presentation/widgets/fandom_details_screen.dart';
 import '../../features/home/presentation/widgets/fandom_gallery_screen.dart';
 import '../../features/home/presentation/widgets/fandom_news_details_screen.dart';
 import '../../features/home/presentation/widgets/fandom_news_screen.dart';
+import '../../features/home/presentation/widgets/fandom_video_screen.dart';
 import '../../features/home/presentation/widgets/search_screen.dart';
 import '../../features/home/presentation/widgets/trending_fandoms.dart';
 import '../../features/intro/presentation/screens/intro_screen.dart';
@@ -188,7 +189,18 @@ class AppRouter {
         );
       },
     ),
+    GoRoute(
+      path: RouteNames.fandomVideo,
+      name: RouteNames.fandomVideoName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
 
+        return FandomVideoScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
 
     GoRoute(
       path: RouteNames.homeSearch,

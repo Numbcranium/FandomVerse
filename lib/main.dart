@@ -12,7 +12,7 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'firebase/firebase_service.dart';
 import 'firebase_options.dart';
-import 'models/fandom-gallery-seed.dart';
+import 'models/fandom_video_seed.dart';
 
 
 
@@ -31,7 +31,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // Seed gallery data into Firestore
-  // await FandomGallerySeed().seedGallery();
+  await FandomVideoSeed().seedVideos();
+
 
   final appRouter = AppRouter(
     authStatus: () => authBloc.state.status,

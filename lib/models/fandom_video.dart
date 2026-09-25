@@ -4,7 +4,7 @@ class FandomVideo {
   final String id;
   final String fandomId;
   final String title;
-  final String videoUrl;
+  final String video;
   final String thumbnail;
   final String category;
   final DateTime uploadedAt;
@@ -13,7 +13,7 @@ class FandomVideo {
     required this.id,
     required this.fandomId,
     required this.title,
-    required this.videoUrl,
+    required this.video,
     required this.thumbnail,
     required this.category,
     required this.uploadedAt,
@@ -27,7 +27,7 @@ class FandomVideo {
       id: documentId,
       fandomId: data['fandomId']?.toString() ?? '',
       title: data['title']?.toString() ?? '',
-      videoUrl: data['videoUrl']?.toString() ?? '',
+      video: data['video']?.toString() ?? '',
       thumbnail: data['thumbnail']?.toString() ?? '',
       category: data['category']?.toString() ?? '',
       uploadedAt: data['uploadedAt'] is Timestamp
@@ -40,7 +40,7 @@ class FandomVideo {
     return {
       'fandomId': fandomId,
       'title': title,
-      'videoUrl': videoUrl,
+      'video': video,
       'thumbnail': thumbnail,
       'category': category,
       'uploadedAt': Timestamp.fromDate(uploadedAt),

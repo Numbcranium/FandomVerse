@@ -276,17 +276,22 @@ class FandomDetailsScreen extends StatelessWidget {
                         icon: Icons.play_circle_outline,
                         title: 'Videos',
                         onTap: () {
-                          // We will connect this next
+                          context.push(
+                            RouteNames.fandomVideo.replaceFirst(
+                              ':fandomId',
+                              fandom.id,
+                            ),
+                          );
                         },
                       ),
 
-                      _ExploreButton(
-                        icon: Icons.event_outlined,
-                        title: 'Events',
-                        onTap: () {
-                          // We will connect this next
-                        },
-                      ),
+                      // _ExploreButton(
+                      //   icon: Icons.event_outlined,
+                      //   title: 'Events',
+                      //   onTap: () {
+                      //     // We will connect this next
+                      //   },
+                      // ),
 
                       const SizedBox(height: 40),
                     ],
