@@ -15,16 +15,32 @@ class _SearchScreenState extends State<SearchScreen> {
 
   String searchText = '';
 
+  final FirebaseFirestore _firestore =
+      FirebaseFirestore.instance;
+
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
 
+  // Get fandoms from Firebase
   Stream<QuerySnapshot<Map<String, dynamic>>> _searchFandoms() {
-    return FirebaseFirestore.instance
+    return _firestore
         .collection('fandoms')
         .snapshots();
+  }
+
+  // Save search history
+  Future<void> saveSearchHistory({
+    required String fandomId,
+    required String searchName,
+  }) async {
+    await _firestore.collection('search_history').add({
+      'searchText': searchName,
+      'fandomId': fandomId,
+      'createdAt': FieldValue.serverTimestamp(),
+    });
   }
 
   @override
@@ -57,10 +73,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
       body: Padding(
         padding: const EdgeInsets.all(16),
+
         child: Column(
           children: [
 
+            // =========================
             // SEARCH FIELD
+            // =========================
+
             TextField(
               controller: _searchController,
 
@@ -75,7 +95,9 @@ class _SearchScreenState extends State<SearchScreen> {
               },
 
               decoration: InputDecoration(
-                hintText: 'Search fandoms,anima,events,movies .......',
+                hintText:
+                'Search fandoms, anime, events, movies...',
+
                 hintStyle: const TextStyle(
                   color: Colors.white54,
                 ),
@@ -85,11 +107,30 @@ class _SearchScreenState extends State<SearchScreen> {
                   color: Colors.white70,
                 ),
 
+                suffixIcon: searchText.isNotEmpty
+                    ? IconButton(
+                  onPressed: () {
+                    _searchController.clear();
+
+                    setState(() {
+                      searchText = '';
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.close,
+                    color: Colors.white54,
+                  ),
+                )
+                    : null,
+
                 filled: true,
+
                 fillColor: const Color(0xFF17163D),
 
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius:
+                  BorderRadius.circular(14),
+
                   borderSide: BorderSide.none,
                 ),
               ),
@@ -97,182 +138,287 @@ class _SearchScreenState extends State<SearchScreen> {
 
             const SizedBox(height: 20),
 
-            // FIREBASE RESULTS
-            Expanded(
-              child: StreamBuilder<
-                  QuerySnapshot<Map<String, dynamic>>>(
-                stream: _searchFandoms(),
+            // =========================
+            // NOTHING SEARCHED YET
+            // =========================
 
-                builder: (context, snapshot) {
+            if (searchText.isEmpty)
+              const Expanded(
+                child: Center(
+                  child: Text(
+                    'Search for a fandom',
+                    style: TextStyle(
+                      color: Colors.white54,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              )
 
-                  if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+            // =========================
+            // SEARCH RESULTS
+            // =========================
 
-                  if (snapshot.hasError) {
-                    return const Center(
-                      child: Text(
-                        'Something went wrong',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    );
-                  }
+            else
+              Expanded(
+                child: StreamBuilder<
+                    QuerySnapshot<Map<String, dynamic>>>(
+                  stream: _searchFandoms(),
 
-                  final docs = snapshot.data?.docs ?? [];
+                  builder: (context, snapshot) {
 
-                  // FILTER RESULTS
-                  final results = docs.where((doc) {
-
-                    final data = doc.data();
-
-                    final name =
-                        data['name']?.toString().toLowerCase() ?? '';
-
-                    final category =
-                        data['category']?.toString().toLowerCase() ?? '';
-
-                    if (searchText.isEmpty) {
-                      return true;
+                    // Loading
+                    if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const Center(
+                        child:
+                        CircularProgressIndicator(),
+                      );
                     }
 
-                    return name.contains(searchText) ||
-                        category.contains(searchText);
-
-                  }).toList();
-
-                  // NO RESULTS
-                  if (results.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        'No fandoms found',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 16,
-                        ),
-                      ),
-                    );
-                  }
-
-                  return ListView.builder(
-                    itemCount: results.length,
-
-                    itemBuilder: (context, index) {
-
-                      final doc = results[index];
-                      final data = doc.data();
-
-                      final String name =
-                          data['name']?.toString() ?? '';
-
-                      final String image =
-                          data['image']?.toString() ?? '';
-
-                      final String category =
-                          data['category']?.toString() ?? '';
-
-                      return GestureDetector(
-                        onTap: () {
-
-                          // Send fandom ID to the fandom screen
-                          context.push(
-                            '/fandom/${doc.id}',
-                          );
-                        },
-
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                            bottom: 12,
-                          ),
-
-                          padding: const EdgeInsets.all(10),
-
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF17163D),
-                            borderRadius:
-                            BorderRadius.circular(14),
-                          ),
-
-                          child: Row(
-                            children: [
-
-                              // IMAGE
-                              ClipRRect(
-                                borderRadius:
-                                BorderRadius.circular(10),
-
-                                child: Image.asset(
-                                  image,
-                                  width: 70,
-                                  height: 70,
-                                  fit: BoxFit.cover,
-
-                                  errorBuilder:
-                                      (context, error, stackTrace) {
-                                    return Container(
-                                      width: 70,
-                                      height: 70,
-                                      color:
-                                      Colors.grey.shade800,
-                                      child: const Icon(
-                                        Icons.image_not_supported,
-                                        color: Colors.white54,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-
-                              const SizedBox(width: 14),
-
-                              // NAME + CATEGORY
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-
-                                  children: [
-
-                                    Text(
-                                      name,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 17,
-                                        fontWeight:
-                                        FontWeight.bold,
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 5),
-
-                                    Text(
-                                      category,
-                                      style: const TextStyle(
-                                        color: Colors.white60,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              const Icon(
-                                Icons.chevron_right,
-                                color: Colors.white54,
-                              ),
-                            ],
+                    // Error
+                    if (snapshot.hasError) {
+                      return const Center(
+                        child: Text(
+                          'Something went wrong',
+                          style: TextStyle(
+                            color: Colors.white,
                           ),
                         ),
                       );
-                    },
-                  );
-                },
+                    }
+
+                    final docs =
+                        snapshot.data?.docs ?? [];
+
+                    // =========================
+                    // FILTER FIREBASE DATA
+                    // =========================
+
+                    final results = docs.where((doc) {
+
+                      final data = doc.data();
+
+                      final name =
+                          data['name']
+                              ?.toString()
+                              .toLowerCase() ??
+                              '';
+
+                      final category =
+                          data['category']
+                              ?.toString()
+                              .toLowerCase() ??
+                              '';
+
+                      return name.contains(searchText) ||
+                          category.contains(searchText);
+
+                    }).toList();
+
+                    // =========================
+                    // NO RESULTS
+                    // =========================
+
+                    if (results.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          'No fandoms found',
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 16,
+                          ),
+                        ),
+                      );
+                    }
+
+                    // =========================
+                    // RESULTS
+                    // =========================
+
+                    return ListView.builder(
+                      itemCount: results.length,
+
+                      itemBuilder: (context, index) {
+
+                        final doc =
+                        results[index];
+
+                        final data =
+                        doc.data();
+
+                        final String name =
+                            data['name']
+                                ?.toString() ??
+                                '';
+
+                        final String image =
+                            data['image']
+                                ?.toString() ??
+                                '';
+
+                        final String category =
+                            data['category']
+                                ?.toString() ??
+                                '';
+
+                        return GestureDetector(
+                          onTap: () async {
+
+                            // =====================
+                            // SAVE SEARCH HISTORY
+                            // =====================
+
+                            await saveSearchHistory(
+                              fandomId: doc.id,
+                              searchName: name,
+                            );
+
+                            if (!context.mounted) {
+                              return;
+                            }
+
+                            // =====================
+                            // OPEN FANDOM
+                            // =====================
+
+                            context.push(
+                              '/fandom/${doc.id}',
+                            );
+                          },
+
+                          child: Container(
+                            margin:
+                            const EdgeInsets.only(
+                              bottom: 12,
+                            ),
+
+                            padding:
+                            const EdgeInsets.all(10),
+
+                            decoration:
+                            BoxDecoration(
+                              color:
+                              const Color(
+                                  0xFF17163D),
+
+                              borderRadius:
+                              BorderRadius.circular(
+                                  14),
+                            ),
+
+                            child: Row(
+                              children: [
+
+                                // =================
+                                // IMAGE
+                                // =================
+
+                                ClipRRect(
+                                  borderRadius:
+                                  BorderRadius
+                                      .circular(10),
+
+                                  child: Image.asset(
+                                    image,
+
+                                    width: 70,
+                                    height: 70,
+
+                                    fit: BoxFit.cover,
+
+                                    errorBuilder:
+                                        (
+                                        context,
+                                        error,
+                                        stackTrace,
+                                        ) {
+                                      return Container(
+                                        width: 70,
+                                        height: 70,
+
+                                        color: Colors
+                                            .grey
+                                            .shade800,
+
+                                        child:
+                                        const Icon(
+                                          Icons
+                                              .image_not_supported,
+
+                                          color: Colors
+                                              .white54,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+
+                                const SizedBox(
+                                  width: 14,
+                                ),
+
+                                // =================
+                                // NAME + CATEGORY
+                                // =================
+
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment
+                                        .start,
+
+                                    children: [
+
+                                      Text(
+                                        name,
+
+                                        style:
+                                        const TextStyle(
+                                          color:
+                                          Colors.white,
+
+                                          fontSize: 17,
+
+                                          fontWeight:
+                                          FontWeight
+                                              .bold,
+                                        ),
+                                      ),
+
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+
+                                      Text(
+                                        category,
+
+                                        style:
+                                        const TextStyle(
+                                          color:
+                                          Colors.white60,
+
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                const Icon(
+                                  Icons.chevron_right,
+                                  color:
+                                  Colors.white54,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
           ],
         ),
       ),

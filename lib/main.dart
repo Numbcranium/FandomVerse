@@ -12,7 +12,7 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'firebase/firebase_service.dart';
 import 'firebase_options.dart';
-import 'models/fandom_seed.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,8 +27,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // Add the fandoms to Firestore
-  await FandomSeed().seedFandoms();
+
 
   final appRouter = AppRouter(
     authStatus: () => authBloc.state.status,
