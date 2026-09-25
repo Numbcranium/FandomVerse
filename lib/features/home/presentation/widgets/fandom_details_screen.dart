@@ -256,7 +256,12 @@ class FandomDetailsScreen extends StatelessWidget {
                         icon: Icons.photo_library_outlined,
                         title: 'Gallery',
                         onTap: () {
-                          // We will connect this next
+                          context.push(
+                            RouteNames.fandomGallery.replaceFirst(
+                              ':fandomId',
+                              fandom.id,
+                            ),
+                          );
                         },
                       ),
                       _ExploreButton(

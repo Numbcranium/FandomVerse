@@ -60,6 +60,7 @@ dependencies:
   # --- Icons (Material 3 friendly, no extra asset weight) ---
   cupertino_icons: ^1.0.8
   carousel_slider: ^5.1.2
+  gal: ^2.3.3
 
 dev_dependencies:
   flutter_test:

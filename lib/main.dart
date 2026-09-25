@@ -29,10 +29,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // final newsSeed = FandomNewsSeed();
-  //
-  // await newsSeed.seedNews();
+  // Seed gallery data into Firestore
+  // await FandomGallerySeed().seedGallery();
 
   final appRouter = AppRouter(
     authStatus: () => authBloc.state.status,
