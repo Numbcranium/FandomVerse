@@ -38,6 +38,24 @@ class RouteNames {
   static const String bookmarksName = 'bookmarks';
   static const String purchaseHistoryName = 'purchaseHistory';
 
+  // --- Events ---
+  static const String events = '/events';
+  static const String eventDetails = '/events/:eventId';
+  static const String eventCalendar = '/events/calendar';
+  static const String nearbyEvents = '/events/nearby';
+  static const String eventMap = '/events/map';
+  static const String eventSearch = '/events/search';
+  static const String eventFilters = '/events/filters';
+
+  // --- Event route names ---
+  static const String eventsName = 'events';
+  static const String eventDetailsName = 'eventDetails';
+  static const String eventCalendarName = 'eventCalendar';
+  static const String nearbyEventsName = 'nearbyEvents';
+  static const String eventMapName = 'eventMap';
+  static const String eventSearchName = 'eventSearch';
+  static const String eventFiltersName = 'eventFilters';
+
   /// Routes reachable without being logged in.
   static const List<String> publicPaths = [
     splash,

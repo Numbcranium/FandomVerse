@@ -10,6 +10,16 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
+
+// event routes
+import '../../features/events/presentation/screens/calender_screen.dart';
+import '../../features/events/presentation/screens/event_screen.dart';
+import '../../features/events/presentation/screens/events_details_screen.dart';
+import '../../features/events/presentation/screens/events_filters_screen.dart';
+import '../../features/events/presentation/screens/events_search_screen.dart';
+import '../../features/events/presentation/screens/map_screen.dart';
+import '../../features/events/presentation/screens/nearby_events_screen.dart';
+
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/intro/presentation/screens/intro_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
@@ -168,6 +178,60 @@ class AppRouter {
       path: RouteNames.purchaseHistory,
       name: RouteNames.purchaseHistoryName,
       builder: (context, state) => const PurchaseHistoryScreen(),
+    ),
+    // events routing
+    GoRoute(
+      path: RouteNames.events,
+      name: RouteNames.eventsName,
+      builder: (context, state) => const EventsScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.eventCalendar,
+      name: RouteNames.eventCalendarName,
+      builder: (context, state) => const CalendarScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.nearbyEvents,
+      name: RouteNames.nearbyEventsName,
+      builder: (context, state) => const NearbyEventsScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.eventMap,
+      name: RouteNames.eventMapName,
+      builder: (context, state) {
+        final eventId = state.uri.queryParameters['eventId'];
+
+        return MapScreen(
+          eventId: eventId,
+        );
+      },
+    ),
+
+    GoRoute(
+      path: RouteNames.eventSearch,
+      name: RouteNames.eventSearchName,
+      builder: (context, state) => const EventSearchScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.eventFilters,
+      name: RouteNames.eventFiltersName,
+      builder: (context, state) => const EventFiltersScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.eventDetails,
+      name: RouteNames.eventDetailsName,
+      builder: (context, state) {
+        final eventId = state.pathParameters['eventId'];
+
+        return EventDetailsScreen(
+          eventId: eventId!,
+        );
+      },
     ),
   ];
 }

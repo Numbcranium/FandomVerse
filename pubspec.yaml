@@ -60,6 +60,11 @@ dependencies:
   # --- Icons (Material 3 friendly, no extra asset weight) ---
   cupertino_icons: ^1.0.8
 
+  #---- flutter map for map screen
+  flutter_map: ^8.3.2
+  latlong2: ^0.10.1
+  sqflite_common_ffi: ^2.4.0+3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

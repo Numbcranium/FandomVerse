@@ -167,7 +167,7 @@ class HomeScreen extends StatelessWidget {
         showComingSoon(context, 'Explore');
         return;
       case 2:
-        showComingSoon(context, 'Events');
+        context.go(RouteNames.events);
         return;
       case 3:
         showComingSoon(context, 'Shop');
