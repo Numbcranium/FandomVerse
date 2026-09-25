@@ -1,5 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../../../features/auth/presentation/bloc/auth_event.dart';
+
+final _db = FirebaseFirestore.instance;
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -14,7 +20,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> tabs = [
-      const _DashboardTab(),
+      _DashboardTab(onTabSelected: (i) => setState(() => _currentIndex = i)),
       const _UserManagementTab(),
       const _ContentManagementTab(),
       const _EventManagementTab(),
@@ -26,7 +32,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       body: SafeArea(child: tabs[_currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
+        onTap: (i) => setState(() => _currentIndex = i),
         backgroundColor: const Color(0xFF1A1D2D),
         selectedItemColor: const Color(0xFF6C4DFF),
         unselectedItemColor: Colors.grey,
@@ -43,69 +49,60 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   }
 }
 
-// ==========================================
-// 1. DASHBOARD TAB — Real Firestore counts
-// ==========================================
+// ============================================================
+// 1. DASHBOARD
+// ============================================================
 class _DashboardTab extends StatelessWidget {
-  const _DashboardTab();
+  final void Function(int) onTabSelected;
+  const _DashboardTab({required this.onTabSelected});
 
-  Future<int> _count(String collection) async {
-    final snap = await FirebaseFirestore.instance.collection(collection).count().get();
-    return snap.count ?? 0;
+  Future<int> _count(String col) async {
+    final s = await _db.collection(col).count().get();
+    return s.count ?? 0;
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Future.wait([
-        _count('users'),
-        _count('events'),
-        _count('products'),
-        _count('posts'),
-      ]),
-      builder: (context, snapshot) {
-        final counts = snapshot.data ?? [0, 0, 0, 0];
+      future: Future.wait([_count('users'), _count('events'), _count('products'), _count('posts')]),
+      builder: (ctx, snap) {
+        final c = snap.data ?? [0, 0, 0, 0];
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildAppBar('Admin Dashboard'),
+            _appBar('Admin Dashboard'),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
               child: Text('Welcome, Admin!', style: TextStyle(color: Colors.white70, fontSize: 16)),
             ),
-            const SizedBox(height: 16),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                children: [
-                  Expanded(child: _buildStatCard('Total Users', '${counts[0]}')),
-                  const SizedBox(width: 16),
-                  Expanded(child: _buildStatCard('Total Events', '${counts[1]}')),
-                ],
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(children: [
+                Expanded(child: _statCard('Total Users', '${c[0]}')),
+                const SizedBox(width: 12),
+                Expanded(child: _statCard('Total Events', '${c[1]}')),
+              ]),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                children: [
-                  Expanded(child: _buildStatCard('Total Products', '${counts[2]}')),
-                  const SizedBox(width: 16),
-                  Expanded(child: _buildStatCard('Total Posts', '${counts[3]}')),
-                ],
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(children: [
+                Expanded(child: _statCard('Total Products', '${c[2]}')),
+                const SizedBox(width: 12),
+                Expanded(child: _statCard('Total Posts', '${c[3]}')),
+              ]),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
-                  _buildListTile(Icons.people, 'Users'),
-                  _buildListTile(Icons.event, 'Events'),
-                  _buildListTile(Icons.shopping_bag, 'Merchandise'),
-                  _buildListTile(Icons.category, 'Categories'),
-                  _buildListTile(Icons.bar_chart, 'Reports'),
-                  _buildListTile(Icons.settings, 'Settings'),
+                  _navTile(Icons.people, 'Users', () => onTabSelected(1)),
+                  _navTile(Icons.event, 'Events', () => onTabSelected(3)),
+                  _navTile(Icons.folder, 'Content', () => onTabSelected(2)),
+                  _navTile(Icons.category, 'Categories', () => onTabSelected(4)),
+                  _navTile(Icons.bar_chart, 'Reports', () => _showReports(context)),
+                  _navTile(Icons.settings, 'Settings', () => _showSettings(context)),
                 ],
               ),
             ),
@@ -115,26 +112,118 @@ class _DashboardTab extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String title, String value) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: const TextStyle(color: Colors.black54, fontSize: 14)),
-          const SizedBox(height: 8),
-          Text(value, style: const TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold)),
-        ],
+  void _showReports(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1A1D2D),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (_) => FutureBuilder(
+        future: Future.wait([
+          _count('users'), _count('events'), _count('fandoms'),
+          _count('categories'), _count('posts'),
+        ]),
+        builder: (ctx, snap) {
+          final c = snap.data ?? [0, 0, 0, 0, 0];
+          return Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Reports & Analytics', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 20),
+                _reportRow('Total Users', '${c[0]}', Icons.people),
+                _reportRow('Total Events', '${c[1]}', Icons.event),
+                _reportRow('Total Fandoms', '${c[2]}', Icons.star),
+                _reportRow('Total Categories', '${c[3]}', Icons.category),
+                _reportRow('Total Posts', '${c[4]}', Icons.article),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildListTile(IconData icon, String title) {
+  void _showSettings(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1A1D2D),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Admin Settings', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
+            _settingsTile(Icons.notifications_outlined, 'Push Notifications', 'Configure notification settings', onTap: () => _showSnack(context, 'Notification settings coming soon')),
+            _settingsTile(Icons.security, 'Security', 'App security settings', onTap: () => _showSnack(context, 'Security settings coming soon')),
+            _settingsTile(Icons.palette_outlined, 'Appearance', 'Theme and display settings', onTap: () => _showSnack(context, 'Appearance settings coming soon')),
+            _settingsTile(Icons.info_outline, 'About', 'App version and info', onTap: () => _showSnack(context, 'About page coming soon')),
+            const Divider(color: Colors.white24, height: 32),
+            _settingsTile(
+              Icons.logout,
+              'Log Out',
+              'End current admin session',
+              color: Colors.redAccent,
+              onTap: () {
+                Navigator.pop(context); // Close sheet
+                context.read<AuthBloc>().add(const AuthLogoutRequested());
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showSnack(BuildContext context, String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg), backgroundColor: const Color(0xFF6C4DFF)));
+  }
+
+  Widget _reportRow(String label, String value, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(children: [
+        Icon(icon, color: const Color(0xFF6C4DFF), size: 20),
+        const SizedBox(width: 12),
+        Expanded(child: Text(label, style: const TextStyle(color: Colors.white70))),
+        Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+      ]),
+    );
+  }
+
+  Widget _settingsTile(IconData icon, String title, String subtitle, {VoidCallback? onTap, Color? color}) {
+    return ListTile(
+      onTap: onTap,
+      contentPadding: EdgeInsets.zero,
+      leading: Icon(icon, color: color ?? Colors.white54),
+      title: Text(title, style: TextStyle(color: color ?? Colors.white)),
+      subtitle: Text(subtitle, style: TextStyle(color: color?.withOpacity(0.7) ?? Colors.white38, fontSize: 12)),
+      trailing: Icon(Icons.chevron_right, color: color?.withOpacity(0.5) ?? Colors.white38),
+    );
+  }
+
+  Widget _statCard(String title, String value) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(title, style: const TextStyle(color: Colors.black54, fontSize: 13)),
+        const SizedBox(height: 6),
+        Text(value, style: const TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold)),
+      ]),
+    );
+  }
+
+  Widget _navTile(IconData icon, String title, VoidCallback onTap) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(12)),
       child: ListTile(
+        onTap: onTap,
         leading: Icon(icon, color: Colors.white54),
         title: Text(title, style: const TextStyle(color: Colors.white)),
         trailing: const Icon(Icons.chevron_right, color: Colors.white54),
@@ -143,587 +232,757 @@ class _DashboardTab extends StatelessWidget {
   }
 }
 
-// ==========================================
-// 2. USER MANAGEMENT TAB — Real Firestore users
-// ==========================================
+// ============================================================
+// 2. USER MANAGEMENT
+// ============================================================
 class _UserManagementTab extends StatefulWidget {
   const _UserManagementTab();
-
   @override
   State<_UserManagementTab> createState() => _UserManagementTabState();
 }
 
 class _UserManagementTabState extends State<_UserManagementTab> {
-  bool _showAddUser = false;
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-
-  final List<Color> _avatarColors = [
-    Colors.pink, Colors.orange, Colors.blue, Colors.purple,
-    Colors.teal, Colors.red, Colors.green, Colors.indigo
-  ];
+  bool _addMode = false;
+  final _nameCtrl = TextEditingController();
+  final _emailCtrl = TextEditingController();
+  final _phoneCtrl = TextEditingController();
+  String _selectedRole = 'user';
+  String _search = '';
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
+    _nameCtrl.dispose(); _emailCtrl.dispose(); _phoneCtrl.dispose();
     super.dispose();
   }
 
   Future<void> _addUser() async {
-    if (_nameController.text.isEmpty || _emailController.text.isEmpty) return;
-    await FirebaseFirestore.instance.collection('users').add({
-      'displayName': _nameController.text.trim(),
-      'email': _emailController.text.trim(),
-      'role': 'fan',
+    if (_nameCtrl.text.isEmpty || _emailCtrl.text.isEmpty) return;
+    await _db.collection('users').add({
+      'fullName': _nameCtrl.text.trim(),
+      'email': _emailCtrl.text.trim(),
+      'phone': _phoneCtrl.text.trim(),
+      'role': _selectedRole,
+      'selectedFandoms': [],
       'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
     });
-    _nameController.clear();
-    _emailController.clear();
-    setState(() => _showAddUser = false);
+    _nameCtrl.clear(); _emailCtrl.clear(); _phoneCtrl.clear();
+    setState(() { _addMode = false; _selectedRole = 'user'; });
+    _showSnack('User added!');
   }
 
-  Future<void> _deleteUser(String id) async {
-    await FirebaseFirestore.instance.collection('users').doc(id).delete();
+  Future<void> _deleteUser(String id, String name) async {
+    final ok = await _confirm('Delete "$name"?');
+    if (!ok) return;
+    await _db.collection('users').doc(id).delete();
+    _showSnack('User deleted');
+  }
+
+  Future<void> _editRole(String id, String currentRole) async {
+    String role = currentRole;
+    await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: const Color(0xFF1A1D2D),
+        title: const Text('Change Role', style: TextStyle(color: Colors.white)),
+        content: StatefulBuilder(
+          builder: (ctx, setS) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: ['user', 'admin', 'provider'].map((r) => RadioListTile<String>(
+              value: r,
+              groupValue: role,
+              onChanged: (v) => setS(() => role = v!),
+              title: Text(r, style: const TextStyle(color: Colors.white)),
+              activeColor: const Color(0xFF6C4DFF),
+            )).toList(),
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel', style: TextStyle(color: Colors.white54))),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6C4DFF)),
+            onPressed: () async {
+              await _db.collection('users').doc(id).update({'role': role});
+              if (mounted) Navigator.pop(context);
+              _showSnack('Role updated to $role');
+            },
+            child: const Text('Save', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSnack(String msg) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg), backgroundColor: const Color(0xFF6C4DFF)));
+  }
+
+  Future<bool> _confirm(String msg) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: const Color(0xFF1A1D2D),
+        title: Text(msg, style: const TextStyle(color: Colors.white)),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel', style: TextStyle(color: Colors.white54))),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    ) ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildAppBar('User Management'),
+    return Column(children: [
+      _appBar('User Management'),
+      _segmentedControl(['All Users', 'Add User'], _addMode ? 1 : 0, (i) => setState(() => _addMode = i == 1)),
+      const SizedBox(height: 12),
+      if (!_addMode) ...[
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Container(
-            decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(24)),
-            child: Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => setState(() => _showAddUser = false),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: !_showAddUser ? const Color(0xFF6C4DFF) : Colors.transparent,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text('All Users', style: TextStyle(color: !_showAddUser ? Colors.white : Colors.white54, fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => setState(() => _showAddUser = true),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: _showAddUser ? const Color(0xFF6C4DFF) : Colors.transparent,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text('Add User', style: TextStyle(color: _showAddUser ? Colors.white : Colors.white54, fontWeight: FontWeight.bold)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: TextField(
+            style: const TextStyle(color: Colors.white),
+            decoration: _inputDeco('Search users...', Icons.search),
+            onChanged: (v) => setState(() => _search = v.toLowerCase()),
           ),
         ),
-        const SizedBox(height: 16),
-        if (_showAddUser) _buildAddUserForm(),
-        if (!_showAddUser)
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('users').snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                final docs = snapshot.data?.docs ?? [];
-                if (docs.isEmpty) {
-                  return const Center(child: Text('No users found.', style: TextStyle(color: Colors.white54)));
-                }
-                return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: docs.length,
-                  itemBuilder: (context, index) {
-                    final data = docs[index].data() as Map<String, dynamic>;
-                    final color = _avatarColors[index % _avatarColors.length];
-                    return _buildUserTile(docs[index].id, data['displayName'] ?? data['email'] ?? 'Unknown', data['role'] ?? 'fan', color);
-                  },
-                );
-              },
-            ),
+        const SizedBox(height: 12),
+        Expanded(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: _db.collection('users').snapshots(),
+            builder: (ctx, snap) {
+              if (snap.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
+              final docs = snap.data?.docs ?? [];
+              final filtered = _search.isEmpty ? docs : docs.where((d) {
+                final data = d.data() as Map<String, dynamic>;
+                return (data['fullName'] ?? '').toString().toLowerCase().contains(_search)
+                    || (data['email'] ?? '').toString().toLowerCase().contains(_search);
+              }).toList();
+              if (filtered.isEmpty) return const Center(child: Text('No users found', style: TextStyle(color: Colors.white54)));
+              return ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: filtered.length,
+                itemBuilder: (ctx, i) {
+                  final d = filtered[i].data() as Map<String, dynamic>;
+                  final id = filtered[i].id;
+                  final name = d['fullName'] ?? d['email'] ?? 'Unknown';
+                  final role = d['role'] ?? 'user';
+                  final colors = [Colors.pink, Colors.orange, Colors.blue, Colors.purple, Colors.teal];
+                  final color = colors[i % colors.length];
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(16)),
+                    child: Row(children: [
+                      CircleAvatar(backgroundColor: color.withOpacity(0.2), child: Icon(Icons.person, color: color)),
+                      const SizedBox(width: 12),
+                      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        Text(d['email'] ?? '', style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                      ])),
+                      GestureDetector(
+                        onTap: () => _editRole(id, role),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(color: const Color(0xFF6C4DFF).withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
+                          child: Text(role, style: const TextStyle(color: Color(0xFF6C4DFF), fontSize: 12)),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      GestureDetector(onTap: () => _deleteUser(id, name), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
+                    ]),
+                  );
+                },
+              );
+            },
           ),
+        ),
       ],
-    );
-  }
-
-  Widget _buildAddUserForm() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        children: [
-          _buildTextField(_nameController, 'Display Name', Icons.person),
-          const SizedBox(height: 12),
-          _buildTextField(_emailController, 'Email', Icons.email),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF6C4DFF),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      if (_addMode)
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(children: [
+              _textField(_nameCtrl, 'Full Name', Icons.person),
+              const SizedBox(height: 12),
+              _textField(_emailCtrl, 'Email', Icons.email),
+              const SizedBox(height: 12),
+              _textField(_phoneCtrl, 'Phone', Icons.phone),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(12)),
+                child: DropdownButton<String>(
+                  value: _selectedRole,
+                  isExpanded: true,
+                  dropdownColor: const Color(0xFF1A1D2D),
+                  underline: const SizedBox(),
+                  style: const TextStyle(color: Colors.white),
+                  items: ['user', 'admin', 'provider'].map((r) => DropdownMenuItem(value: r, child: Text(r))).toList(),
+                  onChanged: (v) => setState(() => _selectedRole = v!),
+                ),
               ),
-              onPressed: _addUser,
-              child: const Text('Add User', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-            ),
+              const SizedBox(height: 20),
+              _primaryBtn('Add User', _addUser),
+            ]),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildUserTile(String id, String name, String role, Color avatarColor) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(16)),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor: avatarColor.withOpacity(0.2),
-            child: Icon(Icons.person, color: avatarColor),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                Text(role, style: const TextStyle(color: Colors.white54, fontSize: 12)),
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(color: Colors.green.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
-            child: const Text('Active', style: TextStyle(color: Colors.green, fontSize: 12)),
-          ),
-          const SizedBox(width: 8),
-          GestureDetector(
-            onTap: () => _deleteUser(id),
-            child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20),
-          ),
-        ],
-      ),
-    );
+        ),
+    ]);
   }
 }
 
-// ==========================================
-// 3. CONTENT MANAGEMENT TAB — Fandoms from Firestore
-// ==========================================
+// ============================================================
+// 3. CONTENT MANAGEMENT
+// ============================================================
 class _ContentManagementTab extends StatefulWidget {
   const _ContentManagementTab();
-
   @override
   State<_ContentManagementTab> createState() => _ContentManagementTabState();
 }
 
 class _ContentManagementTabState extends State<_ContentManagementTab> {
-  bool _showAddContent = false;
-  final _nameController = TextEditingController();
-  final _descController = TextEditingController();
+  String _activeSection = 'fandoms';
+  bool _addMode = false;
+  final _titleCtrl = TextEditingController();
+  final _descCtrl = TextEditingController();
+
+  static const _sections = [
+    {'key': 'fandoms', 'label': 'Fandoms', 'icon': Icons.star_border},
+    {'key': 'news', 'label': 'News', 'icon': Icons.article_outlined},
+    {'key': 'gallery', 'label': 'Gallery', 'icon': Icons.image_outlined},
+    {'key': 'videos', 'label': 'Videos', 'icon': Icons.play_circle_outline},
+    {'key': 'podcasts', 'label': 'Podcasts', 'icon': Icons.mic_none},
+  ];
 
   @override
-  void dispose() {
-    _nameController.dispose();
-    _descController.dispose();
-    super.dispose();
-  }
+  void dispose() { _titleCtrl.dispose(); _descCtrl.dispose(); super.dispose(); }
 
-  Future<void> _addFandom() async {
-    if (_nameController.text.isEmpty) return;
-    await FirebaseFirestore.instance.collection('fandoms').add({
-      'name': _nameController.text.trim(),
-      'description': _descController.text.trim(),
+  String get _titleField => _activeSection == 'fandoms' ? 'name' : 'title';
+
+  Future<void> _add() async {
+    if (_titleCtrl.text.isEmpty) return;
+    await _db.collection(_activeSection).add({
+      _titleField: _titleCtrl.text.trim(),
+      'description': _descCtrl.text.trim(),
       'createdAt': FieldValue.serverTimestamp(),
     });
-    _nameController.clear();
-    _descController.clear();
-    setState(() => _showAddContent = false);
+    _titleCtrl.clear(); _descCtrl.clear();
+    setState(() => _addMode = false);
+    _showSnack('Added to $_activeSection!');
   }
 
-  Future<void> _deleteFandom(String id) async {
-    await FirebaseFirestore.instance.collection('fandoms').doc(id).delete();
+  Future<void> _delete(String id) async {
+    await _db.collection(_activeSection).doc(id).delete();
+    _showSnack('Deleted');
+  }
+
+  void _showSnack(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg), backgroundColor: const Color(0xFF6C4DFF)));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildAppBar('Content Management'),
-        _buildTopButton('Add Fandom', () => setState(() => _showAddContent = !_showAddContent)),
-        if (_showAddContent) _buildAddFandomForm(),
-        Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('fandoms').snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              final docs = snapshot.data?.docs ?? [];
-              if (docs.isEmpty) {
-                return const Center(child: Text('No fandoms yet. Add one!', style: TextStyle(color: Colors.white54)));
-              }
-              return ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: docs.length,
-                itemBuilder: (context, index) {
-                  final data = docs[index].data() as Map<String, dynamic>;
-                  return _buildDismissibleItem(docs[index].id, Icons.star_border, data['name'] ?? 'Unknown', _deleteFandom);
-                },
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAddFandomForm() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        children: [
-          _buildTextField(_nameController, 'Fandom Name', Icons.star_border),
-          const SizedBox(height: 8),
-          _buildTextField(_descController, 'Description (optional)', Icons.description),
-          const SizedBox(height: 8),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF6C4DFF),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+    return Column(children: [
+      _appBar('Content Management'),
+      // Section selector
+      SizedBox(
+        height: 44,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          children: _sections.map((s) {
+            final active = _activeSection == s['key'];
+            return GestureDetector(
+              onTap: () => setState(() { _activeSection = s['key'] as String; _addMode = false; }),
+              child: Container(
+                margin: const EdgeInsets.only(right: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: active ? const Color(0xFF6C4DFF) : const Color(0xFF1A1D2D),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(children: [
+                  Icon(s['icon'] as IconData, size: 16, color: active ? Colors.white : Colors.white54),
+                  const SizedBox(width: 6),
+                  Text(s['label'] as String, style: TextStyle(color: active ? Colors.white : Colors.white54, fontSize: 13)),
+                ]),
               ),
-              onPressed: _addFandom,
-              child: const Text('Save', style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        ],
+            );
+          }).toList(),
+        ),
       ),
-    );
+      const SizedBox(height: 12),
+      _topBtn('Add to ${_sections.firstWhere((s) => s['key'] == _activeSection)['label']}', () => setState(() => _addMode = !_addMode)),
+      if (_addMode) Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+        child: Column(children: [
+          _textField(_titleCtrl, _activeSection == 'fandoms' ? 'Fandom Name' : 'Title', Icons.title),
+          const SizedBox(height: 8),
+          _textField(_descCtrl, 'Description (optional)', Icons.description),
+          const SizedBox(height: 8),
+          _primaryBtn('Save', _add),
+        ]),
+      ),
+      const SizedBox(height: 8),
+      Expanded(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: _db.collection(_activeSection).orderBy('createdAt', descending: true).snapshots(),
+          builder: (ctx, snap) {
+            if (snap.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
+            final docs = snap.data?.docs ?? [];
+            if (docs.isEmpty) return Center(child: Text('No $_activeSection yet. Add one!', style: const TextStyle(color: Colors.white54)));
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: docs.length,
+              itemBuilder: (ctx, i) {
+                final d = docs[i].data() as Map<String, dynamic>;
+                final title = d[_titleField] ?? d['name'] ?? d['title'] ?? 'Untitled';
+                return _dismissibleTile(docs[i].id, _sections.firstWhere((s) => s['key'] == _activeSection)['icon'] as IconData, title, _delete);
+              },
+            );
+          },
+        ),
+      ),
+    ]);
   }
 }
 
-// ==========================================
-// 4. EVENT MANAGEMENT TAB — Real Firestore events
-// ==========================================
+// ============================================================
+// 4. EVENT MANAGEMENT
+// ============================================================
 class _EventManagementTab extends StatefulWidget {
   const _EventManagementTab();
-
   @override
   State<_EventManagementTab> createState() => _EventManagementTabState();
 }
 
 class _EventManagementTabState extends State<_EventManagementTab> {
-  bool _showAddEvent = false;
-  final _titleController = TextEditingController();
-  final _descController = TextEditingController();
-  DateTime? _selectedDate;
+  bool _showUpcoming = true;
+  bool _addMode = false;
+  final _titleCtrl = TextEditingController();
+  final _descCtrl = TextEditingController();
+  final _locationCtrl = TextEditingController();
+  DateTime? _date;
 
   @override
-  void dispose() {
-    _titleController.dispose();
-    _descController.dispose();
-    super.dispose();
-  }
+  void dispose() { _titleCtrl.dispose(); _descCtrl.dispose(); _locationCtrl.dispose(); super.dispose(); }
 
   Future<void> _pickDate() async {
-    final date = await showDatePicker(
+    final d = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime.now().subtract(const Duration(days: 365)),
-      lastDate: DateTime.now().add(const Duration(days: 730)),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
     );
-    if (date != null) setState(() => _selectedDate = date);
+    if (d != null) setState(() => _date = d);
   }
 
   Future<void> _addEvent() async {
-    if (_titleController.text.isEmpty) return;
-    await FirebaseFirestore.instance.collection('events').add({
-      'title': _titleController.text.trim(),
-      'description': _descController.text.trim(),
-      'date': _selectedDate != null ? Timestamp.fromDate(_selectedDate!) : null,
-      'isUpcoming': _selectedDate == null || _selectedDate!.isAfter(DateTime.now()),
+    if (_titleCtrl.text.isEmpty) return;
+    final isUpcoming = _date == null || _date!.isAfter(DateTime.now());
+    await _db.collection('events').add({
+      'title': _titleCtrl.text.trim(),
+      'description': _descCtrl.text.trim(),
+      'location': _locationCtrl.text.trim(),
+      'date': _date != null ? Timestamp.fromDate(_date!) : null,
+      'isUpcoming': isUpcoming,
       'createdAt': FieldValue.serverTimestamp(),
     });
-    _titleController.clear();
-    _descController.clear();
-    setState(() {
-      _showAddEvent = false;
-      _selectedDate = null;
-    });
+    _titleCtrl.clear(); _descCtrl.clear(); _locationCtrl.clear();
+    setState(() { _addMode = false; _date = null; });
+    _showSnack('Event added!');
   }
 
-  Future<void> _deleteEvent(String id) async {
-    await FirebaseFirestore.instance.collection('events').doc(id).delete();
+  Future<void> _delete(String id) async {
+    await _db.collection('events').doc(id).delete();
+    _showSnack('Event deleted');
+  }
+
+  Future<void> _viewAnalytics() async {
+    final upcoming = await _db.collection('events').where('isUpcoming', isEqualTo: true).count().get();
+    final past = await _db.collection('events').where('isUpcoming', isEqualTo: false).count().get();
+    if (!mounted) return;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1A1D2D),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text('Event Analytics', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 20),
+          _analyticsRow('Upcoming Events', '${upcoming.count ?? 0}', Colors.green),
+          _analyticsRow('Past Events', '${past.count ?? 0}', Colors.orange),
+          _analyticsRow('Total Events', '${(upcoming.count ?? 0) + (past.count ?? 0)}', const Color(0xFF6C4DFF)),
+        ]),
+      ),
+    );
+  }
+
+  Widget _analyticsRow(String label, String value, Color color) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(children: [
+        Container(width: 12, height: 12, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+        const SizedBox(width: 12),
+        Expanded(child: Text(label, style: const TextStyle(color: Colors.white70))),
+        Text(value, style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 20)),
+      ]),
+    );
+  }
+
+  void _showSnack(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg), backgroundColor: const Color(0xFF6C4DFF)));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildAppBar('Event Management'),
-        _buildTopButton('Add Event', () => setState(() => _showAddEvent = !_showAddEvent)),
-        if (_showAddEvent) _buildAddEventForm(),
-        Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('events').orderBy('createdAt', descending: true).snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              final docs = snapshot.data?.docs ?? [];
-              if (docs.isEmpty) {
-                return const Center(child: Text('No events yet. Add one!', style: TextStyle(color: Colors.white54)));
-              }
-              return ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: docs.length,
-                itemBuilder: (context, index) {
-                  final data = docs[index].data() as Map<String, dynamic>;
-                  final isUpcoming = data['isUpcoming'] == true;
-                  return _buildDismissibleItem(docs[index].id, isUpcoming ? Icons.event_available : Icons.history, data['title'] ?? 'Untitled', _deleteEvent);
-                },
-              );
-            },
+    return Column(children: [
+      _appBar('Event Management'),
+      Row(children: [
+        Expanded(child: Padding(padding: const EdgeInsets.only(left: 16, right: 8), child: _topBtn('Add Event', () => setState(() => _addMode = !_addMode)))),
+        Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1A1D2D), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+            onPressed: _viewAnalytics,
+            child: const Row(children: [Icon(Icons.analytics, color: Color(0xFF6C4DFF), size: 18), SizedBox(width: 4), Text('Analytics', style: TextStyle(color: Colors.white70))]),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildAddEventForm() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        children: [
-          _buildTextField(_titleController, 'Event Title', Icons.event),
+      ]),
+      if (_addMode) Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+        child: Column(children: [
+          _textField(_titleCtrl, 'Event Title', Icons.event),
           const SizedBox(height: 8),
-          _buildTextField(_descController, 'Description', Icons.description),
+          _textField(_descCtrl, 'Description', Icons.description),
+          const SizedBox(height: 8),
+          _textField(_locationCtrl, 'Location', Icons.location_on_outlined),
           const SizedBox(height: 8),
           GestureDetector(
             onTap: _pickDate,
             child: Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(12)),
-              child: Row(
-                children: [
-                  const Icon(Icons.calendar_today, color: Colors.white54, size: 18),
-                  const SizedBox(width: 8),
-                  Text(
-                    _selectedDate == null ? 'Pick a date' : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
-                    style: TextStyle(color: _selectedDate == null ? Colors.white54 : Colors.white),
-                  ),
-                ],
-              ),
+              child: Row(children: [
+                const Icon(Icons.calendar_today, color: Colors.white54, size: 18),
+                const SizedBox(width: 8),
+                Text(
+                  _date == null ? 'Pick a date' : '${_date!.day}/${_date!.month}/${_date!.year}',
+                  style: TextStyle(color: _date == null ? Colors.white54 : Colors.white),
+                ),
+              ]),
             ),
           ),
           const SizedBox(height: 8),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF6C4DFF),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-              ),
-              onPressed: _addEvent,
-              child: const Text('Save Event', style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        ],
+          _primaryBtn('Save Event', _addEvent),
+        ]),
       ),
-    );
+      const SizedBox(height: 8),
+      _segmentedControl(['Upcoming', 'Past'], _showUpcoming ? 0 : 1, (i) => setState(() => _showUpcoming = i == 0)),
+      const SizedBox(height: 8),
+      Expanded(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: _db.collection('events').where('isUpcoming', isEqualTo: _showUpcoming).orderBy('createdAt', descending: true).snapshots(),
+          builder: (ctx, snap) {
+            if (snap.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
+            final docs = snap.data?.docs ?? [];
+            if (docs.isEmpty) return Center(child: Text('No ${_showUpcoming ? 'upcoming' : 'past'} events', style: const TextStyle(color: Colors.white54)));
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: docs.length,
+              itemBuilder: (ctx, i) {
+                final d = docs[i].data() as Map<String, dynamic>;
+                final date = (d['date'] as Timestamp?)?.toDate();
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(16)),
+                  child: Row(children: [
+                    Icon(_showUpcoming ? Icons.event_available : Icons.history, color: _showUpcoming ? Colors.green : Colors.orange),
+                    const SizedBox(width: 12),
+                    Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text(d['title'] ?? 'Untitled', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      if ((d['location'] ?? '').toString().isNotEmpty)
+                        Text(d['location'], style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                      if (date != null)
+                        Text('${date.day}/${date.month}/${date.year}', style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                    ])),
+                    GestureDetector(onTap: () => _delete(docs[i].id), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
+                  ]),
+                );
+              },
+            );
+          },
+        ),
+      ),
+    ]);
   }
 }
 
-// ==========================================
-// 5. CATEGORY MANAGEMENT TAB — Real Firestore categories
-// ==========================================
+// ============================================================
+// 5. CATEGORY MANAGEMENT
+// ============================================================
 class _CategoryManagementTab extends StatefulWidget {
   const _CategoryManagementTab();
-
   @override
   State<_CategoryManagementTab> createState() => _CategoryManagementTabState();
 }
 
 class _CategoryManagementTabState extends State<_CategoryManagementTab> {
-  bool _showAddCategory = false;
-  final _nameController = TextEditingController();
+  bool _addMode = false;
+  final _nameCtrl = TextEditingController();
+  String _selectedIcon = 'category';
+  final _editCtrl = TextEditingController();
+  String? _editingId;
 
-  final List<Map<String, dynamic>> _categoryIcons = [
-    {'label': 'Anime', 'icon': Icons.animation},
-    {'label': 'Gaming', 'icon': Icons.sports_esports},
-    {'label': 'Movies & TV', 'icon': Icons.movie_creation_outlined},
-    {'label': 'Comics', 'icon': Icons.menu_book},
-    {'label': 'Music', 'icon': Icons.music_note},
-    {'label': 'Sports', 'icon': Icons.sports_soccer},
-    {'label': 'Tech', 'icon': Icons.computer},
+  static const _iconOptions = [
+    {'key': 'animation', 'label': 'Anime'},
+    {'key': 'sports_esports', 'label': 'Gaming'},
+    {'key': 'movie', 'label': 'Movies & TV'},
+    {'key': 'menu_book', 'label': 'Comics'},
+    {'key': 'music_note', 'label': 'Music'},
+    {'key': 'sports_soccer', 'label': 'Sports'},
+    {'key': 'computer', 'label': 'Tech'},
+    {'key': 'category', 'label': 'Other'},
   ];
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
+  IconData _iconFromKey(String key) {
+    switch (key) {
+      case 'animation': return Icons.animation;
+      case 'sports_esports': return Icons.sports_esports;
+      case 'movie': return Icons.movie;
+      case 'menu_book': return Icons.menu_book;
+      case 'music_note': return Icons.music_note;
+      case 'sports_soccer': return Icons.sports_soccer;
+      case 'computer': return Icons.computer;
+      default: return Icons.category;
+    }
   }
+
+  @override
+  void dispose() { _nameCtrl.dispose(); _editCtrl.dispose(); super.dispose(); }
 
   Future<void> _addCategory() async {
-    if (_nameController.text.isEmpty) return;
-    await FirebaseFirestore.instance.collection('categories').add({
-      'name': _nameController.text.trim(),
+    if (_nameCtrl.text.isEmpty) return;
+    await _db.collection('categories').add({
+      'name': _nameCtrl.text.trim(),
+      'icon': _selectedIcon,
       'createdAt': FieldValue.serverTimestamp(),
     });
-    _nameController.clear();
-    setState(() => _showAddCategory = false);
+    _nameCtrl.clear();
+    setState(() { _addMode = false; _selectedIcon = 'category'; });
+    _showSnack('Category added!');
   }
 
-  Future<void> _deleteCategory(String id) async {
-    await FirebaseFirestore.instance.collection('categories').doc(id).delete();
+  Future<void> _delete(String id, String name) async {
+    await _db.collection('categories').doc(id).delete();
+    _showSnack('Category "$name" deleted');
+  }
+
+  Future<void> _editCategory(String id, String currentName) async {
+    _editCtrl.text = currentName;
+    await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: const Color(0xFF1A1D2D),
+        title: const Text('Edit Category', style: TextStyle(color: Colors.white)),
+        content: TextField(
+          controller: _editCtrl,
+          style: const TextStyle(color: Colors.white),
+          decoration: _inputDeco('Category name', Icons.category),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel', style: TextStyle(color: Colors.white54))),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6C4DFF)),
+            onPressed: () async {
+              if (_editCtrl.text.isNotEmpty) {
+                await _db.collection('categories').doc(id).update({'name': _editCtrl.text.trim()});
+              }
+              if (mounted) Navigator.pop(context);
+              _showSnack('Category updated');
+            },
+            child: const Text('Save', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSnack(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg), backgroundColor: const Color(0xFF6C4DFF)));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildAppBar('Category Management'),
-        _buildTopButton('Add Category', () => setState(() => _showAddCategory = !_showAddCategory)),
-        if (_showAddCategory)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                Expanded(child: _buildTextField(_nameController, 'Category Name', Icons.category)),
-                const SizedBox(width: 8),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF6C4DFF),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    return Column(children: [
+      _appBar('Category Management'),
+      _topBtn('Add Category', () => setState(() => _addMode = !_addMode)),
+      if (_addMode) Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          _textField(_nameCtrl, 'Category Name', Icons.category),
+          const SizedBox(height: 8),
+          const Text('Select Icon:', style: TextStyle(color: Colors.white54, fontSize: 13)),
+          const SizedBox(height: 6),
+          Wrap(
+            spacing: 8,
+            children: _iconOptions.map((o) {
+              final active = _selectedIcon == o['key'];
+              return GestureDetector(
+                onTap: () => setState(() => _selectedIcon = o['key']!),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: active ? const Color(0xFF6C4DFF) : const Color(0xFF1A1D2D),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  onPressed: _addCategory,
-                  child: const Text('Add', style: TextStyle(color: Colors.white)),
+                  child: Column(children: [
+                    Icon(_iconFromKey(o['key']!), color: Colors.white, size: 20),
+                    Text(o['label']!, style: const TextStyle(color: Colors.white, fontSize: 10)),
+                  ]),
                 ),
-              ],
-            ),
-          ),
-        Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('categories').snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              final docs = snapshot.data?.docs ?? [];
-              // Seed with the default categories first if empty
-              if (docs.isEmpty) {
-                return ListView(
-                  padding: const EdgeInsets.all(16),
-                  children: _categoryIcons.map((c) => _buildListItem(c['icon'] as IconData, c['label'] as String)).toList(),
-                );
-              }
-              return ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: docs.length,
-                itemBuilder: (context, index) {
-                  final data = docs[index].data() as Map<String, dynamic>;
-                  return _buildDismissibleItem(docs[index].id, Icons.category, data['name'] ?? 'Unknown', _deleteCategory);
-                },
               );
-            },
+            }).toList(),
           ),
+          const SizedBox(height: 8),
+          _primaryBtn('Save Category', _addCategory),
+        ]),
+      ),
+      const SizedBox(height: 8),
+      Expanded(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: _db.collection('categories').orderBy('createdAt', descending: false).snapshots(),
+          builder: (ctx, snap) {
+            if (snap.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
+            final docs = snap.data?.docs ?? [];
+            if (docs.isEmpty) return const Center(child: Text('No categories yet. Add one!', style: TextStyle(color: Colors.white54)));
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: docs.length,
+              itemBuilder: (ctx, i) {
+                final d = docs[i].data() as Map<String, dynamic>;
+                final name = d['name'] ?? 'Unknown';
+                final iconKey = d['icon'] ?? 'category';
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(16)),
+                  child: ListTile(
+                    leading: Icon(_iconFromKey(iconKey), color: Colors.white54),
+                    title: Text(name, style: const TextStyle(color: Colors.white)),
+                    trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                      GestureDetector(onTap: () => _editCategory(docs[i].id, name), child: const Icon(Icons.edit_outlined, color: Colors.white54, size: 20)),
+                      const SizedBox(width: 12),
+                      GestureDetector(onTap: () => _delete(docs[i].id, name), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
+                    ]),
+                  ),
+                );
+              },
+            );
+          },
         ),
-      ],
-    );
+      ),
+    ]);
   }
 }
 
-// ==========================================
+// ============================================================
 // SHARED HELPERS
-// ==========================================
+// ============================================================
+Widget _appBar(String title) => Padding(
+  padding: const EdgeInsets.all(16),
+  child: Row(children: [
+    const Icon(Icons.admin_panel_settings, color: Color(0xFF6C4DFF)),
+    const SizedBox(width: 12),
+    Text(title, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+  ]),
+);
 
-Widget _buildAppBar(String title) {
-  return Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Row(
-      children: [
-        const Icon(Icons.arrow_back, color: Colors.white),
-        const SizedBox(width: 16),
-        Text(title, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-      ],
+Widget _topBtn(String title, VoidCallback onTap) => Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+  child: SizedBox(
+    width: double.infinity,
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF6C4DFF),
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      ),
+      onPressed: onTap,
+      child: Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
     ),
-  );
-}
+  ),
+);
 
-Widget _buildTopButton(String title, VoidCallback onPressed) {
+Widget _primaryBtn(String label, VoidCallback onTap) => SizedBox(
+  width: double.infinity,
+  child: ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF6C4DFF),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    ),
+    onPressed: onTap,
+    child: Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+  ),
+);
+
+Widget _segmentedControl(List<String> labels, int selected, void Function(int) onSelect) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-    child: SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF6C4DFF),
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        ),
-        onPressed: onPressed,
-        child: Text(title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: Container(
+      decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(24)),
+      child: Row(
+        children: labels.asMap().entries.map((e) {
+          final active = e.key == selected;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () => onSelect(e.key),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: active ? const Color(0xFF6C4DFF) : Colors.transparent,
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                alignment: Alignment.center,
+                child: Text(e.value, style: TextStyle(color: active ? Colors.white : Colors.white54, fontWeight: FontWeight.bold)),
+              ),
+            ),
+          );
+        }).toList(),
       ),
     ),
   );
 }
 
-Widget _buildListItem(IconData icon, String title) {
+Widget _textField(TextEditingController ctrl, String hint, IconData icon) => TextField(
+  controller: ctrl,
+  style: const TextStyle(color: Colors.white),
+  decoration: _inputDeco(hint, icon),
+);
+
+InputDecoration _inputDeco(String hint, IconData icon) => InputDecoration(
+  hintText: hint,
+  hintStyle: const TextStyle(color: Colors.white38),
+  prefixIcon: Icon(icon, color: Colors.white38),
+  filled: true,
+  fillColor: const Color(0xFF1A1D2D),
+  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+);
+
+Widget _dismissibleTile(String id, IconData icon, String title, Future<void> Function(String) onDelete) {
   return Container(
     margin: const EdgeInsets.only(bottom: 12),
     decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(16)),
     child: ListTile(
       leading: Icon(icon, color: Colors.white54),
       title: Text(title, style: const TextStyle(color: Colors.white)),
-      trailing: const Icon(Icons.chevron_right, color: Colors.white54),
-    ),
-  );
-}
-
-Widget _buildDismissibleItem(String id, IconData icon, String title, Future<void> Function(String) onDelete) {
-  return Container(
-    margin: const EdgeInsets.only(bottom: 12),
-    decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(16)),
-    child: ListTile(
-      leading: Icon(icon, color: Colors.white54),
-      title: Text(title, style: const TextStyle(color: Colors.white)),
-      trailing: GestureDetector(
-        onTap: () => onDelete(id),
-        child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20),
-      ),
-    ),
-  );
-}
-
-Widget _buildTextField(TextEditingController controller, String hint, IconData icon) {
-  return TextField(
-    controller: controller,
-    style: const TextStyle(color: Colors.white),
-    decoration: InputDecoration(
-      hintText: hint,
-      hintStyle: const TextStyle(color: Colors.white54),
-      prefixIcon: Icon(icon, color: Colors.white54),
-      filled: true,
-      fillColor: const Color(0xFF1A1D2D),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+      trailing: GestureDetector(onTap: () => onDelete(id), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
     ),
   );
 }
