@@ -22,6 +22,7 @@ import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/purchase_history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+
 import 'route_names.dart';
 
 /// Builds and owns the app's [GoRouter] instance.
@@ -153,6 +154,7 @@ class AppRouter {
       name: RouteNames.searchHomeName,
       builder: (context, state) => const SearchScreen(),
     ),
+
     GoRoute(
       path: RouteNames.community,
       name: RouteNames.communityName,

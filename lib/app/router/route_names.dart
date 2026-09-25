@@ -44,6 +44,7 @@ class RouteNames {
   static const String  fandomsName = 'fandoms';
   static const String  searchHomeName  = 'homeSearch';
 
+
   /// Routes reachable without being logged in.
   static const List<String> publicPaths = [
     splash,

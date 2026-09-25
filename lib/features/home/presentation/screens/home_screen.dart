@@ -83,10 +83,12 @@ class HomeScreen extends StatelessWidget {
             // search area for a screen with a search bar
             GestureDetector(
               onTap: () {
-                context.push('/homeSearch');
+                context.push(RouteNames.homeSearch);
               },
-              child: const AppTextField.search(
-                hint: 'Search',
+              child: const AbsorbPointer(
+                child: AppTextField.search(
+                  hint: 'Search',
+                ),
               ),
             ),
             const SizedBox(height: AppConstants.spaceLg),
