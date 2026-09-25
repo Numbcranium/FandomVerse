@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:techwiz7_starter/models/fandom_models.dart';
 
+import '../../../../app/router/route_names.dart';
 import '../../../../models/fandom-service.dart';
 import '../widgets/fandom_follow_button.dart';
 import 'fandom_follower_count.dart';
@@ -241,7 +243,12 @@ class FandomDetailsScreen extends StatelessWidget {
                         icon: Icons.newspaper_outlined,
                         title: 'News',
                         onTap: () {
-                          // We will connect this next
+                          context.push(
+                            RouteNames.fandomNews.replaceFirst(
+                              ':fandomId',
+                              fandom.id,
+                            ),
+                          );
                         },
                       ),
 

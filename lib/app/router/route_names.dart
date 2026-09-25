@@ -25,6 +25,7 @@ class RouteNames {
   static const String fandoms = '/fandoms';
   static const String fandomDetails = '/fandom/:fandomId';
   static const String homeSearch = '/homeSearch';
+  static const String fandomNews = '/fandom/:fandomId/news';
 
 
   // --- Names (used by GoRoute.name and context.goNamed) ---
@@ -46,6 +47,10 @@ class RouteNames {
   static const String  fandomsName = 'fandoms';
   static const String fandomDetailsName = 'fandomDetails';
   static const String  searchHomeName  = 'homeSearch';
+  static const String fandomNewsName = 'fandomNews';
+
+
+
 
 
   /// Routes reachable without being logged in.

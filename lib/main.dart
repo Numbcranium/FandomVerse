@@ -12,6 +12,7 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'firebase/firebase_service.dart';
 import 'firebase_options.dart';
+import 'models/fandom_news_seed.dart';
 
 
 
@@ -29,6 +30,9 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // final newsSeed = FandomNewsSeed();
+  //
+  // await newsSeed.seedNews();
 
   final appRouter = AppRouter(
     authStatus: () => authBloc.state.status,
