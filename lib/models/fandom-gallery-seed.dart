@@ -38,23 +38,23 @@ class FandomGallerySeed {
         uploadedAt: DateTime(2026, 9, 22),
       ),
 
-      FandomGallery(
-        id: 'anime_gallery_004',
-        fandomId: 'anime',
-        title: 'Demon Slayer',
-        image: 'assets/images/gallery/anime/anime_4.jpg',
-        category: 'Anime',
-        uploadedAt: DateTime(2026, 9, 21),
-      ),
+      // FandomGallery(
+      //   id: 'anime_gallery_004',
+      //   fandomId: 'anime',
+      //   title: 'Demon Slayer',
+      //   image: 'assets/images/gallery/anime/anime_4.jpg',
+      //   category: 'Anime',
+      //   uploadedAt: DateTime(2026, 9, 21),
+      // ),
 
-      FandomGallery(
-        id: 'anime_gallery_005',
-        fandomId: 'anime',
-        title: 'Jujutsu Kaisen',
-        image: 'assets/images/gallery/anime/anime_5.jpg',
-        category: 'Anime',
-        uploadedAt: DateTime(2026, 9, 20),
-      ),
+      // FandomGallery(
+      //   id: 'anime_gallery_005',
+      //   fandomId: 'anime',
+      //   title: 'Jujutsu Kaisen',
+      //   image: 'assets/images/gallery/anime/anime_5.jpg',
+      //   category: 'Anime',
+      //   uploadedAt: DateTime(2026, 9, 20),
+      // ),
 
       // =====================================================
       // MARVEL - 5
