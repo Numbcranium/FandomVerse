@@ -59,8 +59,8 @@ dependencies:
 
   # --- Icons (Material 3 friendly, no extra asset weight) ---
   cupertino_icons: ^1.0.8
-  firebase_ai: ^2.3.0
-  firebase_app_check: ^0.3.2+10
+  carousel_slider: ^5.1.2
+  gal: ^2.3.3
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +79,8 @@ flutter:
   # features/intro/presentation/screens/intro_screen.dart.
   assets:
     - assets/video/
+    - assets/images/homeImages/
+    - assets/images/homeSearch/
 
   # Add more paths here (assets/images/, assets/icons/) once other real
   # assets are added post-SRS.

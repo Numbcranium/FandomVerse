@@ -12,6 +12,11 @@ import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/community/presentation/screens/community_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/home/presentation/widgets/fandom_gallery_screen.dart';
+import '../../features/home/presentation/widgets/fandom_news_details_screen.dart';
+import '../../features/home/presentation/widgets/fandom_news_screen.dart';
+import '../../features/home/presentation/widgets/search_screen.dart';
+import '../../features/home/presentation/widgets/trending_fandoms.dart';
 import '../../features/intro/presentation/screens/intro_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/profile/presentation/screens/bookmarks_screen.dart';
@@ -19,7 +24,7 @@ import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/purchase_history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
-import '../../features/ai_helper/presentation/screens/ai_helper_screen.dart';
+
 import 'route_names.dart';
 
 /// Builds and owns the app's [GoRouter] instance.
@@ -142,6 +147,43 @@ class AppRouter {
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
+      path: RouteNames.fandoms,
+      name: RouteNames.fandomsName,
+      builder: (context, state) => const TrendingFandoms(),
+    ),
+    GoRoute(
+      path: RouteNames.fandomNews,
+      name: RouteNames.fandomNewsName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomNewsScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.fandomGallery,
+      name: RouteNames.fandomGalleryName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomGalleryScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+
+
+    GoRoute(
+      path: RouteNames.homeSearch,
+      name: RouteNames.searchHomeName,
+      builder: (context, state) => const SearchScreen(),
+    ),
+
+    GoRoute(
       path: RouteNames.community,
       name: RouteNames.communityName,
       builder: (context, state) => const CommunityScreen(),
@@ -175,11 +217,6 @@ class AppRouter {
       path: RouteNames.purchaseHistory,
       name: RouteNames.purchaseHistoryName,
       builder: (context, state) => const PurchaseHistoryScreen(),
-    ),
-    GoRoute(
-      path: RouteNames.aiHelper,
-      name: RouteNames.aiHelperName,
-      builder: (context, state) => const AiHelperScreen(),
     ),
   ];
 }
