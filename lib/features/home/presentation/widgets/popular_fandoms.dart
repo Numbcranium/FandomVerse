@@ -82,7 +82,7 @@ class PopularFandoms extends StatelessWidget {
 
               return GestureDetector(
                 onTap: () {
-                  context.push('/fandom');
+                  context.push('/fandoms');
                 },
 
                 // CARD

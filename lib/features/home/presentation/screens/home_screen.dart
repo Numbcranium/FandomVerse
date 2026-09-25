@@ -80,7 +80,15 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: AppConstants.spaceLg),
-            const AppTextField.search(hint: 'Search'),
+            // search area for a screen with a search bar
+            GestureDetector(
+              onTap: () {
+                context.push('/homeSearch');
+              },
+              child: const AppTextField.search(
+                hint: 'Search',
+              ),
+            ),
             const SizedBox(height: AppConstants.spaceLg),
           //   ============================================================================
           //   for the trivia screen
