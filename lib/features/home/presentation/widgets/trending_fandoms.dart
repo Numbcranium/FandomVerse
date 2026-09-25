@@ -157,9 +157,7 @@ class _TrendingFandomsState extends State<TrendingFandoms> {
 
                 children: [
 
-                  // ==================================
                   // FILTER
-                  // ==================================
 
                   const SizedBox(
                     height: 10,
@@ -262,11 +260,6 @@ class _TrendingFandomsState extends State<TrendingFandoms> {
                             data['category']
                                 ?.toString() ??
                                 '',
-
-                            members:
-                            data['members']
-                                ?.toString() ??
-                                '0 members',
                           );
                         },
                       ),

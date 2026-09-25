@@ -23,7 +23,9 @@ class RouteNames {
   static const String purchaseHistory = '/purchase-history';
   static const String community = '/community';
   static const String fandoms = '/fandoms';
+  static const String fandomDetails = '/fandom/:fandomId';
   static const String homeSearch = '/homeSearch';
+
 
   // --- Names (used by GoRoute.name and context.goNamed) ---
   static const String introName = 'intro';
@@ -42,6 +44,7 @@ class RouteNames {
   static const String purchaseHistoryName = 'purchaseHistory';
   static const String communityName = 'community';
   static const String  fandomsName = 'fandoms';
+  static const String fandomDetailsName = 'fandomDetails';
   static const String  searchHomeName  = 'homeSearch';
 
 
