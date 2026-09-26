@@ -122,7 +122,7 @@ class HomeScreen extends StatelessWidget {
       case 0:
         return;
       case 1:
-        showComingSoon(context, 'Explore');
+        context.go(RouteNames.trivia);
         return;
       case 2:
         showComingSoon(context, 'Events');

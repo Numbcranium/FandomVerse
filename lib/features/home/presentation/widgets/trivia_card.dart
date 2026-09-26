@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../app/router/route_names.dart';
 
 class TriviaCard extends StatelessWidget {
   const TriviaCard({super.key});
@@ -70,7 +72,7 @@ class TriviaCard extends StatelessWidget {
 
                 ElevatedButton(
                   onPressed: () {
-                  //   change
+                    context.push(RouteNames.trivia);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFB82CFF),

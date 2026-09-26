@@ -78,6 +78,7 @@ flutter:
   # Intro video played once at every app launch, before splash — see
   # features/intro/presentation/screens/intro_screen.dart.
   assets:
+    - assets/icons/
     - assets/video/
     - assets/images/homeImages/
     - assets/images/homeSearch/
