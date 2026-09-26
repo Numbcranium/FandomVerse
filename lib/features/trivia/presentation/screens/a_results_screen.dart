@@ -108,7 +108,9 @@ class AResultsScreen extends StatelessWidget {
 
                       child: IconButton(
                         onPressed: () {
-                           context.push(RouteNames.triviaLeaderboard);
+                          context.push(
+                            RouteNames.triviaLeaderboard,
+                          );
                         },
 
                         icon:

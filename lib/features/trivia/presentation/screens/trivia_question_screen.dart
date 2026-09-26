@@ -110,38 +110,41 @@ class _TriviaQuestionsScreenState
   Future<void> _nextQuestion(
       List<FandomQuizQuestion> questions,
       ) async {
-    // Prevent duplicate calls.
+    // ------------------------------------------------------------
+    // PREVENT DOUBLE NAVIGATION
+    // ------------------------------------------------------------
+
     if (_isMovingNext || _quizFinished) {
       return;
     }
 
     _isMovingNext = true;
 
-    // ============================================================
+    // ------------------------------------------------------------
     // CHECK ANSWER
-    // ============================================================
+    // ------------------------------------------------------------
 
     if (selectedAnswer ==
         questions[currentQuestion].correctAnswer) {
       score++;
     }
 
-    // ============================================================
+    // ------------------------------------------------------------
     // LAST QUESTION
-    // ============================================================
+    // ------------------------------------------------------------
 
     if (currentQuestion == questions.length - 1) {
       _quizFinished = true;
 
-      // Stop the TOTAL quiz stopwatch.
+      // Stop total quiz timer.
       _stopQuizStopwatch();
 
-      // Get the ACTUAL total time before navigating.
+      // Get actual quiz duration.
       final String timeTaken = _getTimeTaken();
 
-      // ========================================================
-      // SAVE QUIZ ATTEMPT
-      // ========================================================
+      // ----------------------------------------------------------
+      // SAVE ATTEMPT
+      // ----------------------------------------------------------
 
       final User? user =
           FirebaseAuth.instance.currentUser;
@@ -170,33 +173,34 @@ class _TriviaQuestionsScreenState
         }
       }
 
-      // ========================================================
-      // GO TO RESULT SCREEN
-      // ========================================================
+      // ----------------------------------------------------------
+      // MAKE SURE SCREEN STILL EXISTS
+      // ----------------------------------------------------------
 
       if (!mounted) {
         return;
       }
 
-      Navigator.pushReplacement(
-        context,
+      // ----------------------------------------------------------
+      // GO TO RESULTS
+      // ----------------------------------------------------------
+
+      await Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) {
-            return AResultsScreen(
-              score: score,
-              total: questions.length,
-              timeTaken: timeTaken,
-            );
-          },
+          builder: (_) => AResultsScreen(
+            score: score,
+            total: questions.length,
+            timeTaken: timeTaken,
+          ),
         ),
       );
 
       return;
     }
 
-    // ============================================================
-    // MOVE TO NEXT QUESTION
-    // ============================================================
+    // ------------------------------------------------------------
+    // NEXT QUESTION
+    // ------------------------------------------------------------
 
     if (!mounted) {
       return;
@@ -207,19 +211,9 @@ class _TriviaQuestionsScreenState
       selectedAnswer = null;
     });
 
+    // Allow another Next/Timer event.
     _isMovingNext = false;
   }
-
-  // ============================================================
-  // DISPOSE
-  // ============================================================
-
-  @override
-  void dispose() {
-    _stopQuizStopwatch();
-    super.dispose();
-  }
-
   // ============================================================
   // BUILD
   // ============================================================

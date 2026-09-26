@@ -160,7 +160,9 @@ class AppRouter {
     GoRoute(
       path: RouteNames.triviaLeaderboard,
       name: RouteNames.triviaLeaderboardName,
-      builder: (context, state) => const TriviaLeaderboardScreen(),
+      builder: (context, state) {
+        return const TriviaLeaderboardScreen();
+      },
     ),
     GoRoute(
       path: RouteNames.fandoms,
