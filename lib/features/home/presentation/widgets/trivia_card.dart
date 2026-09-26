@@ -72,7 +72,7 @@ class TriviaCard extends StatelessWidget {
 
                 ElevatedButton(
                   onPressed: () {
-                    context.push(RouteNames.trivia);
+                    context.go(RouteNames.trivia);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFB82CFF),
