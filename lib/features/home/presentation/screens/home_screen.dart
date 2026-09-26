@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "Here's what's happening today.",
+                        "Your daily fandom breakdown.",
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
