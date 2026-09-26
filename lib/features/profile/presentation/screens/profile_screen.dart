@@ -14,6 +14,7 @@ import '../../../../models/user_model.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
 import '../../../home/presentation/screens/merchandise/order_history_screen.dart';
+import '../../../tickets/presentation/screens/my_tickets_screen.dart';
 import 'wallet_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -85,6 +86,15 @@ class ProfileScreen extends StatelessWidget {
       context,
       MaterialPageRoute<void>(
         builder: (_) => const WalletScreen(),
+      ),
+    );
+  }
+
+  void _openTickets(BuildContext context){
+    Navigator.push<void>(
+      context,
+      MaterialPageRoute<void>(
+          builder: (_) => const MyTicketsScreen(),
       ),
     );
   }
@@ -252,6 +262,19 @@ class ProfileScreen extends StatelessWidget {
                 icon: Icons.account_balance_wallet_outlined,
                 label: 'Wallet',
               ),
+            ),
+
+            const SizedBox(
+              height: AppConstants.spaceSm,
+            ),
+
+            //My tickets
+            AppCard(
+              onTap: () => _openTickets(context),
+              child: const _ActionRow(
+                  icon: Icons.confirmation_num_outlined,
+                  label: 'My tickets'),
+
             ),
 
             const SizedBox(
