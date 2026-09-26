@@ -27,6 +27,7 @@ import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/purchase_history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
 
+import '../../features/trivia/presentation/screens/choose_fandom_screen.dart';
 import '../../features/trivia/presentation/screens/trivia_pop_start_screen.dart';
 import 'route_names.dart';
 
@@ -217,6 +218,13 @@ class AppRouter {
         return FandomTriviaScreen(
           fandomId: fandomId,
         );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.chooseFandom,
+      name: RouteNames.chooseFandomName,
+      builder: (context, state) {
+        return const ChooseFandomScreen();
       },
     ),
 

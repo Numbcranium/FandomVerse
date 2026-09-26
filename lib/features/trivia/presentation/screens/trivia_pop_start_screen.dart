@@ -120,8 +120,7 @@ class TriviaPopStartScreen extends StatelessWidget {
                         // the start playing button
                         child: ElevatedButton(
                           onPressed: () {
-                            // We will connect this to
-                            // the trivia questions screen next.
+                            context.push(RouteNames.chooseFandom);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,

@@ -30,6 +30,7 @@ class RouteNames {
   static const String fandomVideo =  '/fandom/:fandomId/video';
   static const String fandomTrivia = '/fandom/:fandomId/trivia';
   static const String trivia = '/trivia';
+  static const String chooseFandom = '/trivia/choose-fandom';
 
 
   // --- Names (used by GoRoute.name and context.goNamed) ---
@@ -56,6 +57,7 @@ class RouteNames {
   static const String fandomVideoName = 'fandomVideo';
   static const String fandomTriviaName = 'fandomTrivia';
   static const String triviaName = 'trivia';
+  static const String chooseFandomName = 'chooseFandom';
 
 
 
