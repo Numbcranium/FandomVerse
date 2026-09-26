@@ -32,7 +32,8 @@ class RouteNames {
   static const String trivia = '/trivia';
   static const String chooseFandom = '/trivia/choose-fandom';
   static const String triviaQuestions = '/trivia/questions/:fandomId';
-
+  static const String aiHelper = '/ai-helper';
+  static const String adminDashboard = '/admin';
 
   // --- Names (used by GoRoute.name and context.goNamed) ---
   static const String introName = 'intro';
@@ -64,6 +65,8 @@ class RouteNames {
 
 
 
+  static const String aiHelperName = 'aiHelper';
+  static const String adminDashboardName = 'adminDashboard';
 
   /// Routes reachable without being logged in.
   static const List<String> publicPaths = [

@@ -17,6 +17,7 @@ import 'models/fandom_trivia_seed.dart';
 
 
 
+import 'models/user_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +42,7 @@ Future<void> main() async {
     // so a value the onboarding screen writes mid-session is respected.
     isFirstLaunch: () => !(prefs.getBool(AppConstants.prefsFirstLaunchKey) ?? false),
     needsInterestsSelection: () => authBloc.state.user?.selectedFandoms.isEmpty ?? true,
+    isAdmin: () => authBloc.state.user?.role == UserRole.admin,
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
   );
 

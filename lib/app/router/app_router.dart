@@ -26,10 +26,11 @@ import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/purchase_history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
-
 import '../../features/trivia/presentation/screens/choose_fandom_screen.dart';
 import '../../features/trivia/presentation/screens/trivia_pop_start_screen.dart';
 import '../../features/trivia/presentation/screens/trivia_questions_screen.dart';
+import '../../features/ai_helper/presentation/screens/ai_helper_screen.dart';
+import '../../features/admin/presentation/screens/admin_dashboard_screen.dart';
 import 'route_names.dart';
 
 /// Builds and owns the app's [GoRouter] instance.
@@ -56,10 +57,12 @@ class AppRouter {
     required AuthStatus Function() authStatus,
     required bool Function() isFirstLaunch,
     required bool Function() needsInterestsSelection,
+    required bool Function() isAdmin,
     required Listenable refreshListenable,
   })  : _authStatus = authStatus,
         _isFirstLaunch = isFirstLaunch,
-        _needsInterestsSelection = needsInterestsSelection {
+        _needsInterestsSelection = needsInterestsSelection,
+        _isAdmin = isAdmin {
     router = GoRouter(
       initialLocation: RouteNames.intro,
       debugLogDiagnostics: false,
@@ -72,6 +75,7 @@ class AppRouter {
   final AuthStatus Function() _authStatus;
   final bool Function() _isFirstLaunch;
   final bool Function() _needsInterestsSelection;
+  final bool Function() _isAdmin;
 
   late final GoRouter router;
 
@@ -101,6 +105,11 @@ class AppRouter {
     }
 
     // status == AuthStatus.authenticated
+    // Admins are locked into the admin dashboard only.
+    if (_isAdmin()) {
+      return currentPath == RouteNames.adminDashboard ? null : RouteNames.adminDashboard;
+    }
+
     if (_needsInterestsSelection()) {
       return currentPath == RouteNames.interests ? null : RouteNames.interests;
     }
@@ -282,6 +291,16 @@ class AppRouter {
       path: RouteNames.purchaseHistory,
       name: RouteNames.purchaseHistoryName,
       builder: (context, state) => const PurchaseHistoryScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.aiHelper,
+      name: RouteNames.aiHelperName,
+      builder: (context, state) => const AiHelperScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.adminDashboard,
+      name: RouteNames.adminDashboardName,
+      builder: (context, state) => const AdminDashboardScreen(),
     ),
   ];
 }
