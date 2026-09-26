@@ -121,13 +121,13 @@ class ChooseFandomScreen extends StatelessWidget {
                           onTap: () {
                             // Send the Firebase fandom ID
                             // to the trivia questions screen.
-                            // context.push(
-                            //   RouteNames.triviaQuestions
-                            //       .replaceFirst(
-                            //     ':fandomId',
-                            //     fandom.id,
-                            //   ),
-                            // );
+                            context.push(
+                              RouteNames.triviaQuestions
+                                  .replaceFirst(
+                                ':fandomId',
+                                fandom.id,
+                              ),
+                            );
                           },
 
                           child: Container(
