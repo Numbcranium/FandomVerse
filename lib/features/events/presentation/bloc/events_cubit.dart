@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../domain/repositories/event_repository.dart';
 import '../../models/event_model.dart';
-import '../../repositories/event_repository.dart';
 
 sealed class EventsState extends Equatable {
   const EventsState();

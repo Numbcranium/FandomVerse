@@ -1,4 +1,5 @@
-import '../models/event_model.dart';
+
+import '../../models/event_model.dart';
 
 abstract class EventRepository {
   Future<List<EventModel>> getEvents();

@@ -1,7 +1,7 @@
-import '../data/datasources/event_firebase_datasource.dart';
-import '../data/datasources/event_sqlite_datasource.dart';
-import '../models/event_model.dart';
-import 'event_repository.dart';
+import '../../domain/repositories/event_repository.dart';
+import '../../models/event_model.dart';
+import '../datasources/event_firebase_datasource.dart';
+import '../datasources/event_sqlite_datasource.dart';
 
 /// Connects Firebase and SQLite.
 ///

@@ -1,11 +1,6 @@
-import 'dart:io';
 import 'package:path/path.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite/sqflite.dart';
 
-/// Provides the application's local SQLite database.
-///
-/// Firebase remains the source of truth when retrieving events.
-/// SQLite keeps a local copy of the retrieved data.
 class AppDatabase {
   AppDatabase._();
 
@@ -14,51 +9,54 @@ class AppDatabase {
   Database? _database;
 
   Future<Database> get database async {
-    // Return the existing database if it has already been opened.
     if (_database != null) {
       return _database!;
     }
 
-    // Initialize the database before opening it.
     _database = await _initDatabase();
 
     return _database!;
   }
 
   Future<Database> _initDatabase() async {
-    // Windows and Linux require the SQLite FFI implementation.
-    //
-    // Android and iOS use their normal native SQLite implementation,
-    // so we only change the database factory on desktop platforms.
-    if (Platform.isWindows || Platform.isLinux) {
-      sqfliteFfiInit();
-
-      databaseFactory = databaseFactoryFfi;
-    }
-
-    // Get the platform-specific database directory.
     final databasesPath = await getDatabasesPath();
-
-    // Create the full path for the ClubConnect database.
     final path = join(
       databasesPath,
       'clubconnect.db',
     );
 
-    // Open the database and create the tables if this
-    // is the first time the database is being opened.
     return openDatabase(
       path,
-      version: 1,
+
+      // Version 2 because we are adding the tickets table.
+      version: 2,
+
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
-  /// Creates the database tables.
   Future<void> _onCreate(
       Database db,
       int version,
       ) async {
+    await _createEventsTable(db);
+    await _createTicketsTable(db);
+  }
+
+  // Handles existing installations that already have version 1.
+  Future<void> _onUpgrade(
+      Database db,
+      int oldVersion,
+      int newVersion,
+      ) async {
+    if (oldVersion < 2) {
+      await _createTicketsTable(db);
+    }
+  }
+
+  // Existing events table.
+  Future<void> _createEventsTable(Database db) async {
     await db.execute('''
       CREATE TABLE events (
         id TEXT PRIMARY KEY,
@@ -77,6 +75,27 @@ class AppDatabase {
         ticketUrl TEXT NOT NULL,
         createdAt TEXT NOT NULL,
         updatedAt TEXT NOT NULL
+      )
+    ''');
+  }
+
+  // New tickets table.
+  Future<void> _createTicketsTable(Database db) async {
+    await db.execute('''
+      CREATE TABLE tickets (
+        id TEXT PRIMARY KEY,
+        eventId TEXT NOT NULL,
+        userId TEXT NOT NULL,
+        eventTitle TEXT NOT NULL,
+        eventImageUrl TEXT NOT NULL,
+        eventDate TEXT NOT NULL,
+        eventTime TEXT NOT NULL,
+        locationName TEXT NOT NULL,
+        address TEXT NOT NULL,
+        price REAL NOT NULL,
+        ticketCode TEXT NOT NULL,
+        status TEXT NOT NULL,
+        purchasedAt TEXT NOT NULL
       )
     ''');
   }

@@ -8,9 +8,10 @@ import '../../../../app/theme/app_text_styles.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../data/datasources/event_firebase_datasource.dart';
 import '../../data/datasources/event_sqlite_datasource.dart';
+import '../../data/repositories/event_repository_impl.dart';
+import '../../domain/repositories/event_repository.dart';
 import '../../models/event_model.dart';
-import '../../repositories/event_repository.dart';
-import '../../repositories/event_repository_impl.dart';
+
 
 class MapScreen extends StatefulWidget {
   const MapScreen({
