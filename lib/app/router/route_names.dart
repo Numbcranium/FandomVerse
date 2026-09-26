@@ -56,6 +56,11 @@ class RouteNames {
   static const String eventSearchName = 'eventSearch';
   static const String eventFiltersName = 'eventFilters';
 
+  // event tickets route name
+
+  static const String ticket = '/tickets/:ticketId';
+  static const String ticketName = 'ticket';
+
   /// Routes reachable without being logged in.
   static const List<String> publicPaths = [
     splash,

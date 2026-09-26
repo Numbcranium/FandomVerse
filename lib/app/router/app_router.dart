@@ -13,12 +13,15 @@ import '../../features/auth/presentation/screens/splash_screen.dart';
 
 // event routes
 import '../../features/events/presentation/screens/calender_screen.dart';
-import '../../features/events/presentation/screens/event_screen.dart';
+import '../../features/events/presentation/screens/events_screen.dart';
 import '../../features/events/presentation/screens/events_details_screen.dart';
 import '../../features/events/presentation/screens/events_filters_screen.dart';
 import '../../features/events/presentation/screens/events_search_screen.dart';
 import '../../features/events/presentation/screens/map_screen.dart';
 import '../../features/events/presentation/screens/nearby_events_screen.dart';
+
+//ticket route
+import '../../features/tickets/presentation/screens/ticket_screen.dart';
 
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/home/presentation/screens/merchandise/shop_screen.dart';
@@ -242,6 +245,19 @@ class AppRouter {
 
         return EventDetailsScreen(
           eventId: eventId!,
+        );
+      },
+    ),
+
+    // ticket screen
+    GoRoute(
+      path: RouteNames.ticket,
+      name: RouteNames.ticketName,
+      builder: (context, state) {
+        final ticketId = state.pathParameters['ticketId'];
+
+        return TicketScreen(
+          ticketId: ticketId!,
         );
       },
     ),
