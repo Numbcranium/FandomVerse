@@ -116,6 +116,7 @@ class ChooseFandomScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final fandom = fandoms[index];
 
+                        // for the next screen ========
                         return GestureDetector(
                           onTap: () {
                             // Send the Firebase fandom ID
@@ -173,7 +174,7 @@ class ChooseFandomScreen extends StatelessWidget {
                                               .image_outlined,
                                           color:
                                           Colors.white38,
-                                          size: 35,
+                                          size: 40,
                                         ),
                                       );
                                     },
