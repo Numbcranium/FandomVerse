@@ -170,7 +170,7 @@ class HomeScreen extends StatelessWidget {
         context.go(RouteNames.events);
         return;
       case 3:
-        showComingSoon(context, 'Shop');
+        context.push('/merchandise');
         return;
       case 4:
         context.go(RouteNames.profile);

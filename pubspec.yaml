@@ -26,7 +26,7 @@ dependencies:
   # --- Firebase ---
   firebase_core: ^3.4.0
   firebase_auth: ^5.2.0
-  cloud_firestore: ^5.4.0
+  cloud_firestore: ^5.6.12
   firebase_storage: ^12.3.0
   firebase_messaging: ^15.1.0
 
@@ -49,8 +49,8 @@ dependencies:
   # Firestore stays the source of truth for reads; sqflite mirrors writes
   # locally to satisfy the SRS's offline-storage constraint. Wiring this
   # up as a write-through cache layer is a follow-up task, not yet done.
-  sqflite: ^2.3.3+1
-  path: ^1.9.0
+  sqflite: ^2.4.2+1
+  path: ^1.9.1
 
   # --- Typography ---
   # Poppins per the design system — fetched via Google Fonts' API and
