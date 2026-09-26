@@ -10,6 +10,7 @@ import 'features/auth/data/datasources/auth_remote_datasource.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
+import 'features/trivia/presentation/screens/models/lib/models/fandom_quiz_question_seed.dart';
 import 'firebase/firebase_service.dart';
 import 'firebase_options.dart';
 import 'models/fandom_trivia_seed.dart';
@@ -32,7 +33,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // Seed gallery data into Firestore
-  // await FandomTriviaSeed().seedTrivia();
+  await FandomQuizQuestionSeed().seedQuestions();
 
 
   final appRouter = AppRouter(

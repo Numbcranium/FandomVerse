@@ -120,7 +120,7 @@ class ChooseFandomScreen extends StatelessWidget {
                         return GestureDetector(
                           onTap: () {
                             // Send the Firebase fandom ID
-                            // to the trivia questions screen.
+                            // to the trivia questions screen. ====
                             context.push(
                               RouteNames.triviaQuestions
                                   .replaceFirst(
@@ -240,37 +240,36 @@ class ChooseFandomScreen extends StatelessWidget {
               const SizedBox(height: 15),
 
               // Continue button
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-
-                child: ElevatedButton(
-                  onPressed: () {
-                    // We will connect this after
-                    // selecting a fandom.
-                  },
-
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                    const Color(0xFF7027FF),
-
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(30),
-                    ),
-                  ),
-
-                  child: const Text(
-                    'Continue',
-
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
+              // SizedBox(
+              //   width: double.infinity,
+              //   height: 52,
+              //
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       context.push(RouteNames.triviaQuestions);
+              //     },
+              //
+              //     style: ElevatedButton.styleFrom(
+              //       backgroundColor:
+              //       const Color(0xFF7027FF),
+              //
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius:
+              //         BorderRadius.circular(30),
+              //       ),
+              //     ),
+              //
+              //     child: const Text(
+              //       'Continue',
+              //
+              //       style: TextStyle(
+              //         color: Colors.white,
+              //         fontSize: 15,
+              //         fontWeight: FontWeight.w600,
+              //       ),
+              //     ),
+              //   ),
+              // ),
 
               const SizedBox(height: 20),
             ],

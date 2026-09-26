@@ -11,7 +11,7 @@ class TriviaCard extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      // Removed fixed height to let Content + Padding safely determine the size
+
       margin: const EdgeInsets.symmetric(horizontal: 6),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(

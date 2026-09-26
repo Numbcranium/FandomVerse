@@ -82,6 +82,7 @@ flutter:
     - assets/video/
     - assets/images/homeImages/
     - assets/images/homeSearch/
+    - assets/images/quizImage/
 
   # Add more paths here (assets/images/, assets/icons/) once other real
   # assets are added post-SRS.
