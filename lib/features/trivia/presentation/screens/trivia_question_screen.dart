@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../auth/presentation/bloc/auth_bloc.dart';
 import 'a_results_screen.dart';
 import 'models/fandom_quiz_question.dart';
 import 'models/fandom_quiz_question_service.dart';
@@ -146,18 +148,20 @@ class _TriviaQuestionsScreenState
       // SAVE QUIZ ATTEMPT
       // --------------------------------------------------------
 
-      final User? user =
-          FirebaseAuth.instance.currentUser;
+      final firebaseUser = FirebaseAuth.instance.currentUser;
+      final appUser = context.read<AuthBloc>().state.user;
 
-
-      if (user != null) {
+      if (firebaseUser != null) {
         final int points = score * 10;
+
+        // Use appUser.fullName if available, otherwise fallback to displayName or placeholder
+        final String displayName = appUser?.fullName ?? firebaseUser.displayName ?? 'Fandom Fan';
 
         final QuizAttempt attempt = QuizAttempt(
           id: '',
-          userId: user.uid,
-          username: user.displayName ?? 'Fandom Fan',
-          avatar: user.photoURL ?? '',
+          userId: firebaseUser.uid,
+          username: displayName,
+          avatar: appUser?.photoUrl ?? firebaseUser.photoURL ?? '',
           fandomId: widget.fandomId,
           score: score,
           totalQuestions: questions.length,
