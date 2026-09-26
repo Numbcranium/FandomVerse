@@ -64,22 +64,48 @@ class _TriviaLeaderboardScreenState
   // ----------------------------------------------------------
   // BUILD LEADERBOARD
   // ----------------------------------------------------------
-
   List<_LeaderboardUser> _buildLeaderboard(
       List<QuizAttempt> attempts,
       ) {
     final Map<String, _LeaderboardUser> users = {};
 
     for (final attempt in attempts) {
-      if (users.containsKey(attempt.userId)) {
-        users[attempt.userId]!.points += attempt.points;
-      } else {
+      // ----------------------------------------------------------
+      // NEW USER
+      // ----------------------------------------------------------
+
+      if (!users.containsKey(attempt.userId)) {
         users[attempt.userId] = _LeaderboardUser(
           userId: attempt.userId,
-          username: attempt.username,
+          username: attempt.username.trim().isNotEmpty
+              ? attempt.username
+              : 'Fandom Fan',
           avatar: attempt.avatar,
           points: attempt.points,
         );
+
+        continue;
+      }
+
+      // ----------------------------------------------------------
+      // EXISTING USER
+      // ----------------------------------------------------------
+
+      final user = users[attempt.userId]!;
+
+      // Add points from another quiz
+      user.points += attempt.points;
+
+      // Update username if we have a real name
+      if (attempt.username.trim().isNotEmpty &&
+          attempt.username != 'Fandom Fan') {
+        user.username = attempt.username;
+      }
+
+      // Update avatar if we have one
+      if (user.avatar.trim().isEmpty &&
+          attempt.avatar.trim().isNotEmpty) {
+        user.avatar = attempt.avatar;
       }
     }
 
@@ -97,6 +123,7 @@ class _TriviaLeaderboardScreenState
 
     return leaderboard;
   }
+
 
   // ----------------------------------------------------------
   // AVATAR
@@ -586,8 +613,8 @@ class _TriviaLeaderboardScreenState
 
 class _LeaderboardUser {
   final String userId;
-  final String username;
-  final String avatar;
+  String username;
+  String avatar;
 
   int points;
   int rank;
