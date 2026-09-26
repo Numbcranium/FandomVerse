@@ -5,6 +5,7 @@ import 'router/route_names.dart';
 import '../core/constants/app_constants.dart';
 import 'theme/app_theme.dart';
 
+
 /// Root widget: wires [AppTheme] and a [GoRouter] together.
 ///
 /// Deliberately takes the built `GoRouter` as a constructor parameter

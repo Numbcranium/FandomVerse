@@ -64,5 +64,4 @@ class RouteNames {
     register,
     forgotPassword,
   ];
-
 }
