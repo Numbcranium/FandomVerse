@@ -13,8 +13,8 @@ import '../../../tickets/data/services/ticket_purchase_service.dart';
 import '../../../tickets/models/ticket_model.dart';
 import '../../data/datasources/event_firebase_datasource.dart';
 import '../../data/datasources/event_sqlite_datasource.dart';
+import '../../data/repositories/event_repository_impl.dart';
 import '../../models/event_model.dart';
-import '../../repositories/event_repository_impl.dart';
 
 class EventDetailsScreen extends StatefulWidget {
   const EventDetailsScreen({
