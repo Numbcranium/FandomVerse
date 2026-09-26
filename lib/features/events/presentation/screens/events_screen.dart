@@ -5,6 +5,8 @@ import '../../../../app/router/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/utils/coming_soon.dart';
+import '../../../../core/widgets/app_bottom_nav_bar.dart';
 import '../../data/datasources/event_firebase_datasource.dart';
 import '../../data/datasources/event_sqlite_datasource.dart';
 import '../../data/repositories/event_repository_impl.dart';
@@ -84,6 +86,14 @@ class _EventsScreenState extends State<EventsScreen> {
       value: _eventsCubit,
       child: Scaffold(
         backgroundColor: AppColors.backgroundDark,
+
+        // Use the same bottom navigation used throughout the app.
+        // Index 2 represents the Events section.
+        bottomNavigationBar: AppBottomNavBar(
+          currentIndex: 2,
+          onTap: (index) => _onTabTapped(context, index),
+        ),
+
         body: SafeArea(
           child: Column(
             children: [
@@ -115,6 +125,42 @@ class _EventsScreenState extends State<EventsScreen> {
         ),
       ),
     );
+  }
+
+  // ---------------------------------------------------------------------------
+  // BOTTOM NAVIGATION
+  // ---------------------------------------------------------------------------
+
+  /// Handles navigation from the shared app bottom navigation.
+  ///
+  /// The Events tab is index 2, so tapping it while already on this screen
+  /// does nothing.
+  void _onTabTapped(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+      // Home
+        context.go(RouteNames.home);
+        return;
+
+      case 1:
+      // Explore is not implemented yet.
+        showComingSoon(context, 'Explore');
+        return;
+
+      case 2:
+      // Already on Events.
+        return;
+
+      case 3:
+      // Merchandise
+        context.push('/merchandise');
+        return;
+
+      case 4:
+      // Profile
+        context.go(RouteNames.profile);
+        return;
+    }
   }
 
   // ---------------------------------------------------------------------------
