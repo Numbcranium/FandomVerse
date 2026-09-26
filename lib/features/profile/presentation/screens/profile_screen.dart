@@ -23,7 +23,7 @@ class ProfileScreen extends StatelessWidget {
         context.go(RouteNames.home);
         return;
       case 1:
-        showComingSoon(context, 'Explore');
+        context.push(RouteNames.community);
         return;
       case 2:
         showComingSoon(context, 'Events');
