@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../app/router/route_names.dart';
+import '../trivia_leaderboard_screen.dart';
 
 class TriviaResultCard extends StatelessWidget {
   final int score;
   final int total;
+  final String timeTaken;
   final VoidCallback? onDone;
 
   const TriviaResultCard({
     super.key,
     required this.score,
     required this.total,
+    required this.timeTaken,
+
     this.onDone,
   });
 
@@ -86,9 +93,8 @@ class TriviaResultCard extends StatelessWidget {
 
                       child: IconButton(
                         onPressed: () {
-                          // Leaderboard screen will be connected later.
+                          context.push(RouteNames.triviaLeaderboard);
                         },
-
                         icon: const Icon(
                           Icons.leaderboard_outlined,
                           color: Colors.white,
@@ -330,7 +336,7 @@ class TriviaResultCard extends StatelessWidget {
                                     icon:
                                     Icons.timer_outlined,
                                     title: 'Time Taken',
-                                    value: '01:12',
+                                    value: timeTaken,
                                     iconColor:
                                     const Color(
                                       0xFFBD62FF,

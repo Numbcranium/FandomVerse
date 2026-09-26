@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-class TriviaResultScreen extends StatelessWidget {
+import '../../../../app/router/route_names.dart';
+
+class AResultsScreen extends StatelessWidget {
   final int score;
   final int total;
+  final String timeTaken;
 
-  const TriviaResultScreen({
+  const AResultsScreen({
     super.key,
     required this.score,
     required this.total,
+    required this.timeTaken,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Calculate percentage
+    // ==========================================================
+    // CALCULATIONS
+    // ==========================================================
+
     final double percentage =
     total == 0 ? 0 : score / total;
 
@@ -23,11 +31,13 @@ class TriviaResultScreen extends StatelessWidget {
         total - score;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF05052B),
+      backgroundColor:
+      const Color(0xFF05052B),
 
       body: SafeArea(
         child: Container(
-          decoration: const BoxDecoration(
+          decoration:
+          const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -42,10 +52,13 @@ class TriviaResultScreen extends StatelessWidget {
 
           child: Column(
             children: [
+              // ==================================================
               // TOP BAR
+              // ==================================================
 
               Padding(
-                padding: const EdgeInsets.symmetric(
+                padding:
+                const EdgeInsets.symmetric(
                   horizontal: 14,
                   vertical: 8,
                 ),
@@ -53,6 +66,7 @@ class TriviaResultScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     // BACK
+
                     IconButton(
                       onPressed: () {
                         Navigator.pop(context);
@@ -68,17 +82,25 @@ class TriviaResultScreen extends StatelessWidget {
                     const Spacer(),
 
                     // LEADERBOARD ICON
+
                     Container(
                       width: 45,
                       height: 45,
 
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF111B55),
+                      decoration:
+                      BoxDecoration(
+                        color:
+                        const Color(
+                          0xFF111B55,
+                        ),
 
-                        shape: BoxShape.circle,
+                        shape:
+                        BoxShape.circle,
 
-                        border: Border.all(
-                          color: const Color(
+                        border:
+                        Border.all(
+                          color:
+                          const Color(
                             0xFF263D75,
                           ),
                         ),
@@ -86,13 +108,15 @@ class TriviaResultScreen extends StatelessWidget {
 
                       child: IconButton(
                         onPressed: () {
-                          // Leaderboard screen
-                          // will be connected here.
+                           context.push(RouteNames.triviaLeaderboard);
                         },
 
-                        icon: const Icon(
-                          Icons.leaderboard_outlined,
-                          color: Colors.white,
+                        icon:
+                        const Icon(
+                          Icons
+                              .leaderboard_outlined,
+                          color:
+                          Colors.white,
                           size: 23,
                         ),
                       ),
@@ -101,11 +125,13 @@ class TriviaResultScreen extends StatelessWidget {
                 ),
               ),
 
+              // ==================================================
               // CONTENT
-              // =====================================================
+              // ==================================================
 
               Expanded(
-                child: SingleChildScrollView(
+                child:
+                SingleChildScrollView(
                   padding:
                   const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -115,11 +141,13 @@ class TriviaResultScreen extends StatelessWidget {
                     children: [
                       const SizedBox(height: 5),
 
+                      // ==================================================
                       // TROPHY
-                      // =================================================
+                      // ==================================================
 
                       Stack(
-                        alignment: Alignment.center,
+                        alignment:
+                        Alignment.center,
 
                         children: [
                           Container(
@@ -131,9 +159,12 @@ class TriviaResultScreen extends StatelessWidget {
                               shape:
                               BoxShape.circle,
 
-                              color: const Color(
+                              color:
+                              const Color(
                                 0xFF7027FF,
-                              ).withOpacity(0.25),
+                              ).withOpacity(
+                                0.25,
+                              ),
                             ),
                           ),
 
@@ -147,14 +178,20 @@ class TriviaResultScreen extends StatelessWidget {
                               BoxShape.circle,
 
                               color:
-                              Color(0xFF171B65),
+                              Color(
+                                0xFF171B65,
+                              ),
                             ),
 
-                            child: const Icon(
-                              Icons.emoji_events,
+                            child:
+                            const Icon(
+                              Icons
+                                  .emoji_events,
 
                               color:
-                              Color(0xFFFFB72B),
+                              Color(
+                                0xFFFFB72B,
+                              ),
 
                               size: 39,
                             ),
@@ -164,15 +201,17 @@ class TriviaResultScreen extends StatelessWidget {
 
                       const SizedBox(height: 12),
 
-                      // =================================================
+                      // ==================================================
                       // TITLE
-                      // =================================================
+                      // ==================================================
 
                       const Text(
                         'Quiz Completed!',
 
-                        style: TextStyle(
-                          color: Colors.white,
+                        style:
+                        TextStyle(
+                          color:
+                          Colors.white,
                           fontSize: 25,
                           fontWeight:
                           FontWeight.bold,
@@ -181,12 +220,13 @@ class TriviaResultScreen extends StatelessWidget {
 
                       const SizedBox(height: 20),
 
-                      // =================================================
+                      // ==================================================
                       // SCORE CARD
-                      // =================================================
+                      // ==================================================
 
                       Container(
-                        width: double.infinity,
+                        width:
+                        double.infinity,
 
                         padding:
                         const EdgeInsets.all(
@@ -201,11 +241,13 @@ class TriviaResultScreen extends StatelessWidget {
                           ),
 
                           borderRadius:
-                          BorderRadius.circular(
+                          BorderRadius
+                              .circular(
                             20,
                           ),
 
-                          border: Border.all(
+                          border:
+                          Border.all(
                             color:
                             const Color(
                               0xFF263D75,
@@ -213,13 +255,17 @@ class TriviaResultScreen extends StatelessWidget {
                           ),
                         ),
 
-                        child: Column(
+                        child:
+                        Column(
                           crossAxisAlignment:
                           CrossAxisAlignment
                               .start,
 
                           children: [
-                            // SCORE + PERCENTAGE
+                            // ==================================================
+                            // SCORE
+                            // ==================================================
+
                             Row(
                               children: [
                                 Column(
@@ -236,7 +282,8 @@ class TriviaResultScreen extends StatelessWidget {
                                         color:
                                         Colors
                                             .white70,
-                                        fontSize: 16,
+                                        fontSize:
+                                        16,
                                       ),
                                     ),
 
@@ -250,8 +297,10 @@ class TriviaResultScreen extends StatelessWidget {
                                       style:
                                       const TextStyle(
                                         color:
-                                        Colors.white,
-                                        fontSize: 35,
+                                        Colors
+                                            .white,
+                                        fontSize:
+                                        35,
                                         fontWeight:
                                         FontWeight
                                             .bold,
@@ -263,6 +312,7 @@ class TriviaResultScreen extends StatelessWidget {
                                 const Spacer(),
 
                                 // PERCENTAGE
+
                                 Container(
                                   width: 68,
                                   height: 68,
@@ -270,7 +320,8 @@ class TriviaResultScreen extends StatelessWidget {
                                   decoration:
                                   BoxDecoration(
                                     shape:
-                                    BoxShape.circle,
+                                    BoxShape
+                                        .circle,
 
                                     color:
                                     const Color(
@@ -291,16 +342,20 @@ class TriviaResultScreen extends StatelessWidget {
                                   ),
 
                                   alignment:
-                                  Alignment.center,
+                                  Alignment
+                                      .center,
 
-                                  child: Text(
+                                  child:
+                                  Text(
                                     '$percentageValue%',
 
                                     style:
                                     const TextStyle(
                                       color:
-                                      Colors.white,
-                                      fontSize: 19,
+                                      Colors
+                                          .white,
+                                      fontSize:
+                                      19,
                                       fontWeight:
                                       FontWeight
                                           .bold,
@@ -314,28 +369,25 @@ class TriviaResultScreen extends StatelessWidget {
                               height: 18,
                             ),
 
-                            // =================================================
+                            // ==================================================
                             // STATISTICS
-                            // =================================================
+                            // ==================================================
 
                             Row(
                               children: [
                                 Expanded(
-                                  child: _StatBox(
+                                  child:
+                                  _StatBox(
                                     icon: Icons
                                         .check_circle_outline,
-
                                     title:
                                     'Correct',
-
                                     value:
                                     '$score',
-
                                     iconColor:
                                     const Color(
                                       0xFF00D084,
                                     ),
-
                                     valueColor:
                                     const Color(
                                       0xFF00D084,
@@ -348,21 +400,18 @@ class TriviaResultScreen extends StatelessWidget {
                                 ),
 
                                 Expanded(
-                                  child: _StatBox(
+                                  child:
+                                  _StatBox(
                                     icon:
                                     Icons.close,
-
                                     title:
                                     'Incorrect',
-
                                     value:
                                     '$incorrect',
-
                                     iconColor:
                                     const Color(
                                       0xFFFF3D71,
                                     ),
-
                                     valueColor:
                                     const Color(
                                       0xFFFF3D71,
@@ -375,17 +424,16 @@ class TriviaResultScreen extends StatelessWidget {
                                 ),
 
                                 Expanded(
-                                  child: _StatBox(
-                                    icon: Icons
-                                        .timer_outlined,
-
+                                  child:
+                                  _StatBox(
+                                    icon:
+                                    Icons.timer_outlined,
                                     title:
                                     'Time Taken',
 
-                                    // We will make this
-                                    // dynamic later.
+                                    // THIS IS NOW REAL TIME
                                     value:
-                                    '01:12',
+                                    timeTaken,
 
                                     iconColor:
                                     const Color(
@@ -393,7 +441,8 @@ class TriviaResultScreen extends StatelessWidget {
                                     ),
 
                                     valueColor:
-                                    Colors.white,
+                                    Colors
+                                        .white,
                                   ),
                                 ),
                               ],
@@ -402,14 +451,17 @@ class TriviaResultScreen extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 10),
+                      const SizedBox(
+                        height: 10,
+                      ),
 
-                      // =================================================
+                      // ==================================================
                       // PERFORMANCE
-                      // =================================================
+                      // ==================================================
 
                       Container(
-                        width: double.infinity,
+                        width:
+                        double.infinity,
 
                         padding:
                         const EdgeInsets.all(
@@ -424,11 +476,13 @@ class TriviaResultScreen extends StatelessWidget {
                           ),
 
                           borderRadius:
-                          BorderRadius.circular(
+                          BorderRadius
+                              .circular(
                             20,
                           ),
 
-                          border: Border.all(
+                          border:
+                          Border.all(
                             color:
                             const Color(
                               0xFF263D75,
@@ -436,7 +490,8 @@ class TriviaResultScreen extends StatelessWidget {
                           ),
                         ),
 
-                        child: Column(
+                        child:
+                        Column(
                           crossAxisAlignment:
                           CrossAxisAlignment
                               .start,
@@ -445,10 +500,12 @@ class TriviaResultScreen extends StatelessWidget {
                             const Text(
                               'Performance',
 
-                              style: TextStyle(
+                              style:
+                              TextStyle(
                                 color:
                                 Colors.white,
-                                fontSize: 15,
+                                fontSize:
+                                15,
                                 fontWeight:
                                 FontWeight.w600,
                               ),
@@ -459,6 +516,7 @@ class TriviaResultScreen extends StatelessWidget {
                             ),
 
                             // PERFORMANCE BAR
+
                             ClipRRect(
                               borderRadius:
                               BorderRadius
@@ -471,7 +529,8 @@ class TriviaResultScreen extends StatelessWidget {
                                 value:
                                 percentage,
 
-                                minHeight: 15,
+                                minHeight:
+                                15,
 
                                 backgroundColor:
                                 const Color(
@@ -493,19 +552,23 @@ class TriviaResultScreen extends StatelessWidget {
                             ),
 
                             Center(
-                              child: Text(
+                              child:
+                              Text(
                                 _getPerformanceMessage(
                                   percentage,
                                 ),
 
                                 textAlign:
-                                TextAlign.center,
+                                TextAlign
+                                    .center,
 
                                 style:
                                 const TextStyle(
                                   color:
-                                  Colors.white70,
-                                  fontSize: 14,
+                                  Colors
+                                      .white70,
+                                  fontSize:
+                                  14,
                                 ),
                               ),
                             ),
@@ -513,21 +576,23 @@ class TriviaResultScreen extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 25),
+                      const SizedBox(
+                        height: 25,
+                      ),
 
-                      // =================================================
+                      // ==================================================
                       // PLAY AGAIN
-                      // =================================================
+                      // ==================================================
 
                       SizedBox(
-                        width: double.infinity,
+                        width:
+                        double.infinity,
+
                         height: 52,
 
                         child:
                         ElevatedButton(
                           onPressed: () {
-                            // Go back to the
-                            // previous quiz screen.
                             Navigator.pop(
                               context,
                             );
@@ -551,14 +616,16 @@ class TriviaResultScreen extends StatelessWidget {
                             ),
                           ),
 
-                          child: const Text(
+                          child:
+                          const Text(
                             'Play Again',
 
                             style:
                             TextStyle(
                               color:
                               Colors.white,
-                              fontSize: 16,
+                              fontSize:
+                              16,
                               fontWeight:
                               FontWeight.bold,
                             ),
@@ -566,26 +633,28 @@ class TriviaResultScreen extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 12),
+                      const SizedBox(
+                        height: 12,
+                      ),
 
-                      // =================================================
+                      // ==================================================
                       // BACK TO HOME
-                      // =================================================
+                      // ==================================================
 
                       SizedBox(
-                        width: double.infinity,
+                        width:
+                        double.infinity,
+
                         height: 52,
 
                         child:
                         OutlinedButton(
                           onPressed: () {
-                            // We will connect
-                            // this to your Home
-                            // route later.
-
                             Navigator.pop(
                               context,
                             );
+
+                            // Connect Home route here later.
                           },
 
                           style:
@@ -609,14 +678,16 @@ class TriviaResultScreen extends StatelessWidget {
                             ),
                           ),
 
-                          child: const Text(
+                          child:
+                          const Text(
                             'Back to Home',
 
                             style:
                             TextStyle(
                               color:
                               Colors.white,
-                              fontSize: 16,
+                              fontSize:
+                              16,
                               fontWeight:
                               FontWeight.w600,
                             ),
@@ -624,7 +695,9 @@ class TriviaResultScreen extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 25),
+                      const SizedBox(
+                        height: 25,
+                      ),
                     ],
                   ),
                 ),
@@ -636,9 +709,9 @@ class TriviaResultScreen extends StatelessWidget {
     );
   }
 
-  // ===============================================================
+  // ============================================================
   // PERFORMANCE MESSAGE
-  // ===============================================================
+  // ============================================================
 
   String _getPerformanceMessage(
       double percentage,
@@ -659,9 +732,9 @@ class TriviaResultScreen extends StatelessWidget {
   }
 }
 
-// =================================================================
+// ================================================================
 // STAT BOX
-// =================================================================
+// ================================================================
 
 class _StatBox extends StatelessWidget {
   final IconData icon;
@@ -691,23 +764,23 @@ class _StatBox extends StatelessWidget {
 
       decoration:
       BoxDecoration(
-        color: const Color(
-          0xFF081344,
-        ),
+        color:
+        const Color(0xFF081344),
 
         borderRadius:
         BorderRadius.circular(
           12,
         ),
 
-        border: Border.all(
-          color: const Color(
-            0xFF1C3A79,
-          ),
+        border:
+        Border.all(
+          color:
+          const Color(0xFF1C3A79),
         ),
       ),
 
-      child: Column(
+      child:
+      Column(
         mainAxisAlignment:
         MainAxisAlignment.center,
 
@@ -728,7 +801,8 @@ class _StatBox extends StatelessWidget {
             textAlign:
             TextAlign.center,
 
-            style: TextStyle(
+            style:
+            TextStyle(
               color: iconColor,
               fontSize: 11,
               fontWeight:
@@ -746,7 +820,8 @@ class _StatBox extends StatelessWidget {
             textAlign:
             TextAlign.center,
 
-            style: TextStyle(
+            style:
+            TextStyle(
               color: valueColor,
               fontSize: 16,
               fontWeight:

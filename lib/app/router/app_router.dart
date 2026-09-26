@@ -28,8 +28,9 @@ import '../../features/profile/presentation/screens/purchase_history_screen.dart
 import '../../features/settings/presentation/screens/settings_screen.dart';
 
 import '../../features/trivia/presentation/screens/choose_fandom_screen.dart';
+import '../../features/trivia/presentation/screens/trivia_leaderboard_screen.dart';
 import '../../features/trivia/presentation/screens/trivia_pop_start_screen.dart';
-import '../../features/trivia/presentation/screens/trivia_questions_screen.dart';
+import '../../features/trivia/presentation/screens/trivia_question_screen.dart';
 import 'route_names.dart';
 
 /// Builds and owns the app's [GoRouter] instance.
@@ -155,6 +156,11 @@ class AppRouter {
       path: RouteNames.trivia,
       name: RouteNames.triviaName,
       builder: (context, state) => const TriviaPopStartScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.triviaLeaderboard,
+      name: RouteNames.triviaLeaderboardName,
+      builder: (context, state) => const TriviaLeaderboardScreen(),
     ),
     GoRoute(
       path: RouteNames.fandoms,
