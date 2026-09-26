@@ -10,6 +10,18 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
+
+// event routes
+import '../../features/events/presentation/screens/calender_screen.dart';
+import '../../features/events/presentation/screens/event_screen.dart';
+import '../../features/events/presentation/screens/events_details_screen.dart';
+import '../../features/events/presentation/screens/events_filters_screen.dart';
+import '../../features/events/presentation/screens/events_search_screen.dart';
+import '../../features/events/presentation/screens/map_screen.dart';
+import '../../features/events/presentation/screens/nearby_events_screen.dart';
+
+import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/home/presentation/screens/merchandise/shop_screen.dart';
 import '../../features/community/presentation/screens/community_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/home/presentation/widgets/fandom_details_screen.dart';
@@ -26,6 +38,7 @@ import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/purchase_history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/home/presentation/screens/merchandise/shop_screen.dart';
 import '../../features/trivia/presentation/screens/choose_fandom_screen.dart';
 import '../../features/trivia/presentation/screens/trivia_pop_start_screen.dart';
 import '../../features/trivia/presentation/screens/trivia_questions_screen.dart';
@@ -34,24 +47,6 @@ import '../../features/admin/presentation/screens/admin_dashboard_screen.dart';
 import 'route_names.dart';
 
 /// Builds and owns the app's [GoRouter] instance.
-///
-/// [AuthStatus] (defined alongside `AuthBloc`'s state) is what drives
-/// route protection here:
-/// - [RouteNames.intro] is the `initialLocation` and is exempt from all
-///   redirect logic, so the intro clip always plays regardless of auth
-///   state. It hands off to splash itself when it finishes.
-/// - While status is [AuthStatus.unknown], stay on splash.
-/// - [AuthStatus.authenticating] is treated the same as unauthenticated —
-///   a login/register submission in flight shouldn't unlock protected
-///   routes before Firebase confirms the session.
-/// - Unauthenticated users may only reach [RouteNames.publicPaths]; any
-///   other route redirects to onboarding (first launch) or login.
-/// - Authenticated users with no fandoms picked yet
-///   ([needsInterestsSelection]) are routed to [RouteNames.interests] —
-///   a one-time step, same pattern as first-launch onboarding — before
-///   anywhere else.
-/// - Otherwise, authenticated users are redirected away from splash/
-///   onboarding/login/register/forgot-password/interests straight home.
 class AppRouter {
   AppRouter({
     required AuthStatus Function() authStatus,
@@ -82,28 +77,33 @@ class AppRouter {
   String? _redirect(BuildContext context, GoRouterState state) {
     final currentPath = state.matchedLocation;
 
-    // The intro screen is never redirected, whatever the auth status is.
+    // The intro screen is never redirected.
     if (currentPath == RouteNames.intro) return null;
 
     final status = _authStatus();
 
-    // Still resolving auth state (e.g. splash checking Firebase Auth) —
-    // hold position, don't redirect yet.
+    // Still resolving auth state.
     if (status == AuthStatus.unknown) {
-      return currentPath == RouteNames.splash ? null : RouteNames.splash;
+      return currentPath == RouteNames.splash
+          ? null
+          : RouteNames.splash;
     }
 
     final isPublicRoute = RouteNames.publicPaths.contains(currentPath);
 
-    // Treat an in-flight login/register submission the same as signed-out
-    // for route protection — don't unlock protected routes early.
-    if (status == AuthStatus.unauthenticated || status == AuthStatus.authenticating) {
+    // User is not authenticated.
+    if (status == AuthStatus.unauthenticated ||
+        status == AuthStatus.authenticating) {
       if (isPublicRoute && currentPath != RouteNames.splash) {
-        return null; // already headed somewhere a logged-out user can be
+        return null;
       }
-      return _isFirstLaunch() ? RouteNames.onboarding : RouteNames.login;
+
+      return _isFirstLaunch()
+          ? RouteNames.onboarding
+          : RouteNames.login;
     }
 
+    // User is authenticated.
     // status == AuthStatus.authenticated
     // Admins are locked into the admin dashboard only.
     if (_isAdmin()) {
@@ -111,11 +111,15 @@ class AppRouter {
     }
 
     if (_needsInterestsSelection()) {
-      return currentPath == RouteNames.interests ? null : RouteNames.interests;
+      return currentPath == RouteNames.interests
+          ? null
+          : RouteNames.interests;
     }
+
     if (isPublicRoute || currentPath == RouteNames.interests) {
       return RouteNames.home;
     }
+
     return null;
   }
 
@@ -125,41 +129,56 @@ class AppRouter {
       name: RouteNames.introName,
       builder: (context, state) => const IntroScreen(),
     ),
+
     GoRoute(
       path: RouteNames.splash,
       name: RouteNames.splashName,
       builder: (context, state) => const SplashScreen(),
     ),
+
     GoRoute(
       path: RouteNames.onboarding,
       name: RouteNames.onboardingName,
       builder: (context, state) => const OnboardingScreen(),
     ),
+
     GoRoute(
       path: RouteNames.login,
       name: RouteNames.loginName,
       builder: (context, state) => const LoginScreen(),
     ),
+
     GoRoute(
       path: RouteNames.register,
       name: RouteNames.registerName,
       builder: (context, state) => const RegisterScreen(),
     ),
+
     GoRoute(
       path: RouteNames.forgotPassword,
       name: RouteNames.forgotPasswordName,
       builder: (context, state) => const ForgotPasswordScreen(),
     ),
+
     GoRoute(
       path: RouteNames.interests,
       name: RouteNames.interestsName,
       builder: (context, state) => const InterestsScreen(),
     ),
+
     GoRoute(
       path: RouteNames.home,
       name: RouteNames.homeName,
       builder: (context, state) => const HomeScreen(),
     ),
+
+    // Merchandise mock
+    GoRoute(
+      path: '/merchandise',
+      name: 'merchandise',
+      builder: (context, state) => const ShopScreen(),
+    ),
+
     GoRoute(
       path: RouteNames.trivia,
       name: RouteNames.triviaName,
@@ -267,31 +286,89 @@ class AppRouter {
       name: RouteNames.notificationsName,
       builder: (context, state) => const NotificationsScreen(),
     ),
+
     GoRoute(
       path: RouteNames.profile,
       name: RouteNames.profileName,
       builder: (context, state) => const ProfileScreen(),
     ),
+
     GoRoute(
       path: RouteNames.editProfile,
       name: RouteNames.editProfileName,
       builder: (context, state) => const EditProfileScreen(),
     ),
+
     GoRoute(
       path: RouteNames.settings,
       name: RouteNames.settingsName,
       builder: (context, state) => const SettingsScreen(),
     ),
+
     GoRoute(
       path: RouteNames.bookmarks,
       name: RouteNames.bookmarksName,
       builder: (context, state) => const BookmarksScreen(),
     ),
+
     GoRoute(
       path: RouteNames.purchaseHistory,
       name: RouteNames.purchaseHistoryName,
       builder: (context, state) => const PurchaseHistoryScreen(),
     ),
+    // events routing
+    GoRoute(
+      path: RouteNames.events,
+      name: RouteNames.eventsName,
+      builder: (context, state) => const EventsScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.eventCalendar,
+      name: RouteNames.eventCalendarName,
+      builder: (context, state) => const CalendarScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.nearbyEvents,
+      name: RouteNames.nearbyEventsName,
+      builder: (context, state) => const NearbyEventsScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.eventMap,
+      name: RouteNames.eventMapName,
+      builder: (context, state) {
+        final eventId = state.uri.queryParameters['eventId'];
+
+        return MapScreen(
+          eventId: eventId,
+        );
+      },
+    ),
+
+    GoRoute(
+      path: RouteNames.eventSearch,
+      name: RouteNames.eventSearchName,
+      builder: (context, state) => const EventSearchScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.eventFilters,
+      name: RouteNames.eventFiltersName,
+      builder: (context, state) => const EventFiltersScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.eventDetails,
+      name: RouteNames.eventDetailsName,
+      builder: (context, state) {
+        final eventId = state.pathParameters['eventId'];
+
+        return EventDetailsScreen(
+          eventId: eventId!,
+        );
+      },
     GoRoute(
       path: RouteNames.aiHelper,
       name: RouteNames.aiHelperName,
@@ -305,13 +382,12 @@ class AppRouter {
   ];
 }
 
-/// Adapts any [Stream] (e.g. `FirebaseAuth.instance.authStateChanges()`,
-/// or an `AuthBloc`'s `.stream`) into a [Listenable] that [GoRouter] can
-/// use as `refreshListenable`, so the router re-evaluates `redirect` every
-/// time auth state changes.
+/// Adapts a [Stream] into a [Listenable] that [GoRouter] can use
+/// to refresh route redirects.
 class GoRouterRefreshStream extends ChangeNotifier {
   GoRouterRefreshStream(Stream<dynamic> stream) {
     notifyListeners();
+
     _subscription = stream.asBroadcastStream().listen(
           (_) => notifyListeners(),
     );
