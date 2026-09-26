@@ -40,7 +40,7 @@ dependencies:
   # --- Media / images ---
   image_picker: ^1.2.3
   cached_network_image: ^3.4.1
-  video_player: ^2.9.2
+  video_player: ^2.11.1
 
   # --- Utilities ---
   intl: ^0.19.0
@@ -59,6 +59,8 @@ dependencies:
 
   # --- Icons (Material 3 friendly, no extra asset weight) ---
   cupertino_icons: ^1.0.8
+  carousel_slider: ^5.1.2
+  gal: ^2.3.3
   firebase_ai: ^2.3.0
   firebase_app_check: ^0.3.2+10
 
@@ -78,7 +80,10 @@ flutter:
   # Intro video played once at every app launch, before splash — see
   # features/intro/presentation/screens/intro_screen.dart.
   assets:
+    - assets/icons/
     - assets/video/
+    - assets/images/homeImages/
+    - assets/images/homeSearch/
 
   # Add more paths here (assets/images/, assets/icons/) once other real
   # assets are added post-SRS.

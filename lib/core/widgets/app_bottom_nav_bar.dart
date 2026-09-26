@@ -37,7 +37,7 @@ class AppBottomNavBar extends StatelessWidget {
 
   static const List<AppNavTab> defaultTabs = [
     AppNavTab(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home'),
-    AppNavTab(icon: Icons.explore_outlined, activeIcon: Icons.explore, label: 'Explore'),
+    AppNavTab(icon: Icons.quiz_outlined, activeIcon: Icons.quiz, label: 'Trivia '),
     AppNavTab(icon: Icons.event_outlined, activeIcon: Icons.event, label: 'Events'),
     AppNavTab(
       icon: Icons.storefront_outlined,

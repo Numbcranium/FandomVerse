@@ -10,7 +10,15 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
+import '../../features/community/presentation/screens/community_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/home/presentation/widgets/fandom_details_screen.dart';
+import '../../features/home/presentation/widgets/fandom_gallery_screen.dart';
+import '../../features/home/presentation/widgets/fandom_news_screen.dart';
+import '../../features/home/presentation/widgets/fandom_trivia_screen.dart';
+import '../../features/home/presentation/widgets/fandom_video_screen.dart';
+import '../../features/home/presentation/widgets/search_screen.dart';
+import '../../features/home/presentation/widgets/trending_fandoms.dart';
 import '../../features/intro/presentation/screens/intro_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/profile/presentation/screens/bookmarks_screen.dart';
@@ -18,6 +26,9 @@ import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/purchase_history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/trivia/presentation/screens/choose_fandom_screen.dart';
+import '../../features/trivia/presentation/screens/trivia_pop_start_screen.dart';
+import '../../features/trivia/presentation/screens/trivia_questions_screen.dart';
 import '../../features/ai_helper/presentation/screens/ai_helper_screen.dart';
 import '../../features/admin/presentation/screens/admin_dashboard_screen.dart';
 import 'route_names.dart';
@@ -148,6 +159,108 @@ class AppRouter {
       path: RouteNames.home,
       name: RouteNames.homeName,
       builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.trivia,
+      name: RouteNames.triviaName,
+      builder: (context, state) => const TriviaPopStartScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.fandoms,
+      name: RouteNames.fandomsName,
+      builder: (context, state) => const TrendingFandoms(),
+    ),
+    GoRoute(
+      path: RouteNames.fandomNews,
+      name: RouteNames.fandomNewsName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomNewsScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.fandomGallery,
+      name: RouteNames.fandomGalleryName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomGalleryScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.fandomDetails,
+      name: RouteNames.fandomDetailsName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomDetailsScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.fandomVideo,
+      name: RouteNames.fandomVideoName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomVideoScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.fandomTrivia,
+      name: RouteNames.fandomTriviaName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomTriviaScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.chooseFandom,
+      name: RouteNames.chooseFandomName,
+      builder: (context, state) {
+        return const ChooseFandomScreen();
+      },
+    ),
+
+  GoRoute(
+  path: RouteNames.triviaQuestions,
+  name: RouteNames.triviaQuestionsName,
+  builder: (context, state) {
+  final fandomId =
+  state.pathParameters['fandomId']!;
+
+  return TriviaQuestionsScreen(
+  fandomId: fandomId,
+  );
+  },
+  ),
+
+    GoRoute(
+      path: RouteNames.homeSearch,
+      name: RouteNames.searchHomeName,
+      builder: (context, state) => const SearchScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.community,
+      name: RouteNames.communityName,
+      builder: (context, state) => const CommunityScreen(),
     ),
     GoRoute(
       path: RouteNames.notifications,

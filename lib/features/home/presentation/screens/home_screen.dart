@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:techwiz7_starter/features/home/presentation/widgets/trivia_card.dart';
 
 import '../../../../app/router/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -12,6 +13,8 @@ import '../../../../core/widgets/app_empty_state.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../widgets/homeslider_screen.dart';
+import '../widgets/popular_fandoms.dart';
 
 /// Generic, domain-agnostic home/dashboard screen (brief section 12).
 ///
@@ -22,18 +25,6 @@ import '../../../auth/presentation/bloc/auth_bloc.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  static const _quickActions = [
-    (icon: Icons.add_circle_outline, label: 'New'),
-    (icon: Icons.search, label: 'Browse'),
-    (icon: Icons.favorite_border, label: 'Saved'),
-    (icon: Icons.help_outline, label: 'Help'),
-  ];
-
-  static const _stats = [
-    (label: 'Active', value: '—'),
-    (label: 'Pending', value: '—'),
-    (label: 'Completed', value: '—'),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -64,12 +55,13 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "Here's what's happening today.",
+                        "Your daily fandom breakdown.",
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
                   ),
                 ),
+                // the profile image placeholder
                 GestureDetector(
                   onTap: () => context.go(RouteNames.profile),
                   child: AppNetworkImage.avatar(
@@ -79,80 +71,46 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: AppConstants.spaceSm),
+                // the collection button placeholder
                 IconButton(
-                  onPressed: () => context.push(RouteNames.notifications),
-                  icon: const Icon(Icons.notifications_outlined),
-                  tooltip: 'Notifications',
+                  onPressed: () => context.push(RouteNames.community),
+                  icon: const Icon(Icons.group),
+                  tooltip: 'Community',
                 ),
               ],
             ),
             const SizedBox(height: AppConstants.spaceLg),
-            const AppTextField.search(hint: 'Search'),
-            const SizedBox(height: AppConstants.spaceLg),
-            Text('Quick actions', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: AppConstants.spaceSm),
-            SizedBox(
-              height: 88,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: _quickActions.length,
-                separatorBuilder: (_, __) => const SizedBox(width: AppConstants.spaceSm),
-                itemBuilder: (context, index) {
-                  final action = _quickActions[index];
-                  return SizedBox(
-                    width: 84,
-                    child: AppCard(
-                      padding: const EdgeInsets.all(AppConstants.spaceSm),
-                      onTap: () {},
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(action.icon, color: AppColors.primary),
-                          const SizedBox(height: 6),
-                          Text(
-                            action.label,
-                            style: Theme.of(context).textTheme.bodySmall,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+            // search area for a screen with a search bar
+            GestureDetector(
+              onTap: () {
+                context.push(RouteNames.homeSearch);
+              },
+              child: const AbsorbPointer(
+                child: AppTextField.search(
+                  hint: 'Search',
+                ),
               ),
             ),
             const SizedBox(height: AppConstants.spaceLg),
-            Text('Overview', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: AppConstants.spaceSm),
-            Row(
-              children: [
-                for (final stat in _stats) ...[
-                  Expanded(
-                    child: AppCard(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            stat.value,
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                          Text(stat.label, style: Theme.of(context).textTheme.bodySmall),
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (stat != _stats.last) const SizedBox(width: AppConstants.spaceSm),
-                ],
-              ],
+          //   ============================================================================
+          //   for the trivia screen
+             const TriviaCard(),
+            const SizedBox(
+            height: AppConstants.spaceLg,
             ),
-            const SizedBox(height: AppConstants.spaceLg),
-            Text('Recent activity', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: AppConstants.spaceSm),
-            const AppEmptyState(
-              icon: Icons.history,
-              title: 'Nothing yet',
-              message: 'Recent activity will show up here once there is some.',
+
+          //   ============================================================
+          //   for slider
+            HomesliderScreen(),
+            const SizedBox(
+              height: AppConstants.spaceLg,
             ),
+
+          //   =---------------------------------------------------------
+          //   popular fandoms --
+            PopularFandoms()
+
+
           ],
         ),
       ),
@@ -164,7 +122,7 @@ class HomeScreen extends StatelessWidget {
       case 0:
         return;
       case 1:
-        showComingSoon(context, 'Explore');
+        context.go(RouteNames.trivia);
         return;
       case 2:
         showComingSoon(context, 'Events');

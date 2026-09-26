@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +11,12 @@ import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'firebase/firebase_service.dart';
+import 'firebase_options.dart';
+import 'models/fandom_trivia_seed.dart';
+
+
+
+
 import 'models/user_model.dart';
 
 Future<void> main() async {
@@ -20,6 +27,14 @@ Future<void> main() async {
 
   final authRepository = AuthRepositoryImpl(FirebaseAuthRemoteDataSource());
   final authBloc = AuthBloc(authRepository)..add(const AuthSubscriptionRequested());
+
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  // Seed gallery data into Firestore
+  // await FandomTriviaSeed().seedTrivia();
+
 
   final appRouter = AppRouter(
     authStatus: () => authBloc.state.status,
