@@ -203,7 +203,7 @@ class _TriviaLeaderboardScreenState
       ) {
     final bool isCurrentUser = currentUserId != null && currentUserId == user.userId;
     
-    // Resolve display name:
+
     // 1. Check fetchedNames (current name from 'users' collection)
     // 2. Fallback to user.username (name saved in 'quizAttempts' record)
     String nameToDisplay = fetchedNames[user.userId] ?? user.username;
