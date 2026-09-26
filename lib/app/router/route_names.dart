@@ -22,7 +22,12 @@ class RouteNames {
   static const String bookmarks = '/bookmarks';
   static const String purchaseHistory = '/purchase-history';
   static const String aiHelper = '/ai-helper';
-  static const String adminDashboard = '/admin';
+  static const String community = '/community';
+  static const String fandoms = '/fandoms';
+  static const String fandomDetails = '/fandom/:fandomId';
+  static const String homeSearch = '/homeSearch';
+  static const String fandomNews = '/fandom/:fandomId/news';
+  static const String fandomGallery = '/fandom/:fandomId/gallery';
 
   // --- Names (used by GoRoute.name and context.goNamed) ---
   static const String introName = 'intro';
@@ -40,7 +45,16 @@ class RouteNames {
   static const String bookmarksName = 'bookmarks';
   static const String purchaseHistoryName = 'purchaseHistory';
   static const String aiHelperName = 'aiHelper';
-  static const String adminDashboardName = 'adminDashboard';
+  static const String communityName = 'community';
+  static const String  fandomsName = 'fandoms';
+  static const String fandomDetailsName = 'fandomDetails';
+  static const String  searchHomeName  = 'homeSearch';
+  static const String fandomNewsName = 'fandomNews';
+  static const String fandomGalleryName = 'fandomGallery';
+
+
+
+
 
   /// Routes reachable without being logged in.
   static const List<String> publicPaths = [

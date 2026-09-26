@@ -65,7 +65,17 @@ class ProfileScreen extends StatelessWidget {
     final user = context.watch<AuthBloc>().state.user;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
+      appBar: AppBar(
+          title: const Text('Profile'),
+      // for the notificatiom button
+        actions: [
+          IconButton(
+            onPressed: () => context.push(RouteNames.notifications),
+            icon: const Icon(Icons.notifications_outlined),
+            tooltip: 'Notifications',
+          ),
+        ],
+      ),
       bottomNavigationBar: AppBottomNavBar(
         currentIndex: 4,
         onTap: (index) => _onTabTapped(context, index),

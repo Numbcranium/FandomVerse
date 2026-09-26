@@ -10,7 +10,13 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
+import '../../features/community/presentation/screens/community_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/home/presentation/widgets/fandom_gallery_screen.dart';
+import '../../features/home/presentation/widgets/fandom_news_details_screen.dart';
+import '../../features/home/presentation/widgets/fandom_news_screen.dart';
+import '../../features/home/presentation/widgets/search_screen.dart';
+import '../../features/home/presentation/widgets/trending_fandoms.dart';
 import '../../features/intro/presentation/screens/intro_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/profile/presentation/screens/bookmarks_screen.dart';
@@ -19,7 +25,7 @@ import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/purchase_history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/ai_helper/presentation/screens/ai_helper_screen.dart';
-import '../../features/admin/presentation/screens/admin_dashboard_screen.dart';
+
 import 'route_names.dart';
 
 /// Builds and owns the app's [GoRouter] instance.
@@ -46,12 +52,10 @@ class AppRouter {
     required AuthStatus Function() authStatus,
     required bool Function() isFirstLaunch,
     required bool Function() needsInterestsSelection,
-    required bool Function() isAdmin,
     required Listenable refreshListenable,
   })  : _authStatus = authStatus,
         _isFirstLaunch = isFirstLaunch,
-        _needsInterestsSelection = needsInterestsSelection,
-        _isAdmin = isAdmin {
+        _needsInterestsSelection = needsInterestsSelection {
     router = GoRouter(
       initialLocation: RouteNames.intro,
       debugLogDiagnostics: false,
@@ -64,7 +68,6 @@ class AppRouter {
   final AuthStatus Function() _authStatus;
   final bool Function() _isFirstLaunch;
   final bool Function() _needsInterestsSelection;
-  final bool Function() _isAdmin;
 
   late final GoRouter router;
 
@@ -94,11 +97,6 @@ class AppRouter {
     }
 
     // status == AuthStatus.authenticated
-    // Admins are locked into the admin dashboard only.
-    if (_isAdmin()) {
-      return currentPath == RouteNames.adminDashboard ? null : RouteNames.adminDashboard;
-    }
-
     if (_needsInterestsSelection()) {
       return currentPath == RouteNames.interests ? null : RouteNames.interests;
     }
@@ -150,6 +148,48 @@ class AppRouter {
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
+      path: RouteNames.fandoms,
+      name: RouteNames.fandomsName,
+      builder: (context, state) => const TrendingFandoms(),
+    ),
+    GoRoute(
+      path: RouteNames.fandomNews,
+      name: RouteNames.fandomNewsName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomNewsScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.fandomGallery,
+      name: RouteNames.fandomGalleryName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomGalleryScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+
+
+    GoRoute(
+      path: RouteNames.homeSearch,
+      name: RouteNames.searchHomeName,
+      builder: (context, state) => const SearchScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.community,
+      name: RouteNames.communityName,
+      builder: (context, state) => const CommunityScreen(),
+    ),
+    GoRoute(
       path: RouteNames.notifications,
       name: RouteNames.notificationsName,
       builder: (context, state) => const NotificationsScreen(),
@@ -183,11 +223,6 @@ class AppRouter {
       path: RouteNames.aiHelper,
       name: RouteNames.aiHelperName,
       builder: (context, state) => const AiHelperScreen(),
-    ),
-    GoRoute(
-      path: RouteNames.adminDashboard,
-      name: RouteNames.adminDashboardName,
-      builder: (context, state) => const AdminDashboardScreen(),
     ),
   ];
 }
