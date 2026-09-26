@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:techwiz7_starter/features/trivia/presentation/screens/trivia_result_screen.dart';
 
 import '../../../home/presentation/widgets/trivia_result_card.dart';
 import 'models/fandom_quiz_question.dart';
@@ -40,9 +41,7 @@ class _TriviaQuestionsScreenState
   // Prevents the result screen from opening twice
   bool _quizFinished = false;
 
-  // ----------------------------------------------------------
   // SELECT ANSWER
-  // ----------------------------------------------------------
 
   void _selectAnswer(String answer) {
     // User can only select one answer
@@ -53,9 +52,9 @@ class _TriviaQuestionsScreenState
     });
   }
 
-  // ----------------------------------------------------------
+  //
   // NEXT QUESTION
-  // ----------------------------------------------------------
+
 
   void _nextQuestion(
       List<FandomQuizQuestion> questions,
@@ -73,23 +72,22 @@ class _TriviaQuestionsScreenState
       score++;
     }
 
-    // --------------------------------------------------------
     // LAST QUESTION
-    // --------------------------------------------------------
 
     if (currentQuestion == questions.length - 1) {
       _quizFinished = true;
 
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return TriviaResultCard(
-            score: score,
-            total: questions.length,
-            onDone: () {},
-          );
-        },
+      // GO TO RESULT SCREEN
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return TriviaResultScreen(
+              score: score,
+              total: questions.length,
+            );
+          },
+        ),
       );
 
       return;
@@ -189,9 +187,7 @@ class _TriviaQuestionsScreenState
             final question =
             questions[currentQuestion];
 
-            // ------------------------------------------------
             // MAIN QUIZ UI
-            // ------------------------------------------------
 
             return Padding(
               padding: const EdgeInsets.symmetric(
@@ -201,9 +197,7 @@ class _TriviaQuestionsScreenState
                 children: [
                   const SizedBox(height: 15),
 
-                  // =================================================
-                  // TOP BAR
-                  // =================================================
+                  // TOP BAR ---
 
                   Row(
                     children: [
@@ -574,7 +568,6 @@ class _TriviaQuestionsScreenState
 // This is a separate StatefulWidget.
 //
 // Only this widget rebuilds every second.
-// Your question, image, answers and entire screen will NOT blink.
 // ================================================================
 
 class QuizTimer extends StatefulWidget {
