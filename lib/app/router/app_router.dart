@@ -26,6 +26,15 @@ import '../../features/tickets/presentation/screens/ticket_screen.dart';
 
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/home/presentation/screens/merchandise/shop_screen.dart';
+import '../../features/community/presentation/screens/community_screen.dart';
+import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/home/presentation/widgets/fandom_details_screen.dart';
+import '../../features/home/presentation/widgets/fandom_gallery_screen.dart';
+import '../../features/home/presentation/widgets/fandom_news_screen.dart';
+import '../../features/home/presentation/widgets/fandom_trivia_screen.dart';
+import '../../features/home/presentation/widgets/fandom_video_screen.dart';
+import '../../features/home/presentation/widgets/search_screen.dart';
+import '../../features/home/presentation/widgets/trending_fandoms.dart';
 import '../../features/intro/presentation/screens/intro_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/profile/presentation/screens/bookmarks_screen.dart';
@@ -33,6 +42,12 @@ import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/purchase_history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/home/presentation/screens/merchandise/shop_screen.dart';
+import '../../features/trivia/presentation/screens/choose_fandom_screen.dart';
+import '../../features/trivia/presentation/screens/trivia_pop_start_screen.dart';
+import '../../features/trivia/presentation/screens/trivia_questions_screen.dart';
+import '../../features/ai_helper/presentation/screens/ai_helper_screen.dart';
+import '../../features/admin/presentation/screens/admin_dashboard_screen.dart';
 import 'route_names.dart';
 
 /// Builds and owns the app's [GoRouter] instance.
@@ -41,10 +56,12 @@ class AppRouter {
     required AuthStatus Function() authStatus,
     required bool Function() isFirstLaunch,
     required bool Function() needsInterestsSelection,
+    required bool Function() isAdmin,
     required Listenable refreshListenable,
   })  : _authStatus = authStatus,
         _isFirstLaunch = isFirstLaunch,
-        _needsInterestsSelection = needsInterestsSelection {
+        _needsInterestsSelection = needsInterestsSelection,
+        _isAdmin = isAdmin {
     router = GoRouter(
       initialLocation: RouteNames.intro,
       debugLogDiagnostics: false,
@@ -57,6 +74,7 @@ class AppRouter {
   final AuthStatus Function() _authStatus;
   final bool Function() _isFirstLaunch;
   final bool Function() _needsInterestsSelection;
+  final bool Function() _isAdmin;
 
   late final GoRouter router;
 
@@ -90,6 +108,12 @@ class AppRouter {
     }
 
     // User is authenticated.
+    // status == AuthStatus.authenticated
+    // Admins are locked into the admin dashboard only.
+    if (_isAdmin()) {
+      return currentPath == RouteNames.adminDashboard ? null : RouteNames.adminDashboard;
+    }
+
     if (_needsInterestsSelection()) {
       return currentPath == RouteNames.interests
           ? null
@@ -159,6 +183,108 @@ class AppRouter {
       builder: (context, state) => const ShopScreen(),
     ),
 
+    GoRoute(
+      path: RouteNames.trivia,
+      name: RouteNames.triviaName,
+      builder: (context, state) => const TriviaPopStartScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.fandoms,
+      name: RouteNames.fandomsName,
+      builder: (context, state) => const TrendingFandoms(),
+    ),
+    GoRoute(
+      path: RouteNames.fandomNews,
+      name: RouteNames.fandomNewsName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomNewsScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.fandomGallery,
+      name: RouteNames.fandomGalleryName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomGalleryScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.fandomDetails,
+      name: RouteNames.fandomDetailsName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomDetailsScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.fandomVideo,
+      name: RouteNames.fandomVideoName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomVideoScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.fandomTrivia,
+      name: RouteNames.fandomTriviaName,
+      builder: (context, state) {
+        final fandomId =
+        state.pathParameters['fandomId']!;
+
+        return FandomTriviaScreen(
+          fandomId: fandomId,
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.chooseFandom,
+      name: RouteNames.chooseFandomName,
+      builder: (context, state) {
+        return const ChooseFandomScreen();
+      },
+    ),
+
+  GoRoute(
+  path: RouteNames.triviaQuestions,
+  name: RouteNames.triviaQuestionsName,
+  builder: (context, state) {
+  final fandomId =
+  state.pathParameters['fandomId']!;
+
+  return TriviaQuestionsScreen(
+  fandomId: fandomId,
+  );
+  },
+  ),
+
+    GoRoute(
+      path: RouteNames.homeSearch,
+      name: RouteNames.searchHomeName,
+      builder: (context, state) => const SearchScreen(),
+    ),
+
+    GoRoute(
+      path: RouteNames.community,
+      name: RouteNames.communityName,
+      builder: (context, state) => const CommunityScreen(),
+    ),
     GoRoute(
       path: RouteNames.notifications,
       name: RouteNames.notificationsName,
@@ -247,6 +373,15 @@ class AppRouter {
           eventId: eventId!,
         );
       },
+    GoRoute(
+      path: RouteNames.aiHelper,
+      name: RouteNames.aiHelperName,
+      builder: (context, state) => const AiHelperScreen(),
+    ),
+    GoRoute(
+      path: RouteNames.adminDashboard,
+      name: RouteNames.adminDashboardName,
+      builder: (context, state) => const AdminDashboardScreen(),
     ),
 
     // ticket screens

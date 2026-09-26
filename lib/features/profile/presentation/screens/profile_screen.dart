@@ -106,6 +106,15 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
+          title: const Text('Profile'),
+      // for the notificatiom button
+        actions: [
+          IconButton(
+            onPressed: () => context.push(RouteNames.notifications),
+            icon: const Icon(Icons.notifications_outlined),
+            tooltip: 'Notifications',
+          ),
+        ],
       ),
       bottomNavigationBar: AppBottomNavBar(
         currentIndex: 4,

@@ -21,6 +21,19 @@ class RouteNames {
   static const String settings = '/settings';
   static const String bookmarks = '/bookmarks';
   static const String purchaseHistory = '/purchase-history';
+  static const String community = '/community';
+  static const String fandoms = '/fandoms';
+  static const String fandomDetails = '/fandom/:fandomId';
+  static const String homeSearch = '/homeSearch';
+  static const String fandomNews = '/fandom/:fandomId/news';
+  static const String fandomGallery = '/fandom/:fandomId/gallery';
+  static const String fandomVideo =  '/fandom/:fandomId/video';
+  static const String fandomTrivia = '/fandom/:fandomId/trivia';
+  static const String trivia = '/trivia';
+  static const String chooseFandom = '/trivia/choose-fandom';
+  static const String triviaQuestions = '/trivia/questions/:fandomId';
+  static const String aiHelper = '/ai-helper';
+  static const String adminDashboard = '/admin';
 
   // --- Names (used by GoRoute.name and context.goNamed) ---
   static const String introName = 'intro';
@@ -37,6 +50,23 @@ class RouteNames {
   static const String settingsName = 'settings';
   static const String bookmarksName = 'bookmarks';
   static const String purchaseHistoryName = 'purchaseHistory';
+  static const String communityName = 'community';
+  static const String  fandomsName = 'fandoms';
+  static const String fandomDetailsName = 'fandomDetails';
+  static const String  searchHomeName  = 'homeSearch';
+  static const String fandomNewsName = 'fandomNews';
+  static const String fandomGalleryName = 'fandomGallery';
+  static const String fandomVideoName = 'fandomVideo';
+  static const String fandomTriviaName = 'fandomTrivia';
+  static const String triviaName = 'trivia';
+  static const String chooseFandomName = 'chooseFandom';
+  static const String triviaQuestionsName = 'triviaQuestions';
+
+
+
+
+  static const String aiHelperName = 'aiHelper';
+  static const String adminDashboardName = 'adminDashboard';
 
   // --- Events ---
   static const String events = '/events';
@@ -71,4 +101,5 @@ class RouteNames {
     register,
     forgotPassword,
   ];
+
 }
