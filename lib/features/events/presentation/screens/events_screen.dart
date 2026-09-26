@@ -144,6 +144,17 @@ class _EventsScreenState extends State<EventsScreen> {
                 ),
               ),
 
+              // Opens the user's purchased tickets.
+              _buildHeaderIconButton(
+                icon: Icons.confirmation_num_outlined,
+                tooltip: 'My Tickets',
+                onPressed: () {
+                  context.pushNamed(
+                    RouteNames.myTicketsName,
+                  );
+                },
+              ),
+
               // Opens the event calendar.
               _buildHeaderIconButton(
                 icon: Icons.calendar_month_outlined,

@@ -627,13 +627,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           AppConstants.spaceLg,
           AppConstants.spaceMd,
         ),
-        decoration: BoxDecoration(
-          color: AppColors.background,
-          // border: const Border(
-          //   top: BorderSide(
-          //     color: AppColors.borderDark,
-          //   ),
-          // ),
+        decoration: const BoxDecoration(
+          color: AppColors.backgroundDark,
         ),
         child: SizedBox(
           width: double.infinity,

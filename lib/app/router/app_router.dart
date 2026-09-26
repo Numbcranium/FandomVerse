@@ -20,7 +20,8 @@ import '../../features/events/presentation/screens/events_search_screen.dart';
 import '../../features/events/presentation/screens/map_screen.dart';
 import '../../features/events/presentation/screens/nearby_events_screen.dart';
 
-//ticket route
+//ticket routes
+import '../../features/tickets/presentation/screens/my_tickets_screen.dart';
 import '../../features/tickets/presentation/screens/ticket_screen.dart';
 
 import '../../features/home/presentation/screens/home_screen.dart';
@@ -32,7 +33,6 @@ import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/purchase_history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
-import '../../features/home/presentation/screens/merchandise/shop_screen.dart';
 import 'route_names.dart';
 
 /// Builds and owns the app's [GoRouter] instance.
@@ -249,7 +249,15 @@ class AppRouter {
       },
     ),
 
-    // ticket screen
+    // ticket screens
+    GoRoute(
+      path: RouteNames.myTickets,
+      name: RouteNames.myTicketsName,
+      builder: (context, state) {
+        return const MyTicketsScreen();
+      },
+    ),
+
     GoRoute(
       path: RouteNames.ticket,
       name: RouteNames.ticketName,
@@ -261,6 +269,7 @@ class AppRouter {
         );
       },
     ),
+
   ];
 }
 

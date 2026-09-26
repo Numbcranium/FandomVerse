@@ -60,6 +60,8 @@ class RouteNames {
 
   static const String ticket = '/tickets/:ticketId';
   static const String ticketName = 'ticket';
+  static const String myTickets = '/tickets';
+  static const String myTicketsName = 'myTickets';
 
   /// Routes reachable without being logged in.
   static const List<String> publicPaths = [
