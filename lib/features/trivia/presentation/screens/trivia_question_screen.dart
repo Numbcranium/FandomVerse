@@ -149,6 +149,7 @@ class _TriviaQuestionsScreenState
       final User? user =
           FirebaseAuth.instance.currentUser;
 
+
       if (user != null) {
         final int points = score * 10;
 

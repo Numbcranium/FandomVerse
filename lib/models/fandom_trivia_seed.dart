@@ -343,7 +343,303 @@ class FandomTriviaSeed {
         category: 'Movies',
         questionNumber: 5,
       ),
+      const FandomTrivia(
+        id: 'comic_question_1',
+        fandomId: 'comic_books',
+        question: 'Who is known as the Dark Knight?',
+        options: [
+          'Batman',
+          'Superman',
+          'Spider-Man',
+          'Iron Man',
+        ],
+        correctAnswer: 'Batman',
+        category: 'Comic Books',
+        questionNumber: 1,
+      ),
+
+      const FandomTrivia(
+        id: 'comic_question_2',
+        fandomId: 'comic_books',
+        question: 'What is Superman’s home planet?',
+        options: [
+          'Krypton',
+          'Asgard',
+          'Wakanda',
+          'Xandar',
+        ],
+        correctAnswer: 'Krypton',
+        category: 'Comic Books',
+        questionNumber: 2,
+      ),
+
+      const FandomTrivia(
+        id: 'comic_question_3',
+        fandomId: 'comic_books',
+        question: 'Which superhero uses a shield made of vibranium?',
+        options: [
+          'Captain America',
+          'Thor',
+          'Hulk',
+          'Doctor Strange',
+        ],
+        correctAnswer: 'Captain America',
+        category: 'Comic Books',
+        questionNumber: 3,
+      ),
+
+      const FandomTrivia(
+        id: 'comic_question_4',
+        fandomId: 'comic_books',
+        question: 'What is Spider-Man’s real name?',
+        options: [
+          'Peter Parker',
+          'Bruce Wayne',
+          'Clark Kent',
+          'Matt Murdock',
+        ],
+        correctAnswer: 'Peter Parker',
+        category: 'Comic Books',
+        questionNumber: 4,
+      ),
+
+      const FandomTrivia(
+        id: 'comic_question_5',
+        fandomId: 'comic_books',
+        question: 'Which villain is the archenemy of Batman?',
+        options: [
+          'Joker',
+          'Thanos',
+          'Green Goblin',
+          'Lex Luthor',
+        ],
+        correctAnswer: 'Joker',
+        category: 'Comic Books',
+        questionNumber: 5,
+      ),
+      const FandomTrivia(
+        id: 'pop_culture_question_1',
+        fandomId: 'pop_culture',
+        question: 'Which artist is known as the King of Pop?',
+        options: [
+          'Michael Jackson',
+          'Elvis Presley',
+          'Bruno Mars',
+          'Justin Timberlake',
+        ],
+        correctAnswer: 'Michael Jackson',
+        category: 'Pop Culture',
+        questionNumber: 1,
+      ),
+
+      const FandomTrivia(
+        id: 'pop_culture_question_2',
+        fandomId: 'pop_culture',
+        question: 'Which social media platform is known for short-form videos and trends?',
+        options: [
+          'TikTok',
+          'LinkedIn',
+          'Pinterest',
+          'Reddit',
+        ],
+        correctAnswer: 'TikTok',
+        category: 'Pop Culture',
+        questionNumber: 2,
+      ),
+
+      const FandomTrivia(
+        id: 'pop_culture_question_3',
+        fandomId: 'pop_culture',
+        question: 'Which singer released the song "Bad Guy"?',
+        options: [
+          'Billie Eilish',
+          'Ariana Grande',
+          'Dua Lipa',
+          'Selena Gomez',
+        ],
+        correctAnswer: 'Billie Eilish',
+        category: 'Pop Culture',
+        questionNumber: 3,
+      ),
+
+      const FandomTrivia(
+        id: 'pop_culture_question_4',
+        fandomId: 'pop_culture',
+        question: 'Which film series features the character Jack Sparrow?',
+        options: [
+          'Pirates of the Caribbean',
+          'Fast & Furious',
+          'The Hunger Games',
+          'Mission: Impossible',
+        ],
+        correctAnswer: 'Pirates of the Caribbean',
+        category: 'Pop Culture',
+        questionNumber: 4,
+      ),
+
+      const FandomTrivia(
+        id: 'pop_culture_question_5',
+        fandomId: 'pop_culture',
+        question: 'Which award is primarily associated with achievements in music?',
+        options: [
+          'Grammy Awards',
+          'Emmy Awards',
+          'Tony Awards',
+          'Academy Awards',
+        ],
+        correctAnswer: 'Grammy Awards',
+        category: 'Pop Culture',
+        questionNumber: 5,
+      ),
+      const FandomTrivia(
+        id: 'music_question_1',
+        fandomId: 'music',
+        question: 'Which artist is known as the King of Pop?',
+        options: [
+          'Michael Jackson',
+          'Elvis Presley',
+          'Usher',
+          'Bruno Mars',
+        ],
+        correctAnswer: 'Michael Jackson',
+        category: 'Music',
+        questionNumber: 1,
+      ),
+
+      const FandomTrivia(
+        id: 'music_question_2',
+        fandomId: 'music',
+        question: 'Which instrument has 88 keys?',
+        options: [
+          'Piano',
+          'Guitar',
+          'Violin',
+          'Drums',
+        ],
+        correctAnswer: 'Piano',
+        category: 'Music',
+        questionNumber: 2,
+      ),
+
+      const FandomTrivia(
+        id: 'music_question_3',
+        fandomId: 'music',
+        question: 'Which Nigerian artist released the hit song "Essence" with Tems?',
+        options: [
+          'Wizkid',
+          'Davido',
+          'Burna Boy',
+          'Olamide',
+        ],
+        correctAnswer: 'Wizkid',
+        category: 'Music',
+        questionNumber: 3,
+      ),
+
+      const FandomTrivia(
+        id: 'music_question_4',
+        fandomId: 'music',
+        question: 'Which award is one of the most famous awards in the music industry?',
+        options: [
+          'Grammy Awards',
+          'Emmy Awards',
+          'Oscar Awards',
+          'Tony Awards',
+        ],
+        correctAnswer: 'Grammy Awards',
+        category: 'Music',
+        questionNumber: 4,
+      ),
+
+      const FandomTrivia(
+        id: 'music_question_5',
+        fandomId: 'music',
+        question: 'Which singer is known for the album "21"?',
+        options: [
+          'Adele',
+          'Rihanna',
+          'Taylor Swift',
+          'Beyoncé',
+        ],
+        correctAnswer: 'Adele',
+        category: 'Music',
+        questionNumber: 5,
+      ),
+      const FandomTrivia(
+        id: 'tv_universes_question_1',
+        fandomId: 'tv_universes',
+        question: 'In which TV universe does the character Eleven appear?',
+        options: [
+          'Stranger Things',
+          'The Walking Dead',
+          'Wednesday',
+          'The Vampire Diaries',
+        ],
+        correctAnswer: 'Stranger Things',
+        category: 'TV Universes',
+        questionNumber: 1,
+      ),
+
+      const FandomTrivia(
+        id: 'tv_universes_question_2',
+        fandomId: 'tv_universes',
+        question: 'What is the name of the town where Stranger Things is set?',
+        options: [
+          'Hawkins',
+          'Riverdale',
+          'Sunnydale',
+          'Mystic Falls',
+        ],
+        correctAnswer: 'Hawkins',
+        category: 'TV Universes',
+        questionNumber: 2,
+      ),
+
+      const FandomTrivia(
+        id: 'tv_universes_question_3',
+        fandomId: 'tv_universes',
+        question: 'Which TV series follows the survivors of a zombie apocalypse?',
+        options: [
+          'The Walking Dead',
+          'The Flash',
+          'Friends',
+          'Wednesday',
+        ],
+        correctAnswer: 'The Walking Dead',
+        category: 'TV Universes',
+        questionNumber: 3,
+      ),
+
+      const FandomTrivia(
+        id: 'tv_universes_question_4',
+        fandomId: 'tv_universes',
+        question: 'What is Wednesday Addams known for in the series Wednesday?',
+        options: [
+          'Her dark personality',
+          'Her super speed',
+          'Her magic hammer',
+          'Her detective badge',
+        ],
+        correctAnswer: 'Her dark personality',
+        category: 'TV Universes',
+        questionNumber: 4,
+      ),
+      const FandomTrivia(
+        id: 'tv_universes_question_5',
+        fandomId: 'tv_universes',
+        question: 'Which fictional town is home to the Salvatore brothers in The Vampire Diaries?',
+        options: [
+          'Mystic Falls',
+          'Hawkins',
+          'Riverdale',
+          'Gotham',
+        ],
+        correctAnswer: 'Mystic Falls',
+        category: 'TV Universes',
+        questionNumber: 5,
+      ),
     ];
+
 
     for (final question in trivia) {
       await _triviaService.addTrivia(question);

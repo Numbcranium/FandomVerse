@@ -10,9 +10,9 @@ import 'features/auth/data/datasources/auth_remote_datasource.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
-import 'features/trivia/presentation/screens/models/lib/models/fandom_quiz_question_seed.dart';
 import 'firebase/firebase_service.dart';
 import 'firebase_options.dart';
+import 'models/fandom-gallery-seed.dart';
 import 'models/fandom_trivia_seed.dart';
 
 
@@ -32,7 +32,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   final appRouter = AppRouter(
     authStatus: () => authBloc.state.status,
     // Read fresh each time rather than capturing a single bool at startup,
