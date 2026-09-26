@@ -497,9 +497,7 @@ class TriviaResultCard extends StatelessWidget {
                             Navigator.pop(
                               context,
                             );
-
-                            // We will connect this to
-                            // your Home route later.
+                            context.go(RouteNames.home);
                           },
 
                           style:

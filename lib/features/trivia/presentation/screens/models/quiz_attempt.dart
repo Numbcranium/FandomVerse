@@ -32,33 +32,21 @@ class QuizAttempt {
     return QuizAttempt(
       id: documentId,
       userId: data['userId']?.toString() ?? '',
-      username:
-      data['username']?.toString() ?? 'Unknown User',
-      avatar:
-      data['avatar']?.toString() ?? '',
-      fandomId:
-      data['fandomId']?.toString() ?? '',
+      username: data['username']?.toString() ?? 'Fandom Fan',
+      avatar: data['avatar']?.toString() ?? '',
+      fandomId: data['fandomId']?.toString() ?? '',
       score: data['score'] is int
           ? data['score'] as int
-          : int.tryParse(
-        data['score']?.toString() ?? '',
-      ) ??
-          0,
-      totalQuestions:
-      data['totalQuestions'] is int
+          : int.tryParse(data['score']?.toString() ?? '') ?? 0,
+      totalQuestions: data['totalQuestions'] is int
           ? data['totalQuestions'] as int
           : int.tryParse(
-        data['totalQuestions']
-            ?.toString() ??
-            '',
+        data['totalQuestions']?.toString() ?? '',
       ) ??
           0,
       points: data['points'] is int
           ? data['points'] as int
-          : int.tryParse(
-        data['points']?.toString() ?? '',
-      ) ??
-          0,
+          : int.tryParse(data['points']?.toString() ?? '') ?? 0,
       playedAt: timestamp is Timestamp
           ? timestamp.toDate()
           : DateTime.now(),
@@ -74,8 +62,7 @@ class QuizAttempt {
       'score': score,
       'totalQuestions': totalQuestions,
       'points': points,
-      'playedAt':
-      Timestamp.fromDate(playedAt),
+      'playedAt': Timestamp.fromDate(playedAt),
     };
   }
 }

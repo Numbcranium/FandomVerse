@@ -54,15 +54,12 @@ class _TriviaQuestionsScreenState
 
   final Stopwatch _quizStopwatch = Stopwatch();
 
-  // Start the TOTAL quiz timer.
-  // This timer is different from the 15-second question timer.
   void _startQuizStopwatch() {
     if (!_quizStopwatch.isRunning && !_quizFinished) {
       _quizStopwatch.start();
     }
   }
 
-  // Stop the TOTAL quiz timer.
   void _stopQuizStopwatch() {
     if (_quizStopwatch.isRunning) {
       _quizStopwatch.stop();
@@ -70,7 +67,7 @@ class _TriviaQuestionsScreenState
   }
 
   // ============================================================
-  // GET TOTAL TIME
+  // GET TOTAL QUIZ TIME
   // ============================================================
 
   String _getTimeTaken() {
@@ -89,12 +86,15 @@ class _TriviaQuestionsScreenState
   // ============================================================
 
   void _selectAnswer(String answer) {
-    // Only one answer can be selected.
     if (selectedAnswer != null) {
       return;
     }
 
     if (_quizFinished) {
+      return;
+    }
+
+    if (_isMovingNext) {
       return;
     }
 
@@ -110,9 +110,9 @@ class _TriviaQuestionsScreenState
   Future<void> _nextQuestion(
       List<FandomQuizQuestion> questions,
       ) async {
-    // ------------------------------------------------------------
-    // PREVENT DOUBLE NAVIGATION
-    // ------------------------------------------------------------
+    // ----------------------------------------------------------
+    // PREVENT DOUBLE EXECUTION
+    // ----------------------------------------------------------
 
     if (_isMovingNext || _quizFinished) {
       return;
@@ -120,18 +120,18 @@ class _TriviaQuestionsScreenState
 
     _isMovingNext = true;
 
-    // ------------------------------------------------------------
+    // ----------------------------------------------------------
     // CHECK ANSWER
-    // ------------------------------------------------------------
+    // ----------------------------------------------------------
 
     if (selectedAnswer ==
         questions[currentQuestion].correctAnswer) {
       score++;
     }
 
-    // ------------------------------------------------------------
+    // ----------------------------------------------------------
     // LAST QUESTION
-    // ------------------------------------------------------------
+    // ----------------------------------------------------------
 
     if (currentQuestion == questions.length - 1) {
       _quizFinished = true;
@@ -139,12 +139,12 @@ class _TriviaQuestionsScreenState
       // Stop total quiz timer.
       _stopQuizStopwatch();
 
-      // Get actual quiz duration.
+      // Get actual quiz time.
       final String timeTaken = _getTimeTaken();
 
-      // ----------------------------------------------------------
-      // SAVE ATTEMPT
-      // ----------------------------------------------------------
+      // --------------------------------------------------------
+      // SAVE QUIZ ATTEMPT
+      // --------------------------------------------------------
 
       final User? user =
           FirebaseAuth.instance.currentUser;
@@ -166,41 +166,51 @@ class _TriviaQuestionsScreenState
 
         try {
           await _attemptService.saveAttempt(attempt);
+
+          debugPrint(
+            'Quiz attempt saved successfully.',
+          );
         } catch (e) {
           debugPrint(
             'Failed to save quiz attempt: $e',
           );
         }
+      } else {
+        debugPrint(
+          'No logged-in user. Quiz attempt was not saved.',
+        );
       }
 
-      // ----------------------------------------------------------
-      // MAKE SURE SCREEN STILL EXISTS
-      // ----------------------------------------------------------
+      // --------------------------------------------------------
+      // CHECK SCREEN
+      // --------------------------------------------------------
 
       if (!mounted) {
         return;
       }
 
-      // ----------------------------------------------------------
+      // --------------------------------------------------------
       // GO TO RESULTS
-      // ----------------------------------------------------------
+      // --------------------------------------------------------
 
       await Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => AResultsScreen(
-            score: score,
-            total: questions.length,
-            timeTaken: timeTaken,
-          ),
+          builder: (_) {
+            return AResultsScreen(
+              score: score,
+              total: questions.length,
+              timeTaken: timeTaken,
+            );
+          },
         ),
       );
 
       return;
     }
 
-    // ------------------------------------------------------------
-    // NEXT QUESTION
-    // ------------------------------------------------------------
+    // ----------------------------------------------------------
+    // MOVE TO NEXT QUESTION
+    // ----------------------------------------------------------
 
     if (!mounted) {
       return;
@@ -211,9 +221,20 @@ class _TriviaQuestionsScreenState
       selectedAnswer = null;
     });
 
-    // Allow another Next/Timer event.
+    // Allow the next action.
     _isMovingNext = false;
   }
+
+  // ============================================================
+  // DISPOSE
+  // ============================================================
+
+  @override
+  void dispose() {
+    _stopQuizStopwatch();
+    super.dispose();
+  }
+
   // ============================================================
   // BUILD
   // ============================================================
@@ -248,6 +269,10 @@ class _TriviaQuestionsScreenState
             // ==================================================
 
             if (snapshot.hasError) {
+              debugPrint(
+                'Quiz error: ${snapshot.error}',
+              );
+
               return const Center(
                 child: Text(
                   'Unable to load quiz questions',
@@ -257,6 +282,10 @@ class _TriviaQuestionsScreenState
                 ),
               );
             }
+
+            // ==================================================
+            // QUESTIONS
+            // ==================================================
 
             final List<FandomQuizQuestion> questions =
                 snapshot.data ?? [];
@@ -296,8 +325,7 @@ class _TriviaQuestionsScreenState
             // START TOTAL QUIZ STOPWATCH
             // ==================================================
 
-            if (questions.isNotEmpty &&
-                currentQuestion == 0 &&
+            if (currentQuestion == 0 &&
                 !_quizStopwatch.isRunning &&
                 !_quizFinished) {
               WidgetsBinding.instance.addPostFrameCallback(
@@ -334,8 +362,10 @@ class _TriviaQuestionsScreenState
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
+                        onPressed: _isMovingNext
+                            ? null
+                            : () {
+                          Navigator.of(context).pop();
                         },
                         icon: const Icon(
                           Icons.arrow_back,
@@ -379,7 +409,6 @@ class _TriviaQuestionsScreenState
 
                       child: Text(
                         question.category,
-
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -492,7 +521,9 @@ class _TriviaQuestionsScreenState
                         }
 
                         return GestureDetector(
-                          onTap: () {
+                          onTap: _isMovingNext
+                              ? null
+                              : () {
                             _selectAnswer(answer);
                           },
 
@@ -600,18 +631,18 @@ class _TriviaQuestionsScreenState
                       const SizedBox(width: 5),
 
                       // 15 SECOND QUESTION TIMER
+
                       QuizTimer(
                         key: ValueKey(currentQuestion),
 
                         onTimeUp: () {
                           if (!mounted ||
-                              _quizFinished) {
+                              _quizFinished ||
+                              _isMovingNext) {
                             return;
                           }
 
-                          _nextQuestion(
-                            questions,
-                          );
+                          _nextQuestion(questions);
                         },
                       ),
 
@@ -625,7 +656,8 @@ class _TriviaQuestionsScreenState
 
                         child: ElevatedButton(
                           onPressed:
-                          selectedAnswer == null
+                          selectedAnswer == null ||
+                              _isMovingNext
                               ? null
                               : () {
                             _nextQuestion(
@@ -722,7 +754,6 @@ class _QuizTimerState extends State<QuizTimer> {
 
     _timer = Timer.periodic(
       const Duration(seconds: 1),
-
           (timer) {
         if (!mounted) {
           timer.cancel();
@@ -736,9 +767,11 @@ class _QuizTimerState extends State<QuizTimer> {
         } else {
           timer.cancel();
 
-          setState(() {
-            secondsLeft = 0;
-          });
+          if (mounted) {
+            setState(() {
+              secondsLeft = 0;
+            });
+          }
 
           widget.onTimeUp();
         }
