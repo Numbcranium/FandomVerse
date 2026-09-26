@@ -6,10 +6,10 @@ import '../models/merchandise/product_model.dart';
 class MerchandiseMock {
   MerchandiseMock._();
 
-  // Generates an online image URL for each product.
-  //
-  // If the online image cannot load, ProductImage should display
-  // "No image available" using its errorBuilder.
+  // =====================================================
+  // PRODUCT IMAGE URL
+  // =====================================================
+
   static String imageFor(String productName) {
     String prompt;
 
@@ -24,48 +24,49 @@ class MerchandiseMock {
         break;
 
       case 'Gojo Satoru Figure':
+      case 'Gojo Satoru Collectible Figure':
         prompt =
-        'Jujutsu Kaisen anime, Satoru Gojo collectible figure, anime merchandise product photo, detailed action figure, white hair, blindfold, blue eyes, studio product photography, square image';
+        'Jujutsu Kaisen anime, Satoru Gojo collectible figure, white hair, blindfold, blue eyes, detailed premium anime merchandise product photo, studio photography, square image';
         break;
 
       case 'Naruto Sage Mode Figure':
         prompt =
-        'Naruto anime, Naruto Uzumaki Sage Mode collectible figure, orange ninja outfit, sage mode eyes, anime merchandise product photo, detailed figure, studio background, square image';
+        'Naruto anime, Naruto Uzumaki Sage Mode collectible figure, orange ninja outfit, sage mode eyes, detailed anime merchandise product photo, studio background, square image';
         break;
 
       case 'Tanjiro Kamado Figure':
         prompt =
-        'Demon Slayer anime, Tanjiro Kamado collectible figure, green black checkered haori, anime merchandise product photo, detailed action figure, studio background, square image';
+        'Demon Slayer anime, Tanjiro Kamado collectible figure, green black checkered haori, detailed anime merchandise product photo, studio background, square image';
         break;
 
       case 'Nezuko Kamado Figure':
         prompt =
-        'Demon Slayer anime, Nezuko Kamado collectible figure, pink kimono, bamboo muzzle, anime merchandise product photo, detailed figure, studio background, square image';
+        'Demon Slayer anime, Nezuko Kamado collectible figure, pink kimono, bamboo muzzle, detailed anime merchandise product photo, studio background, square image';
         break;
 
       case 'Itachi Uchiha Figure':
         prompt =
-        'Naruto anime, Itachi Uchiha collectible figure, Akatsuki cloak, red Sharingan eyes, anime merchandise product photo, detailed figure, studio background, square image';
+        'Naruto anime, Itachi Uchiha collectible figure, Akatsuki cloak, red Sharingan eyes, detailed anime merchandise product photo, studio background, square image';
         break;
 
       case 'Killua Zoldyck Figure':
         prompt =
-        'Hunter x Hunter anime, Killua Zoldyck collectible figure, white hair, blue outfit, anime merchandise product photo, detailed action figure, studio background, square image';
+        'Hunter x Hunter anime, Killua Zoldyck collectible figure, white hair, blue outfit, detailed anime merchandise product photo, studio background, square image';
         break;
 
       case 'Goku Super Saiyan Figure':
         prompt =
-        'Dragon Ball anime, Goku Super Saiyan collectible figure, golden hair, orange gi, anime merchandise product photo, detailed action figure, studio background, square image';
+        'Dragon Ball anime, Goku Super Saiyan collectible figure, golden hair, orange gi, detailed anime merchandise product photo, studio background, square image';
         break;
 
       case 'Levi Ackerman Figure':
         prompt =
-        'Attack on Titan anime, Levi Ackerman collectible figure, Survey Corps uniform, anime merchandise product photo, detailed figure, studio background, square image';
+        'Attack on Titan anime, Levi Ackerman collectible figure, Survey Corps uniform, detailed anime merchandise product photo, studio background, square image';
         break;
 
       case 'Sukuna Collectible Figure':
         prompt =
-        'Jujutsu Kaisen anime, Ryomen Sukuna collectible figure, pink hair, cursed markings, anime merchandise product photo, detailed figure, studio background, square image';
+        'Jujutsu Kaisen anime, Ryomen Sukuna collectible figure, pink hair, cursed markings, detailed anime merchandise product photo, studio background, square image';
         break;
 
     // =====================================================
@@ -74,47 +75,47 @@ class MerchandiseMock {
 
       case 'One Piece Manga Vol 1':
         prompt =
-        'One Piece manga volume 1 book, Monkey D. Luffy, manga book product photo, Japanese manga style cover, clean retail product photography, square image';
+        'One Piece manga volume 1 book, Monkey D. Luffy, manga book product photo, Japanese manga cover, clean retail product photography, square image';
         break;
 
       case 'Naruto Manga Vol 1':
         prompt =
-        'Naruto manga volume 1 book, Naruto Uzumaki, manga book product photo, Japanese manga style cover, clean retail product photography, square image';
+        'Naruto manga volume 1 book, Naruto Uzumaki, manga book product photo, Japanese manga cover, clean retail product photography, square image';
         break;
 
       case 'Jujutsu Kaisen Manga Vol 1':
         prompt =
-        'Jujutsu Kaisen manga volume 1 book, Yuji Itadori and Jujutsu Kaisen characters, manga book product photo, clean retail product photography, square image';
+        'Jujutsu Kaisen manga volume 1 book, Yuji Itadori, Japanese manga book product photo, clean retail product photography, square image';
         break;
 
       case 'Demon Slayer Manga Vol 1':
         prompt =
-        'Demon Slayer manga volume 1 book, Tanjiro Kamado, manga book product photo, Japanese manga cover style, clean retail product photography, square image';
+        'Demon Slayer manga volume 1 book, Tanjiro Kamado, Japanese manga book product photo, clean retail product photography, square image';
         break;
 
       case 'My Hero Academia Manga Vol 1':
         prompt =
-        'My Hero Academia manga volume 1 book, Izuku Midoriya, manga book product photo, anime manga cover, clean retail product photography, square image';
+        'My Hero Academia manga volume 1 book, Izuku Midoriya, anime manga cover, clean retail product photography, square image';
         break;
 
       case 'Chainsaw Man Manga Vol 1':
         prompt =
-        'Chainsaw Man manga volume 1 book, Denji, chainsaw anime manga cover, manga book product photo, clean retail product photography, square image';
+        'Chainsaw Man manga volume 1 book, Denji, chainsaw anime manga cover, clean retail product photography, square image';
         break;
 
       case 'Spy x Family Manga Vol 1':
         prompt =
-        'Spy x Family manga volume 1 book, Anya Forger, Loid Forger and Yor Forger, manga book product photo, clean retail product photography, square image';
+        'Spy x Family manga volume 1 book, Anya Forger, Loid Forger and Yor Forger, manga book product photo, square image';
         break;
 
       case 'Blue Lock Manga Vol 1':
         prompt =
-        'Blue Lock manga volume 1 book, football anime manga, Isagi Yoichi, manga book product photo, clean retail product photography, square image';
+        'Blue Lock manga volume 1 book, Isagi Yoichi, football anime manga, clean retail product photography, square image';
         break;
 
       case 'Solo Leveling Manga Vol 1':
         prompt =
-        'Solo Leveling manga volume 1 book, Sung Jinwoo, dark fantasy anime manga cover, manga book product photo, clean retail product photography, square image';
+        'Solo Leveling manga volume 1 book, Sung Jinwoo, dark fantasy manga cover, clean retail product photography, square image';
         break;
 
       case 'Attack on Titan Manga Vol 1':
@@ -128,27 +129,27 @@ class MerchandiseMock {
 
       case 'One Piece Trading Card Pack':
         prompt =
-        'One Piece anime trading card booster pack, Monkey D. Luffy, colorful collectible trading cards, sealed card pack, anime merchandise product photo, square image';
+        'One Piece anime trading card booster pack, Monkey D. Luffy, colorful collectible trading cards, sealed card pack, premium merchandise product photo, square image';
         break;
 
       case 'Naruto Trading Card Pack':
         prompt =
-        'Naruto anime trading card booster pack, Naruto Uzumaki, colorful collectible cards, sealed card pack, anime merchandise product photo, square image';
+        'Naruto anime trading card booster pack, Naruto Uzumaki, colorful collectible cards, sealed card pack, premium merchandise product photo, square image';
         break;
 
       case 'Dragon Ball Trading Card Pack':
         prompt =
-        'Dragon Ball anime trading card booster pack, Goku Super Saiyan, colorful collectible cards, sealed card pack, anime merchandise product photo, square image';
+        'Dragon Ball anime trading card booster pack, Goku Super Saiyan, colorful collectible cards, sealed card pack, premium merchandise product photo, square image';
         break;
 
       case 'Jujutsu Kaisen Card Pack':
         prompt =
-        'Jujutsu Kaisen anime trading card booster pack, Satoru Gojo and Yuji Itadori, collectible card pack, anime merchandise product photo, square image';
+        'Jujutsu Kaisen anime trading card booster pack, Satoru Gojo and Yuji Itadori, collectible card pack, premium merchandise product photo, square image';
         break;
 
       case 'Demon Slayer Card Pack':
         prompt =
-        'Demon Slayer anime trading card booster pack, Tanjiro and Nezuko, collectible card pack, anime merchandise product photo, square image';
+        'Demon Slayer anime trading card booster pack, Tanjiro and Nezuko, collectible card pack, premium merchandise product photo, square image';
         break;
 
     // =====================================================
@@ -311,8 +312,7 @@ class MerchandiseMock {
     );
 
     // IMPORTANT:
-    // This must be a normal URL.
-    // Do NOT wrap it in Markdown [text](url).
+    // This is a direct URL. Do not wrap it in Markdown.
     return 'https://image.pollinations.ai/prompt/$encodedPrompt'
         '?width=600'
         '&height=600'
@@ -320,10 +320,12 @@ class MerchandiseMock {
         '&nologo=true';
   }
 
+  // =====================================================
+  // PRODUCTS
+  // =====================================================
+
   static final List<ProductModel> products = [
-    // =====================================================
-    // FIGURES & STATUES
-    // =====================================================
+    // FIGURES
 
     ProductModel(
       id: 'anime_001',
@@ -332,7 +334,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Luffy Grand Line Figure'),
       category: 'Figures',
     ),
-
     ProductModel(
       id: 'anime_002',
       name: 'Gojo Satoru Collectible Figure',
@@ -340,7 +341,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Gojo Satoru Figure'),
       category: 'Figures',
     ),
-
     ProductModel(
       id: 'anime_003',
       name: 'Naruto Sage Mode Figure',
@@ -348,7 +348,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Naruto Sage Mode Figure'),
       category: 'Figures',
     ),
-
     ProductModel(
       id: 'anime_004',
       name: 'Tanjiro Kamado Figure',
@@ -356,7 +355,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Tanjiro Kamado Figure'),
       category: 'Figures',
     ),
-
     ProductModel(
       id: 'anime_005',
       name: 'Nezuko Kamado Figure',
@@ -364,7 +362,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Nezuko Kamado Figure'),
       category: 'Figures',
     ),
-
     ProductModel(
       id: 'anime_006',
       name: 'Itachi Uchiha Figure',
@@ -372,7 +369,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Itachi Uchiha Figure'),
       category: 'Figures',
     ),
-
     ProductModel(
       id: 'anime_007',
       name: 'Killua Zoldyck Figure',
@@ -380,7 +376,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Killua Zoldyck Figure'),
       category: 'Figures',
     ),
-
     ProductModel(
       id: 'anime_008',
       name: 'Goku Super Saiyan Figure',
@@ -388,7 +383,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Goku Super Saiyan Figure'),
       category: 'Figures',
     ),
-
     ProductModel(
       id: 'anime_009',
       name: 'Levi Ackerman Figure',
@@ -396,7 +390,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Levi Ackerman Figure'),
       category: 'Figures',
     ),
-
     ProductModel(
       id: 'anime_010',
       name: 'Sukuna Collectible Figure',
@@ -405,9 +398,7 @@ class MerchandiseMock {
       category: 'Figures',
     ),
 
-    // =====================================================
     // MANGA
-    // =====================================================
 
     ProductModel(
       id: 'anime_011',
@@ -416,7 +407,6 @@ class MerchandiseMock {
       imageUrl: imageFor('One Piece Manga Vol 1'),
       category: 'Manga',
     ),
-
     ProductModel(
       id: 'anime_012',
       name: 'Naruto Manga Vol. 1',
@@ -424,7 +414,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Naruto Manga Vol 1'),
       category: 'Manga',
     ),
-
     ProductModel(
       id: 'anime_013',
       name: 'Jujutsu Kaisen Manga Vol. 1',
@@ -432,7 +421,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Jujutsu Kaisen Manga Vol 1'),
       category: 'Manga',
     ),
-
     ProductModel(
       id: 'anime_014',
       name: 'Demon Slayer Manga Vol. 1',
@@ -440,7 +428,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Demon Slayer Manga Vol 1'),
       category: 'Manga',
     ),
-
     ProductModel(
       id: 'anime_015',
       name: 'My Hero Academia Manga Vol. 1',
@@ -448,7 +435,6 @@ class MerchandiseMock {
       imageUrl: imageFor('My Hero Academia Manga Vol 1'),
       category: 'Manga',
     ),
-
     ProductModel(
       id: 'anime_016',
       name: 'Chainsaw Man Manga Vol. 1',
@@ -456,7 +442,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Chainsaw Man Manga Vol 1'),
       category: 'Manga',
     ),
-
     ProductModel(
       id: 'anime_017',
       name: 'Spy x Family Manga Vol. 1',
@@ -464,7 +449,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Spy x Family Manga Vol 1'),
       category: 'Manga',
     ),
-
     ProductModel(
       id: 'anime_018',
       name: 'Blue Lock Manga Vol. 1',
@@ -472,7 +456,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Blue Lock Manga Vol 1'),
       category: 'Manga',
     ),
-
     ProductModel(
       id: 'anime_019',
       name: 'Solo Leveling Manga Vol. 1',
@@ -480,7 +463,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Solo Leveling Manga Vol 1'),
       category: 'Manga',
     ),
-
     ProductModel(
       id: 'anime_020',
       name: 'Attack on Titan Manga Vol. 1',
@@ -489,9 +471,7 @@ class MerchandiseMock {
       category: 'Manga',
     ),
 
-    // =====================================================
     // TRADING CARDS
-    // =====================================================
 
     ProductModel(
       id: 'anime_021',
@@ -500,7 +480,6 @@ class MerchandiseMock {
       imageUrl: imageFor('One Piece Trading Card Pack'),
       category: 'Trading Cards',
     ),
-
     ProductModel(
       id: 'anime_022',
       name: 'Naruto Trading Card Pack',
@@ -508,7 +487,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Naruto Trading Card Pack'),
       category: 'Trading Cards',
     ),
-
     ProductModel(
       id: 'anime_023',
       name: 'Dragon Ball Trading Card Pack',
@@ -516,7 +494,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Dragon Ball Trading Card Pack'),
       category: 'Trading Cards',
     ),
-
     ProductModel(
       id: 'anime_024',
       name: 'Jujutsu Kaisen Card Pack',
@@ -524,7 +501,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Jujutsu Kaisen Card Pack'),
       category: 'Trading Cards',
     ),
-
     ProductModel(
       id: 'anime_025',
       name: 'Demon Slayer Card Pack',
@@ -533,9 +509,7 @@ class MerchandiseMock {
       category: 'Trading Cards',
     ),
 
-    // =====================================================
     // POSTERS & ART
-    // =====================================================
 
     ProductModel(
       id: 'anime_026',
@@ -544,7 +518,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Gojo Satoru Art Poster'),
       category: 'Posters & Art',
     ),
-
     ProductModel(
       id: 'anime_027',
       name: 'Luffy Wanted Poster',
@@ -552,7 +525,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Luffy Wanted Poster'),
       category: 'Posters & Art',
     ),
-
     ProductModel(
       id: 'anime_028',
       name: 'Naruto Character Poster',
@@ -560,7 +532,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Naruto Character Poster'),
       category: 'Posters & Art',
     ),
-
     ProductModel(
       id: 'anime_029',
       name: 'Demon Slayer Art Print',
@@ -568,7 +539,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Demon Slayer Art Print'),
       category: 'Posters & Art',
     ),
-
     ProductModel(
       id: 'anime_030',
       name: 'Attack on Titan Wall Art',
@@ -577,9 +547,7 @@ class MerchandiseMock {
       category: 'Posters & Art',
     ),
 
-    // =====================================================
     // ACCESSORIES
-    // =====================================================
 
     ProductModel(
       id: 'anime_031',
@@ -588,7 +556,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Anime Character Keychain'),
       category: 'Accessories',
     ),
-
     ProductModel(
       id: 'anime_032',
       name: 'Gojo Chibi Keychain',
@@ -596,7 +563,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Gojo Chibi Keychain'),
       category: 'Accessories',
     ),
-
     ProductModel(
       id: 'anime_033',
       name: 'Luffy Keychain',
@@ -604,7 +570,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Luffy Keychain'),
       category: 'Accessories',
     ),
-
     ProductModel(
       id: 'anime_034',
       name: 'Naruto Kunai Keychain',
@@ -612,7 +577,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Naruto Kunai Keychain'),
       category: 'Accessories',
     ),
-
     ProductModel(
       id: 'anime_035',
       name: 'Nezuko Keychain',
@@ -621,9 +585,7 @@ class MerchandiseMock {
       category: 'Accessories',
     ),
 
-    // =====================================================
     // COLLECTIBLES
-    // =====================================================
 
     ProductModel(
       id: 'anime_036',
@@ -632,7 +594,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Anime Mystery Box'),
       category: 'Collectibles',
     ),
-
     ProductModel(
       id: 'anime_037',
       name: 'One Piece Mystery Box',
@@ -640,7 +601,6 @@ class MerchandiseMock {
       imageUrl: imageFor('One Piece Mystery Box'),
       category: 'Collectibles',
     ),
-
     ProductModel(
       id: 'anime_038',
       name: 'Jujutsu Kaisen Mystery Box',
@@ -648,7 +608,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Jujutsu Kaisen Mystery Box'),
       category: 'Collectibles',
     ),
-
     ProductModel(
       id: 'anime_039',
       name: 'Anime Mini Statue',
@@ -656,7 +615,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Anime Mini Statue'),
       category: 'Collectibles',
     ),
-
     ProductModel(
       id: 'anime_040',
       name: 'Demon Slayer Collectible Set',
@@ -665,9 +623,7 @@ class MerchandiseMock {
       category: 'Collectibles',
     ),
 
-    // =====================================================
     // LIMITED EDITION
-    // =====================================================
 
     ProductModel(
       id: 'anime_041',
@@ -676,7 +632,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Limited Edition Gojo Figure'),
       category: 'Limited Edition',
     ),
-
     ProductModel(
       id: 'anime_042',
       name: 'Limited Edition Luffy Figure',
@@ -684,7 +639,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Limited Edition Luffy Figure'),
       category: 'Limited Edition',
     ),
-
     ProductModel(
       id: 'anime_043',
       name: 'Naruto Collector Set',
@@ -692,7 +646,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Naruto Collector Set'),
       category: 'Limited Edition',
     ),
-
     ProductModel(
       id: 'anime_044',
       name: 'Attack on Titan Collector Set',
@@ -700,7 +653,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Attack on Titan Collector Set'),
       category: 'Limited Edition',
     ),
-
     ProductModel(
       id: 'anime_045',
       name: 'Dragon Ball Collector Set',
@@ -709,9 +661,7 @@ class MerchandiseMock {
       category: 'Limited Edition',
     ),
 
-    // =====================================================
     // ANIME GIFTS
-    // =====================================================
 
     ProductModel(
       id: 'anime_046',
@@ -720,7 +670,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Anime Sticker Collection'),
       category: 'Anime Gifts',
     ),
-
     ProductModel(
       id: 'anime_047',
       name: 'Anime Bookmark Set',
@@ -728,7 +677,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Anime Bookmark Set'),
       category: 'Anime Gifts',
     ),
-
     ProductModel(
       id: 'anime_048',
       name: 'Manga Reader Gift Set',
@@ -736,7 +684,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Manga Reader Gift Set'),
       category: 'Anime Gifts',
     ),
-
     ProductModel(
       id: 'anime_049',
       name: 'Anime Collector Gift Box',
@@ -744,7 +691,6 @@ class MerchandiseMock {
       imageUrl: imageFor('Anime Collector Gift Box'),
       category: 'Anime Gifts',
     ),
-
     ProductModel(
       id: 'anime_050',
       name: 'FandomVerse Mystery Gift Box',
@@ -753,6 +699,10 @@ class MerchandiseMock {
       category: 'Anime Gifts',
     ),
   ];
+
+  // =====================================================
+  // CATEGORIES
+  // =====================================================
 
   static const List<CategoryModel> categories = [
     CategoryModel(

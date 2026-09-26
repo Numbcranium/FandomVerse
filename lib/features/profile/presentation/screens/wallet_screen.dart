@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../app/theme/merchandise_colors.dart';
 
@@ -8,108 +9,238 @@ class WalletService {
 
   static final WalletService instance = WalletService._();
 
-  static const String _walletKey = 'merchandise_wallet_balance';
+  static final FirebaseFirestore _firestore =
+      FirebaseFirestore.instance;
 
-  // First-time wallet balance.
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  // Default wallet balance for a new user.
   static const double initialBalance = 100000.0;
 
-  double _balance = initialBalance;
+  double _balance = 0.0;
   bool _initialized = false;
 
   double get balance => _balance;
 
+  String get _userId {
+    final user = _auth.currentUser;
+
+    if (user == null) {
+      throw Exception('User is not logged in.');
+    }
+
+    return user.uid;
+  }
+
+  DocumentReference<Map<String, dynamic>> get _userDocument {
+    return _firestore.collection('users').doc(_userId);
+  }
+
+  /// Load the wallet balance from Firebase.
   Future<void> init() async {
     if (_initialized) {
       return;
     }
 
-    final prefs = await SharedPreferences.getInstance();
+    final snapshot = await _userDocument.get();
 
-    final savedBalance = prefs.getDouble(_walletKey);
-
-    if (savedBalance == null) {
-      // First time opening the wallet.
+    if (!snapshot.exists) {
       _balance = initialBalance;
 
-      await prefs.setDouble(
-        _walletKey,
-        _balance,
+      await _userDocument.set(
+        {
+          'walletBalance': _balance,
+        },
+        SetOptions(merge: true),
       );
     } else {
-      // Use the previously saved balance.
-      _balance = savedBalance;
+      final data = snapshot.data();
+
+      final savedBalance = data?['walletBalance'];
+
+      if (savedBalance is num) {
+        _balance = savedBalance.toDouble();
+      } else {
+        _balance = initialBalance;
+
+        await _userDocument.set(
+          {
+            'walletBalance': _balance,
+          },
+          SetOptions(merge: true),
+        );
+      }
     }
 
     _initialized = true;
   }
 
-  Future<void> _saveBalance() async {
-    final prefs = await SharedPreferences.getInstance();
+  /// Refresh the wallet balance from Firebase.
+  Future<void> refresh() async {
+    final snapshot = await _userDocument.get();
 
-    await prefs.setDouble(
-      _walletKey,
-      _balance,
-    );
+    if (!snapshot.exists) {
+      _balance = initialBalance;
+
+      await _userDocument.set(
+        {
+          'walletBalance': _balance,
+        },
+        SetOptions(merge: true),
+      );
+
+      return;
+    }
+
+    final data = snapshot.data();
+    final savedBalance = data?['walletBalance'];
+
+    if (savedBalance is num) {
+      _balance = savedBalance.toDouble();
+    } else {
+      _balance = initialBalance;
+
+      await _userDocument.set(
+        {
+          'walletBalance': _balance,
+        },
+        SetOptions(merge: true),
+      );
+    }
   }
 
+  /// Add money to the Firebase wallet.
   Future<bool> addMoney(double amount) async {
-    await init();
-
     if (amount <= 0) {
       return false;
     }
 
-    _balance += amount;
+    try {
+      await _firestore.runTransaction((transaction) async {
+        final snapshot = await transaction.get(_userDocument);
 
-    await _saveBalance();
+        final data = snapshot.data();
 
-    return true;
+        double currentBalance = 0.0;
+
+        if (data?['walletBalance'] is num) {
+          currentBalance =
+              (data!['walletBalance'] as num).toDouble();
+        }
+
+        final newBalance = currentBalance + amount;
+
+        transaction.set(
+          _userDocument,
+          {
+            'walletBalance': newBalance,
+          },
+          SetOptions(merge: true),
+        );
+
+        _balance = newBalance;
+      });
+
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
+  /// Withdraw money from the Firebase wallet.
   Future<bool> withdraw(double amount) async {
-    await init();
-
     if (amount <= 0) {
       return false;
     }
 
-    if (amount > _balance) {
+    try {
+      await _firestore.runTransaction((transaction) async {
+        final snapshot = await transaction.get(_userDocument);
+
+        final data = snapshot.data();
+
+        double currentBalance = 0.0;
+
+        if (data?['walletBalance'] is num) {
+          currentBalance =
+              (data!['walletBalance'] as num).toDouble();
+        }
+
+        if (amount > currentBalance) {
+          throw Exception('Insufficient balance.');
+        }
+
+        final newBalance = currentBalance - amount;
+
+        transaction.update(
+          _userDocument,
+          {
+            'walletBalance': newBalance,
+          },
+        );
+
+        _balance = newBalance;
+      });
+
+      return true;
+    } catch (e) {
       return false;
     }
-
-    _balance -= amount;
-
-    await _saveBalance();
-
-    return true;
   }
 
-  /// Used when the customer orders a product.
+  /// Pay for a merchandise order.
   ///
-  /// Returns true if payment was successful.
-  /// Returns false if the wallet does not have enough money.
+  /// The payment is performed inside a Firebase transaction
+  /// so the balance cannot go below zero.
   Future<bool> pay(double amount) async {
-    await init();
-
     if (amount <= 0) {
       return false;
     }
 
-    if (_balance < amount) {
+    try {
+      await _firestore.runTransaction((transaction) async {
+        final snapshot = await transaction.get(_userDocument);
+
+        final data = snapshot.data();
+
+        double currentBalance = 0.0;
+
+        if (data?['walletBalance'] is num) {
+          currentBalance =
+              (data!['walletBalance'] as num).toDouble();
+        }
+
+        if (currentBalance < amount) {
+          throw Exception('Insufficient wallet balance.');
+        }
+
+        final newBalance = currentBalance - amount;
+
+        transaction.update(
+          _userDocument,
+          {
+            'walletBalance': newBalance,
+          },
+        );
+
+        _balance = newBalance;
+      });
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Check whether the wallet can afford an amount.
+  Future<bool> canAfford(double amount) async {
+    if (amount <= 0) {
       return false;
     }
 
-    _balance -= amount;
+    await refresh();
 
-    await _saveBalance();
-
-    return true;
-  }
-
-  Future<bool> canAfford(double amount) async {
-    await init();
-
-    return amount > 0 && _balance >= amount;
+    return _balance >= amount;
   }
 }
 
@@ -132,7 +263,22 @@ class _WalletScreenState extends State<WalletScreen> {
   }
 
   Future<void> _initializeWallet() async {
-    await _wallet.init();
+    try {
+      await _wallet.init();
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Please log in to access your wallet.',
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
 
     if (!mounted) {
       return;
@@ -218,7 +364,8 @@ class _WalletScreenState extends State<WalletScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                final text = controller.text.trim().replaceAll(',', '');
+                final text =
+                controller.text.trim().replaceAll(',', '');
 
                 final value = double.tryParse(text);
 
@@ -276,7 +423,8 @@ class _WalletScreenState extends State<WalletScreen> {
               ? '${_formatMoney(amount)} added to your wallet.'
               : 'Unable to add money.',
         ),
-        backgroundColor: success ? MerchColors.primary : Colors.red,
+        backgroundColor:
+        success ? MerchColors.primary : Colors.red,
       ),
     );
   }
@@ -318,7 +466,8 @@ class _WalletScreenState extends State<WalletScreen> {
               ? '${_formatMoney(amount)} withdrawn successfully.'
               : 'Unable to withdraw money.',
         ),
-        backgroundColor: success ? MerchColors.primary : Colors.red,
+        backgroundColor:
+        success ? MerchColors.primary : Colors.red,
       ),
     );
   }
@@ -390,7 +539,9 @@ class _WalletScreenState extends State<WalletScreen> {
                         width: 44,
                         height: 44,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.15),
+                          color: Colors.white.withValues(
+                            alpha: 0.15,
+                          ),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Icon(
