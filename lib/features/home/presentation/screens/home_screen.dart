@@ -120,7 +120,7 @@ class HomeScreen extends StatelessWidget {
   void _onTabTapped(BuildContext context, int index) {
     switch (index) {
       case 0:
-        return;
+        return; // Already on home
       case 1:
         context.go(RouteNames.trivia);
         return;
@@ -128,7 +128,7 @@ class HomeScreen extends StatelessWidget {
         context.go(RouteNames.events);
         return;
       case 3:
-        context.push('/merchandise');
+        context.go('/merchandise');
         return;
       case 4:
         context.go(RouteNames.profile);

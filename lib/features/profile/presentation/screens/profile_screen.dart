@@ -25,21 +25,17 @@ class ProfileScreen extends StatelessWidget {
       case 0:
         context.go(RouteNames.home);
         return;
-
       case 1:
-        context.push(RouteNames.community);
+        context.go(RouteNames.trivia);
         return;
-
       case 2:
-        showComingSoon(context, 'Events');
+        context.go(RouteNames.events);
         return;
-
       case 3:
-        showComingSoon(context, 'Shop');
+        context.go('/merchandise');
         return;
-
       case 4:
-        return;
+        return; // Already on profile
     }
   }
 

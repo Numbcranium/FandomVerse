@@ -138,26 +138,17 @@ class _EventsScreenState extends State<EventsScreen> {
   void _onTabTapped(BuildContext context, int index) {
     switch (index) {
       case 0:
-      // Home
         context.go(RouteNames.home);
         return;
-
       case 1:
-      // Explore is not implemented yet.
-        showComingSoon(context, 'Explore');
+        context.go(RouteNames.trivia);
         return;
-
       case 2:
-      // Already on Events.
-        return;
-
+        return; // Already on events
       case 3:
-      // Merchandise
-        context.push('/merchandise');
+        context.go('/merchandise');
         return;
-
       case 4:
-      // Profile
         context.go(RouteNames.profile);
         return;
     }
