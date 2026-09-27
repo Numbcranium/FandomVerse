@@ -120,13 +120,13 @@ class FandomDetailsScreen extends StatelessWidget {
 
                       // Dark overlay
                       Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
                               Colors.transparent,
-                              const Color(0xFF0B0A24),
+                              Color(0xFF0B0A24),
                             ],
                           ),
                         ),
@@ -268,7 +268,12 @@ class FandomDetailsScreen extends StatelessWidget {
                         icon: Icons.quiz_outlined,
                         title: 'Trivia',
                         onTap: () {
-                          // We will connect this next
+                          context.push(
+                            RouteNames.fandomTrivia.replaceFirst(
+                              ':fandomId',
+                              fandom.id,
+                            ),
+                          );
                         },
                       ),
 
@@ -276,17 +281,22 @@ class FandomDetailsScreen extends StatelessWidget {
                         icon: Icons.play_circle_outline,
                         title: 'Videos',
                         onTap: () {
-                          // We will connect this next
+                          context.push(
+                            RouteNames.fandomVideo.replaceFirst(
+                              ':fandomId',
+                              fandom.id,
+                            ),
+                          );
                         },
                       ),
 
-                      _ExploreButton(
-                        icon: Icons.event_outlined,
-                        title: 'Events',
-                        onTap: () {
-                          // We will connect this next
-                        },
-                      ),
+                      // _ExploreButton(
+                      //   icon: Icons.event_outlined,
+                      //   title: 'Events',
+                      //   onTap: () {
+                      //     // We will connect this next
+                      //   },
+                      // ),
 
                       const SizedBox(height: 40),
                     ],

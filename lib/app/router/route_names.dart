@@ -28,6 +28,13 @@ class RouteNames {
   static const String homeSearch = '/homeSearch';
   static const String fandomNews = '/fandom/:fandomId/news';
   static const String fandomGallery = '/fandom/:fandomId/gallery';
+  static const String fandomVideo =  '/fandom/:fandomId/video';
+  static const String fandomTrivia = '/fandom/:fandomId/trivia';
+  static const String trivia = '/trivia';
+  static const String chooseFandom = '/trivia/choose-fandom';
+  static const String triviaQuestions = '/trivia/questions/:fandomId';
+  static const String triviaLeaderboard = '/trivia/leaderboard';
+
 
   // --- Names (used by GoRoute.name and context.goNamed) ---
   static const String introName = 'intro';
@@ -51,6 +58,12 @@ class RouteNames {
   static const String  searchHomeName  = 'homeSearch';
   static const String fandomNewsName = 'fandomNews';
   static const String fandomGalleryName = 'fandomGallery';
+  static const String fandomVideoName = 'fandomVideo';
+  static const String fandomTriviaName = 'fandomTrivia';
+  static const String triviaName = 'trivia';
+  static const String chooseFandomName = 'chooseFandom';
+  static const String triviaQuestionsName = 'triviaQuestions';
+  static const String triviaLeaderboardName = 'triviaLeaderboard';
 
 
 

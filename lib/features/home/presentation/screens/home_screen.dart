@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "Here's what's happening today.",
+                        "Your daily fandom breakdown.",
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -122,7 +122,7 @@ class HomeScreen extends StatelessWidget {
       case 0:
         return;
       case 1:
-        showComingSoon(context, 'Explore');
+        context.go(RouteNames.trivia);
         return;
       case 2:
         showComingSoon(context, 'Events');

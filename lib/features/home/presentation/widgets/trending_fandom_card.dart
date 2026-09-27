@@ -53,7 +53,7 @@ class TrendingFandomCard extends StatelessWidget {
           padding: const EdgeInsets.all(8),
 
           decoration: BoxDecoration(
-            color: const Color(0xFF8FA8F5),
+            // color: const Color(0xFF8FA8F3),
             borderRadius: BorderRadius.circular(12),
           ),
 

@@ -10,6 +10,12 @@ import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'firebase/firebase_service.dart';
+import 'models/fandom-gallery-seed.dart';
+import 'models/fandom_trivia_seed.dart';
+
+
+
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
