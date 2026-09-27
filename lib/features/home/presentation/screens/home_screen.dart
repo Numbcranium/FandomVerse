@@ -128,7 +128,7 @@ class HomeScreen extends StatelessWidget {
         context.go(RouteNames.events);
         return;
       case 3:
-        context.go('/merchandise');
+        context.push('/merchandise');
         return;
       case 4:
         context.go(RouteNames.profile);

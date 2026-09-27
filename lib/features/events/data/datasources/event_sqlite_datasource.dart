@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
+import 'package:flutter/foundation.dart';
 import '../../models/event_model.dart';
 import 'database/app_database.dart';
 
@@ -17,6 +18,7 @@ class EventSqliteDataSource {
   ///
   /// If the event already exists, its local copy is replaced.
   Future<void> insertEvent(EventModel event) async {
+    if (kIsWeb) return;
     final db = await _database.database;
 
     await db.insert(
@@ -28,6 +30,7 @@ class EventSqliteDataSource {
 
   /// Saves multiple events locally.
   Future<void> insertEvents(List<EventModel> events) async {
+    if (kIsWeb) return;
     final db = await _database.database;
 
     final batch = db.batch();
@@ -45,6 +48,7 @@ class EventSqliteDataSource {
 
   /// Retrieves all locally stored events.
   Future<List<EventModel>> getEvents() async {
+    if (kIsWeb) return [];
     final db = await _database.database;
 
     final rows = await db.query(
@@ -57,6 +61,7 @@ class EventSqliteDataSource {
 
   /// Retrieves one locally stored event.
   Future<EventModel?> getEventById(String eventId) async {
+    if (kIsWeb) return null;
     final db = await _database.database;
 
     final rows = await db.query(
@@ -75,6 +80,7 @@ class EventSqliteDataSource {
 
   /// Updates a locally stored event.
   Future<void> updateEvent(EventModel event) async {
+    if (kIsWeb) return;
     final db = await _database.database;
 
     await db.update(
@@ -87,6 +93,7 @@ class EventSqliteDataSource {
 
   /// Deletes a locally stored event.
   Future<void> deleteEvent(String eventId) async {
+    if (kIsWeb) return;
     final db = await _database.database;
 
     await db.delete(

@@ -1,4 +1,5 @@
 import 'package:sqflite/sqflite.dart';
+import 'package:flutter/foundation.dart';
 import '../../../events/data/datasources/database/app_database.dart';
 import '../../models/ticket_model.dart';
 
@@ -11,6 +12,7 @@ class TicketSqliteDataSource {
 
   // Saves a ticket locally.
   Future<void> insertTicket(TicketModel ticket) async {
+    if (kIsWeb) return;
     final db = await _database.database;
 
     await db.insert(
@@ -24,6 +26,7 @@ class TicketSqliteDataSource {
   Future<void> insertTickets(
       List<TicketModel> tickets,
       ) async {
+    if (kIsWeb) return;
     final db = await _database.database;
 
     final batch = db.batch();
@@ -45,6 +48,7 @@ class TicketSqliteDataSource {
   Future<TicketModel?> getTicketById(
       String ticketId,
       ) async {
+    if (kIsWeb) return null;
     final db = await _database.database;
 
     final rows = await db.query(
@@ -65,6 +69,7 @@ class TicketSqliteDataSource {
   Future<List<TicketModel>> getTicketsForUser(
       String userId,
       ) async {
+    if (kIsWeb) return [];
     final db = await _database.database;
 
     final rows = await db.query(

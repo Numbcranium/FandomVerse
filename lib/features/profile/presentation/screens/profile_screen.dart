@@ -32,7 +32,7 @@ class ProfileScreen extends StatelessWidget {
         context.go(RouteNames.events);
         return;
       case 3:
-        context.go('/merchandise');
+        context.push('/merchandise');
         return;
       case 4:
         return; // Already on profile

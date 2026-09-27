@@ -146,7 +146,7 @@ class _EventsScreenState extends State<EventsScreen> {
       case 2:
         return; // Already on events
       case 3:
-        context.go('/merchandise');
+        context.push('/merchandise');
         return;
       case 4:
         context.go(RouteNames.profile);
