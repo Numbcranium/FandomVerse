@@ -116,6 +116,7 @@ class _DashboardTab extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       backgroundColor: const Color(0xFF1A1D2D),
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (_) => FutureBuilder(
         future: Future.wait([
@@ -124,10 +125,12 @@ class _DashboardTab extends StatelessWidget {
         ]),
         builder: (ctx, snap) {
           final c = snap.data ?? [0, 0, 0, 0, 0];
-          return Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+          return SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text('Reports & Analytics', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
@@ -139,7 +142,7 @@ class _DashboardTab extends StatelessWidget {
                 _reportRow('Total Posts', '${c[4]}', Icons.article),
               ],
             ),
-          );
+          )));
         },
       ),
     );
@@ -149,13 +152,16 @@ class _DashboardTab extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       backgroundColor: const Color(0xFF1A1D2D),
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (_) => Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      builder: (_) => SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
             const Text('Admin Settings', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
             _settingsTile(Icons.notifications_outlined, 'Push Notifications', 'Configure notification settings', onTap: () => _showSnack(context, 'Notification settings coming soon')),
@@ -176,7 +182,7 @@ class _DashboardTab extends StatelessWidget {
           ],
         ),
       ),
-    );
+    )));
   }
 
   void _showSnack(BuildContext context, String msg) {
@@ -610,16 +616,21 @@ class _EventManagementTabState extends State<_EventManagementTab> {
     showModalBottomSheet(
       context: context,
       backgroundColor: const Color(0xFF1A1D2D),
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (_) => Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Event Analytics', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 20),
-          _analyticsRow('Upcoming Events', '${upcoming.count ?? 0}', Colors.green),
-          _analyticsRow('Past Events', '${past.count ?? 0}', Colors.orange),
-          _analyticsRow('Total Events', '${(upcoming.count ?? 0) + (past.count ?? 0)}', const Color(0xFF6C4DFF)),
-        ]),
+      builder: (_) => SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text('Event Analytics', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 20),
+              _analyticsRow('Upcoming Events', '${upcoming.count ?? 0}', Colors.green),
+              _analyticsRow('Past Events', '${past.count ?? 0}', Colors.orange),
+              _analyticsRow('Total Events', '${(upcoming.count ?? 0) + (past.count ?? 0)}', const Color(0xFF6C4DFF)),
+            ]),
+          ),
+        ),
       ),
     );
   }
