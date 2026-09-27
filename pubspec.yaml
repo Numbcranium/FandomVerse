@@ -49,8 +49,8 @@ dependencies:
   # Firestore stays the source of truth for reads; sqflite mirrors writes
   # locally to satisfy the SRS's offline-storage constraint. Wiring this
   # up as a write-through cache layer is a follow-up task, not yet done.
-  sqflite: ^2.3.3+1
-  path: ^1.9.0
+  sqflite: ^2.4.2+1
+  path: ^1.9.1
 
   # --- Typography ---
   # Poppins per the design system — fetched via Google Fonts' API and
@@ -63,6 +63,12 @@ dependencies:
   gal: ^2.3.3
   firebase_ai: ^2.3.0
   firebase_app_check: ^0.3.2+10
+
+  #---- flutter map for map screen
+  flutter_map: ^8.3.2
+  latlong2: ^0.10.1
+  sqflite_common_ffi: ^2.4.0+3
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:

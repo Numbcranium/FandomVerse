@@ -83,6 +83,7 @@ class _GlobalFabOverlayState extends State<_GlobalFabOverlay> {
       RouteNames.register,
       RouteNames.forgotPassword,
       RouteNames.aiHelper,
+      RouteNames.adminDashboard,
       '/', // Hide on root before redirect
     ];
 

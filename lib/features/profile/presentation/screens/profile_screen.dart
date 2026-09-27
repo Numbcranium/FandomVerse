@@ -13,6 +13,9 @@ import '../../../../core/widgets/status_badge.dart';
 import '../../../../models/user_model.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
+import '../../../home/presentation/screens/merchandise/order_history_screen.dart';
+import '../../../tickets/presentation/screens/my_tickets_screen.dart';
+import 'wallet_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -22,15 +25,19 @@ class ProfileScreen extends StatelessWidget {
       case 0:
         context.go(RouteNames.home);
         return;
+
       case 1:
         context.push(RouteNames.community);
         return;
+
       case 2:
         showComingSoon(context, 'Events');
         return;
+
       case 3:
         showComingSoon(context, 'Shop');
         return;
+
       case 4:
         return;
     }
@@ -44,8 +51,11 @@ class ProfileScreen extends StatelessWidget {
       confirmText: 'Log out',
       isDestructive: true,
     );
+
     if (confirmed && context.mounted) {
-      context.read<AuthBloc>().add(const AuthLogoutRequested());
+      context.read<AuthBloc>().add(
+        const AuthLogoutRequested(),
+      );
     }
   }
 
@@ -53,11 +63,40 @@ class ProfileScreen extends StatelessWidget {
     switch (role) {
       case UserRole.admin:
         return StatusBadgeType.error;
+
       case UserRole.provider:
         return StatusBadgeType.info;
+
       case UserRole.user:
         return StatusBadgeType.neutral;
     }
+  }
+
+  void _openOrderHistory(BuildContext context) {
+    Navigator.push<void>(
+      context,
+      MaterialPageRoute<void>(
+        builder: (_) => const OrderHistoryScreen(),
+      ),
+    );
+  }
+
+  void _openWallet(BuildContext context) {
+    Navigator.push<void>(
+      context,
+      MaterialPageRoute<void>(
+        builder: (_) => const WalletScreen(),
+      ),
+    );
+  }
+
+  void _openTickets(BuildContext context){
+    Navigator.push<void>(
+      context,
+      MaterialPageRoute<void>(
+          builder: (_) => const MyTicketsScreen(),
+      ),
+    );
   }
 
   @override
@@ -66,6 +105,7 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        title: const Text('Profile'),
           title: const Text('Profile'),
       // for the notificatiom button
         actions: [
@@ -78,96 +118,221 @@ class ProfileScreen extends StatelessWidget {
       ),
       bottomNavigationBar: AppBottomNavBar(
         currentIndex: 4,
-        onTap: (index) => _onTabTapped(context, index),
+        onTap: (index) => _onTabTapped(
+          context,
+          index,
+        ),
       ),
       body: user == null
           ? const SizedBox.shrink()
           : SafeArea(
-              child: ListView(
-                padding: const EdgeInsets.all(AppConstants.spaceMd),
+        child: ListView(
+          padding: const EdgeInsets.all(
+            AppConstants.spaceMd,
+          ),
+          children: [
+            // =========================================================
+            // PROFILE PHOTO
+            // =========================================================
+
+            Center(
+              child: AppNetworkImage.avatar(
+                imageUrl: user.photoUrl,
+                radius: 44,
+                fallbackText: user.fullName,
+              ),
+            ),
+
+            const SizedBox(
+              height: AppConstants.spaceMd,
+            ),
+
+            // =========================================================
+            // NAME
+            // =========================================================
+
+            Center(
+              child: Text(
+                user.fullName,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge,
+              ),
+            ),
+
+            const SizedBox(height: 4),
+
+            // =========================================================
+            // ROLE
+            // =========================================================
+
+            Center(
+              child: StatusBadge(
+                label: user.role.asString,
+                type: _badgeTypeFor(
+                  user.role,
+                ),
+              ),
+            ),
+
+            const SizedBox(
+              height: AppConstants.spaceLg,
+            ),
+
+            // =========================================================
+            // USER INFORMATION
+            // =========================================================
+
+            AppCard(
+              child: Column(
+                crossAxisAlignment:
+                CrossAxisAlignment.start,
                 children: [
-                  Center(
-                    child: AppNetworkImage.avatar(
-                      imageUrl: user.photoUrl,
-                      radius: 44,
-                      fallbackText: user.fullName,
-                    ),
+                  _InfoRow(
+                    icon: Icons.email_outlined,
+                    label: 'Email',
+                    value: user.email,
                   ),
-                  const SizedBox(height: AppConstants.spaceMd),
-                  Center(
-                    child: Text(
-                      user.fullName,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
+                  const Divider(
+                    height: AppConstants.spaceLg,
                   ),
-                  const SizedBox(height: 4),
-                  Center(
-                    child: StatusBadge(
-                      label: user.role.asString,
-                      type: _badgeTypeFor(user.role),
-                    ),
-                  ),
-                  const SizedBox(height: AppConstants.spaceLg),
-                  AppCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _InfoRow(icon: Icons.email_outlined, label: 'Email', value: user.email),
-                        const Divider(height: AppConstants.spaceLg),
-                        _InfoRow(icon: Icons.phone_outlined, label: 'Phone', value: user.phone),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: AppConstants.spaceLg),
-                  AppCard(
-                    onTap: () => context.push(RouteNames.editProfile),
-                    child: const _ActionRow(
-                      icon: Icons.edit_outlined,
-                      label: 'Edit profile',
-                    ),
-                  ),
-                  const SizedBox(height: AppConstants.spaceSm),
-                  AppCard(
-                    onTap: () => context.push(RouteNames.bookmarks),
-                    child: const _ActionRow(
-                      icon: Icons.bookmark_border,
-                      label: 'Bookmarks',
-                    ),
-                  ),
-                  const SizedBox(height: AppConstants.spaceSm),
-                  AppCard(
-                    onTap: () => context.push(RouteNames.purchaseHistory),
-                    child: const _ActionRow(
-                      icon: Icons.receipt_long_outlined,
-                      label: 'Purchase history',
-                    ),
-                  ),
-                  const SizedBox(height: AppConstants.spaceSm),
-                  AppCard(
-                    onTap: () => context.push(RouteNames.settings),
-                    child: const _ActionRow(
-                      icon: Icons.settings_outlined,
-                      label: 'Settings',
-                    ),
-                  ),
-                  const SizedBox(height: AppConstants.spaceLg),
-                  AppCard(
-                    onTap: () => _confirmLogout(context),
-                    child: const _ActionRow(
-                      icon: Icons.logout,
-                      label: 'Log out',
-                      isDestructive: true,
-                    ),
+                  _InfoRow(
+                    icon: Icons.phone_outlined,
+                    label: 'Phone',
+                    value: user.phone,
                   ),
                 ],
               ),
             ),
+
+            const SizedBox(
+              height: AppConstants.spaceLg,
+            ),
+
+            // =========================================================
+            // EDIT PROFILE
+            // =========================================================
+
+            AppCard(
+              onTap: () => context.push(
+                RouteNames.editProfile,
+              ),
+              child: const _ActionRow(
+                icon: Icons.edit_outlined,
+                label: 'Edit profile',
+              ),
+            ),
+
+            const SizedBox(
+              height: AppConstants.spaceSm,
+            ),
+
+            // =========================================================
+            // BOOKMARKS
+            // =========================================================
+
+            AppCard(
+              onTap: () => context.push(
+                RouteNames.bookmarks,
+              ),
+              child: const _ActionRow(
+                icon: Icons.bookmark_border,
+                label: 'Bookmarks',
+              ),
+            ),
+
+            const SizedBox(
+              height: AppConstants.spaceSm,
+            ),
+
+            // =========================================================
+            // PURCHASE HISTORY
+            // =========================================================
+
+            AppCard(
+              onTap: () => _openOrderHistory(context),
+              child: const _ActionRow(
+                icon: Icons.receipt_long_outlined,
+                label: 'Purchase history',
+              ),
+            ),
+
+            const SizedBox(
+              height: AppConstants.spaceSm,
+            ),
+
+            // =========================================================
+            // WALLET
+            // =========================================================
+
+            AppCard(
+              onTap: () => _openWallet(context),
+              child: const _ActionRow(
+                icon: Icons.account_balance_wallet_outlined,
+                label: 'Wallet',
+              ),
+            ),
+
+            const SizedBox(
+              height: AppConstants.spaceSm,
+            ),
+
+            //My tickets
+            AppCard(
+              onTap: () => _openTickets(context),
+              child: const _ActionRow(
+                  icon: Icons.confirmation_num_outlined,
+                  label: 'My tickets'),
+
+            ),
+
+            const SizedBox(
+              height: AppConstants.spaceSm,
+            ),
+
+            // =========================================================
+            // SETTINGS
+            // =========================================================
+
+            AppCard(
+              onTap: () => context.push(
+                RouteNames.settings,
+              ),
+              child: const _ActionRow(
+                icon: Icons.settings_outlined,
+                label: 'Settings',
+              ),
+            ),
+
+            const SizedBox(
+              height: AppConstants.spaceLg,
+            ),
+
+            // =========================================================
+            // LOG OUT
+            // =========================================================
+
+            AppCard(
+              onTap: () => _confirmLogout(context),
+              child: const _ActionRow(
+                icon: Icons.logout,
+                label: 'Log out',
+                isDestructive: true,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
 class _InfoRow extends StatelessWidget {
-  const _InfoRow({required this.icon, required this.label, required this.value});
+  const _InfoRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
 
   final IconData icon;
   final String label;
@@ -177,14 +342,31 @@ class _InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
-        const SizedBox(width: AppConstants.spaceSm),
+        Icon(
+          icon,
+          size: 20,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        const SizedBox(
+          width: AppConstants.spaceSm,
+        ),
         Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment:
+            CrossAxisAlignment.start,
             children: [
-              Text(label, style: Theme.of(context).textTheme.bodySmall),
-              Text(value, style: Theme.of(context).textTheme.bodyLarge),
+              Text(
+                label,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall,
+              ),
+              Text(
+                value,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge,
+              ),
             ],
           ),
         ),
@@ -212,11 +394,28 @@ class _ActionRow extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(icon, size: 20, color: color),
-        const SizedBox(width: AppConstants.spaceSm),
-        Text(label, style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: color)),
+        Icon(
+          icon,
+          size: 20,
+          color: color,
+        ),
+        const SizedBox(
+          width: AppConstants.spaceSm,
+        ),
+        Text(
+          label,
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge
+              ?.copyWith(
+            color: color,
+          ),
+        ),
         const Spacer(),
-        Icon(Icons.chevron_right, color: Theme.of(context).disabledColor),
+        Icon(
+          Icons.chevron_right,
+          color: Theme.of(context).disabledColor,
+        ),
       ],
     );
   }

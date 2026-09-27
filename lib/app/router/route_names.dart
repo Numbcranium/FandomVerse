@@ -33,6 +33,7 @@ class RouteNames {
   static const String trivia = '/trivia';
   static const String chooseFandom = '/trivia/choose-fandom';
   static const String triviaQuestions = '/trivia/questions/:fandomId';
+  static const String adminDashboard = '/admin';
   static const String triviaLeaderboard = '/trivia/leaderboard';
 
 
@@ -68,6 +69,33 @@ class RouteNames {
 
 
 
+  static const String aiHelperName = 'aiHelper';
+  static const String adminDashboardName = 'adminDashboard';
+
+  // --- Events ---
+  static const String events = '/events';
+  static const String eventDetails = '/events/:eventId';
+  static const String eventCalendar = '/events/calendar';
+  static const String nearbyEvents = '/events/nearby';
+  static const String eventMap = '/events/map';
+  static const String eventSearch = '/events/search';
+  static const String eventFilters = '/events/filters';
+
+  // --- Event route names ---
+  static const String eventsName = 'events';
+  static const String eventDetailsName = 'eventDetails';
+  static const String eventCalendarName = 'eventCalendar';
+  static const String nearbyEventsName = 'nearbyEvents';
+  static const String eventMapName = 'eventMap';
+  static const String eventSearchName = 'eventSearch';
+  static const String eventFiltersName = 'eventFilters';
+
+  // event tickets route name
+
+  static const String ticket = '/tickets/:ticketId';
+  static const String ticketName = 'ticket';
+  static const String myTickets = '/tickets';
+  static const String myTicketsName = 'myTickets';
 
   /// Routes reachable without being logged in.
   static const List<String> publicPaths = [
