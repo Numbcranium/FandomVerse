@@ -21,6 +21,7 @@ class RouteNames {
   static const String settings = '/settings';
   static const String bookmarks = '/bookmarks';
   static const String purchaseHistory = '/purchase-history';
+  static const String aiHelper = '/ai-helper';
   static const String community = '/community';
   static const String fandoms = '/fandoms';
   static const String fandomDetails = '/fandom/:fandomId';
@@ -32,8 +33,9 @@ class RouteNames {
   static const String trivia = '/trivia';
   static const String chooseFandom = '/trivia/choose-fandom';
   static const String triviaQuestions = '/trivia/questions/:fandomId';
-  static const String aiHelper = '/ai-helper';
   static const String adminDashboard = '/admin';
+  static const String triviaLeaderboard = '/trivia/leaderboard';
+
 
   // --- Names (used by GoRoute.name and context.goNamed) ---
   static const String introName = 'intro';
@@ -50,6 +52,7 @@ class RouteNames {
   static const String settingsName = 'settings';
   static const String bookmarksName = 'bookmarks';
   static const String purchaseHistoryName = 'purchaseHistory';
+  static const String aiHelperName = 'aiHelper';
   static const String communityName = 'community';
   static const String  fandomsName = 'fandoms';
   static const String fandomDetailsName = 'fandomDetails';
@@ -61,6 +64,7 @@ class RouteNames {
   static const String triviaName = 'trivia';
   static const String chooseFandomName = 'chooseFandom';
   static const String triviaQuestionsName = 'triviaQuestions';
+  static const String triviaLeaderboardName = 'triviaLeaderboard';
 
 
 
@@ -101,5 +105,4 @@ class RouteNames {
     register,
     forgotPassword,
   ];
-
 }

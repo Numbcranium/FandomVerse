@@ -212,20 +212,20 @@ class FandomGallerySeed {
         fandomId: 'pop_culture',
         title: 'Pop Culture',
         image:
-        'assets/images//homeSearch/popCulture_01',
+        'assets/images//homeSearch/popCulture_01.webp',
         category: 'Pop Culture',
         uploadedAt: DateTime(2026, 9, 24),
       ),
 
-      //  FandomGallery(
-      //   id: 'pop_culture_gallery_002',
-      //   fandomId: 'pop_culture',
-      //   title: 'Trending Moments',
-      //   image:
-      //   'assets/images/gallery/homeSearch/tv_01.jpg',
-      //   category: 'Pop Culture',
-      //   uploadedAt: DateTime(2026, 9, 23),
-      // ),
+       FandomGallery(
+        id: 'pop_culture_gallery_002',
+        fandomId: 'pop_culture',
+        title: 'Trending Moments',
+        image:
+        'assets/images//homeSearch/PopCulture.png',
+        category: 'Pop Culture',
+        uploadedAt: DateTime(2026, 9, 23),
+      ),
 
       //  FandomGallery(
       //   id: 'pop_culture_gallery_003',
@@ -320,7 +320,7 @@ class FandomGallerySeed {
         fandomId: 'comic_books',
         title: 'Comic Heroes',
         image:
-        'assets/images/homeSearch/comic_01',
+        'assets/images/homeSearch/comic_01.jpg',
         category: 'Comic Books',
         uploadedAt: DateTime(2026, 9, 24),
       ),
@@ -330,7 +330,7 @@ class FandomGallerySeed {
         fandomId: 'comic_books',
         title: 'Classic Comics',
         image:
-        'assets/images/homeSearch/comic_02',
+        'assets/images/homeSearch/comic_02.jpg',
         category: 'Comic Books',
         uploadedAt: DateTime(2026, 9, 23),
       ),
@@ -340,7 +340,7 @@ class FandomGallerySeed {
         fandomId: 'comic_books',
         title: 'Comic Characters',
         image:
-        'assets/images/homeSearch/comic_03',
+        'assets/images/homeSearch/comic_03.jpg',
         category: 'Comic Books',
         uploadedAt: DateTime(2026, 9, 22),
       ),
