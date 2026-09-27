@@ -65,11 +65,6 @@ class RouteNames {
   static const String chooseFandomName = 'chooseFandom';
   static const String triviaQuestionsName = 'triviaQuestions';
   static const String triviaLeaderboardName = 'triviaLeaderboard';
-
-
-
-
-  static const String aiHelperName = 'aiHelper';
   static const String adminDashboardName = 'adminDashboard';
 
   // --- Events ---

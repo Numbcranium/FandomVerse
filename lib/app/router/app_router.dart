@@ -381,6 +381,7 @@ class AppRouter {
           eventId: eventId!,
         );
       },
+  ),
     GoRoute(
       path: RouteNames.aiHelper,
       name: RouteNames.aiHelperName,

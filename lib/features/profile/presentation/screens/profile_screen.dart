@@ -106,7 +106,6 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
-          title: const Text('Profile'),
       // for the notificatiom button
         actions: [
           IconButton(

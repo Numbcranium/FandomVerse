@@ -297,7 +297,7 @@ class _WalletScreenState extends State<WalletScreen> {
     required String title,
     required String buttonText,
   }) async {
-    final controller = TextEditingController();
+    String enteredAmount = '';
 
     final result = await showDialog<double>(
       context: context,
@@ -313,11 +313,13 @@ class _WalletScreenState extends State<WalletScreen> {
             ),
           ),
           content: TextField(
-            controller: controller,
             autofocus: true,
             keyboardType: const TextInputType.numberWithOptions(
               decimal: true,
             ),
+            onChanged: (value) {
+              enteredAmount = value;
+            },
             style: const TextStyle(
               color: MerchColors.textPrimary,
             ),
@@ -334,16 +336,16 @@ class _WalletScreenState extends State<WalletScreen> {
               filled: true,
               fillColor: MerchColors.surfaceLight,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.all(Radius.circular(12)),
                 borderSide: BorderSide.none,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.all(Radius.circular(12)),
                 borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderSide: BorderSide(
                   color: MerchColors.primary,
                   width: 1.5,
                 ),
@@ -364,9 +366,7 @@ class _WalletScreenState extends State<WalletScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                final text =
-                controller.text.trim().replaceAll(',', '');
-
+                final text = enteredAmount.trim().replaceAll(',', '');
                 final value = double.tryParse(text);
 
                 if (value == null || value <= 0) {
@@ -393,11 +393,8 @@ class _WalletScreenState extends State<WalletScreen> {
       },
     );
 
-    controller.dispose();
-
     return result;
   }
-
   Future<void> _addMoney() async {
     final amount = await _showAmountDialog(
       title: 'Add Money',
