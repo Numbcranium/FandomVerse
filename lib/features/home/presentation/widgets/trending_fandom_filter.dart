@@ -39,7 +39,7 @@ class TrendingFandomFilter extends StatelessWidget {
         itemCount: categories.length,
 
         separatorBuilder: (context, index) {
-          return const SizedBox(width: 8);
+          return SizedBox(width: 8);
         },
 
         itemBuilder: (context, index) {
@@ -82,7 +82,7 @@ class TrendingFandomFilter extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? const Color(0xFF8B2CFF)
-                      : const Color(0xFF17163D),
+                      : Theme.of(context).cardColor,
 
                   borderRadius:
                   BorderRadius.circular(20),
@@ -90,7 +90,7 @@ class TrendingFandomFilter extends StatelessWidget {
                   border: Border.all(
                     color: isSelected
                         ? const Color(0xFF8B2CFF)
-                        : const Color(0xFF292745),
+                        : Theme.of(context).dividerColor,
                   ),
                 ),
 
@@ -98,7 +98,7 @@ class TrendingFandomFilter extends StatelessWidget {
                   category,
 
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
 
                     fontSize: 14,
 

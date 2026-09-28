@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../../app/router/route_names.dart';
 import 'fandom_news.dart';
 
 class FandomNewsScreen extends StatelessWidget {
@@ -37,30 +35,30 @@ class FandomNewsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0B0A24),
+      backgroundColor: Theme.of(context).cardColor,
 
       // ========================================
       // APP BAR
       // ========================================
 
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0B0A24),
+        backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
 
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
 
-        title: const Text(
+        title: Text(
           'News',
           style: TextStyle(
-            color: Colors.white,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -82,7 +80,7 @@ class FandomNewsScreen extends StatelessWidget {
 
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -92,14 +90,14 @@ class FandomNewsScreen extends StatelessWidget {
           // ======================================
 
           if (snapshot.hasError) {
-            return const Center(
+            return Center(
               child: Padding(
                 padding: EdgeInsets.all(20),
                 child: Text(
                   'Unable to load news. Try again later.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white70,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
                   ),
                 ),
               ),
@@ -117,11 +115,11 @@ class FandomNewsScreen extends StatelessWidget {
           // ======================================
 
           if (news.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'No news available',
                 style: TextStyle(
-                  color: Colors.white54,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                   fontSize: 15,
                 ),
               ),
@@ -138,7 +136,7 @@ class FandomNewsScreen extends StatelessWidget {
             itemCount: news.length,
 
             separatorBuilder: (context, index) {
-              return const SizedBox(height: 14);
+              return SizedBox(height: 14);
             },
 
             itemBuilder: (context, index) {
@@ -192,7 +190,7 @@ class _NewsCard extends StatelessWidget {
           width: double.infinity,
 
           decoration: BoxDecoration(
-            color: const Color(0xFF17163D),
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(14),
           ),
 
@@ -221,7 +219,7 @@ class _NewsCard extends StatelessWidget {
                     return Container(
                       color: const Color(0xFF292745),
 
-                      child: const Icon(
+                      child: Icon(
                         Icons.image_not_supported_outlined,
                         color: Colors.white38,
                         size: 45,
@@ -246,14 +244,14 @@ class _NewsCard extends StatelessWidget {
                     Text(
                       news.category,
 
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Color(0xFF8FA8F5),
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
 
-                    const SizedBox(height: 7),
+                    SizedBox(height: 7),
 
                     // TITLE
                     Text(
@@ -263,14 +261,14 @@ class _NewsCard extends StatelessWidget {
                       overflow:
                       TextOverflow.ellipsis,
 
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
 
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
 
                     // DESCRIPTION
                     Text(
@@ -280,14 +278,14 @@ class _NewsCard extends StatelessWidget {
                       overflow:
                       TextOverflow.ellipsis,
 
-                      style: const TextStyle(
-                        color: Colors.white70,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                         fontSize: 13,
                         height: 1.4,
                       ),
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
 
                     // DATE
                     Text(
@@ -295,7 +293,7 @@ class _NewsCard extends StatelessWidget {
                         news.publishedAt,
                       ),
 
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white38,
                         fontSize: 11,
                       ),

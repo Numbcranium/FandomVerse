@@ -11,12 +11,12 @@ class CategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MerchColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: MerchColors.background,
-        foregroundColor: MerchColors.textPrimary,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'Categories',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -50,10 +50,10 @@ class CategoryScreen extends StatelessWidget {
             },
             child: Container(
               decoration: BoxDecoration(
-                color: MerchColors.surface,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(18),
                 border: Border.all(
-                  color: MerchColors.divider,
+                  color: Theme.of(context).dividerColor,
                 ),
               ),
               child: Column(
@@ -74,7 +74,7 @@ class CategoryScreen extends StatelessWidget {
                       color: MerchColors.primaryLight,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8,
@@ -82,8 +82,8 @@ class CategoryScreen extends StatelessWidget {
                     child: Text(
                       category.name,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: MerchColors.textPrimary,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

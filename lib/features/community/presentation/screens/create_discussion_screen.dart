@@ -55,15 +55,15 @@ class _CreateDiscussionScreenState extends State<CreateDiscussionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F111A), // Dark background matching app theme
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor, // Dark background matching app theme
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0F111A),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Theme.of(context).textTheme.bodyLarge?.color),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Create Discussion', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: Text('Create Discussion', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -72,14 +72,14 @@ class _CreateDiscussionScreenState extends State<CreateDiscussionScreen> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF1A1D2D),
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: TextField(
                 controller: _controller,
                 maxLines: 6,
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Start a discussion...',
@@ -87,9 +87,9 @@ class _CreateDiscussionScreenState extends State<CreateDiscussionScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
-            const Text('Add tags', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
+            SizedBox(height: 24),
+            Text('Add tags', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 16, fontWeight: FontWeight.bold)),
+            SizedBox(height: 12),
             Wrap(
               spacing: 8,
               children: _tags.map((tag) {
@@ -106,10 +106,10 @@ class _CreateDiscussionScreenState extends State<CreateDiscussionScreen> {
                       }
                     });
                   },
-                  backgroundColor: const Color(0xFF1A1D2D),
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   selectedColor: const Color(0xFF6C4DFF),
                   checkmarkColor: Colors.white,
-                  labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.white70),
+                  labelStyle: TextStyle(color: isSelected ? Colors.white : Theme.of(context).textTheme.bodyMedium?.color),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   side: BorderSide.none,
                 );
@@ -126,11 +126,11 @@ class _CreateDiscussionScreenState extends State<CreateDiscussionScreen> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
                 child: _isLoading 
-                  ? const CircularProgressIndicator(color: Colors.white) 
-                  : const Text('Post', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                  ? CircularProgressIndicator(color: Theme.of(context).textTheme.bodyLarge?.color) 
+                  : Text('Post', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
           ],
         ),
       ),

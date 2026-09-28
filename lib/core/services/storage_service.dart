@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -13,14 +13,14 @@ class StorageService {
 
   final FirebaseStorage _storage;
 
-  /// Uploads [file] to `$folder/$fileName` and returns its download URL.
+  /// Uploads [fileBytes] to `$folder/$fileName` and returns its download URL.
   Future<String> uploadFile({
     required String folder,
     required String fileName,
-    required File file,
+    required Uint8List fileBytes,
   }) async {
     final ref = _storage.ref().child(folder).child(fileName);
-    final task = await ref.putFile(file);
+    final task = await ref.putData(fileBytes);
     return task.ref.getDownloadURL();
   }
 

@@ -125,7 +125,7 @@ class _ProductDetailsScreenState
           ),
           backgroundColor: _isInWishlist
               ? MerchColors.success
-              : MerchColors.surfaceLight,
+              : Theme.of(context).cardColor,
         ),
       );
     } catch (_) {
@@ -228,11 +228,11 @@ class _ProductDetailsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MerchColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: MerchColors.background,
-        foregroundColor: MerchColors.textPrimary,
-        title: const Text('Product Details'),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
+        title: Text('Product Details'),
         actions: [
           IconButton(
             onPressed:
@@ -241,7 +241,7 @@ class _ProductDetailsScreenState
                 ? 'Remove from wishlist'
                 : 'Add to wishlist',
             icon: _isUpdatingWishlist
-                ? const SizedBox(
+                ? SizedBox(
               width: 22,
               height: 22,
               child: CircularProgressIndicator(
@@ -255,7 +255,7 @@ class _ProductDetailsScreenState
                   : Icons.favorite_border,
               color: _isInWishlist
                   ? Colors.redAccent
-                  : MerchColors.textPrimary,
+                  : Theme.of(context).textTheme.bodyLarge?.color,
             ),
           ),
         ],
@@ -274,29 +274,29 @@ class _ProductDetailsScreenState
               ),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             Text(
               widget.product.name,
-              style: const TextStyle(
-                color: MerchColors.textPrimary,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
             Text(
               '₦${widget.product.price.toStringAsFixed(0)}',
-              style: const TextStyle(
+              style: TextStyle(
                 color: MerchColors.primaryLight,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             Container(
               padding: const EdgeInsets.symmetric(
@@ -304,40 +304,40 @@ class _ProductDetailsScreenState
                 vertical: 8,
               ),
               decoration: BoxDecoration(
-                color: MerchColors.surface,
+                color: Theme.of(context).cardColor,
                 borderRadius:
                 BorderRadius.circular(10),
               ),
               child: Text(
                 widget.product.category,
-                style: const TextStyle(
-                  color: MerchColors.textSecondary,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
-            const Text(
+            Text(
               'Product Information',
               style: TextStyle(
-                color: MerchColors.textPrimary,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
-            const Text(
+            Text(
               'Official FandomVerse merchandise available for fans.',
               style: TextStyle(
-                color: MerchColors.textSecondary,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
                 height: 1.5,
               ),
             ),
 
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
 
             SizedBox(
               width: double.infinity,
@@ -347,16 +347,16 @@ class _ProductDetailsScreenState
                     ? null
                     : _addToCart,
                 icon: _isAddingToCart
-                    ? const SizedBox(
+                    ? SizedBox(
                   height: 20,
                   width: 20,
                   child:
                   CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                 )
-                    : const Icon(
+                    : Icon(
                   Icons.shopping_cart,
                 ),
                 label: Text(

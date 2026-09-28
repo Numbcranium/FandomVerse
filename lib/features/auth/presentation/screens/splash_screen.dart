@@ -23,25 +23,25 @@ class SplashScreen extends StatelessWidget {
               width: 88,
               height: 88,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 borderRadius: BorderRadius.circular(AppConstants.radiusLg),
               ),
               alignment: Alignment.center,
-              child: const Icon(
+              child: Icon(
                 Icons.bolt_rounded,
                 size: 44,
                 color: AppColors.primary,
               ),
             ),
-            const SizedBox(height: AppConstants.spaceLg),
+            SizedBox(height: AppConstants.spaceLg),
             Text(
               AppConstants.appName,
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
             ),
-            const SizedBox(height: AppConstants.spaceXl),
-            const SizedBox(
+            SizedBox(height: AppConstants.spaceXl),
+            SizedBox(
               width: 28,
               height: 28,
               child: CircularProgressIndicator(

@@ -101,12 +101,12 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text('Profile'),
       // for the notificatiom button
         actions: [
           IconButton(
             onPressed: () => context.push(RouteNames.notifications),
-            icon: const Icon(Icons.notifications_outlined),
+            icon: Icon(Icons.notifications_outlined),
             tooltip: 'Notifications',
           ),
         ],
@@ -138,7 +138,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceMd,
             ),
 
@@ -155,7 +155,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
 
             // =========================================================
             // ROLE
@@ -170,7 +170,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceLg,
             ),
 
@@ -200,7 +200,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceLg,
             ),
 
@@ -218,7 +218,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceSm,
             ),
 
@@ -236,7 +236,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceSm,
             ),
 
@@ -252,7 +252,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceSm,
             ),
 
@@ -268,7 +268,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceSm,
             ),
 
@@ -281,7 +281,7 @@ class ProfileScreen extends StatelessWidget {
 
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceSm,
             ),
 
@@ -299,7 +299,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceLg,
             ),
 
@@ -342,7 +342,7 @@ class _InfoRow extends StatelessWidget {
           size: 20,
           color: Theme.of(context).colorScheme.primary,
         ),
-        const SizedBox(
+        SizedBox(
           width: AppConstants.spaceSm,
         ),
         Expanded(
@@ -394,7 +394,7 @@ class _ActionRow extends StatelessWidget {
           size: 20,
           color: color,
         ),
-        const SizedBox(
+        SizedBox(
           width: AppConstants.spaceSm,
         ),
         Text(

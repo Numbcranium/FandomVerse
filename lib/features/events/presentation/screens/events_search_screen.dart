@@ -102,7 +102,7 @@ class _EventSearchScreenState
           onPressed: () {
             context.pop();
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_rounded,
           ),
         ),
@@ -135,7 +135,7 @@ class _EventSearchScreenState
                   // Firebase request is still running.
                   if (snapshot.connectionState ==
                       ConnectionState.waiting) {
-                    return const Center(
+                    return Center(
                       child: CircularProgressIndicator(),
                     );
                   }
@@ -223,7 +223,7 @@ class _EventSearchScreenState
       decoration: InputDecoration(
         hintText:
         'Search events, categories or locations...',
-        prefixIcon: const Icon(
+        prefixIcon: Icon(
           Icons.search_rounded,
         ),
 
@@ -240,7 +240,7 @@ class _EventSearchScreenState
 
             _searchFocusNode.requestFocus();
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.close_rounded,
           ),
         )
@@ -307,13 +307,13 @@ class _EventSearchScreenState
           mainAxisAlignment:
           MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.search_off_rounded,
               size: 52,
-              color: AppColors.textSecondaryDark,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             Text(
               hasSearch
@@ -323,7 +323,7 @@ class _EventSearchScreenState
               textAlign: TextAlign.center,
             ),
 
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
             Text(
               hasSearch
@@ -349,13 +349,13 @@ class _EventSearchScreenState
           mainAxisAlignment:
           MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.cloud_off_outlined,
               size: 48,
               color: AppColors.error,
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             Text(
               'Unable to load events',
@@ -363,7 +363,7 @@ class _EventSearchScreenState
               textAlign: TextAlign.center,
             ),
 
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
             Text(
               'Something went wrong while retrieving events.',
@@ -371,15 +371,15 @@ class _EventSearchScreenState
               textAlign: TextAlign.center,
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // Try the Firebase request again.
             ElevatedButton.icon(
               onPressed: _retry,
-              icon: const Icon(
+              icon: Icon(
                 Icons.refresh_rounded,
               ),
-              label: const Text('Try Again'),
+              label: Text('Try Again'),
             ),
           ],
         ),

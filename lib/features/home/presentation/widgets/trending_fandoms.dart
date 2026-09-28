@@ -61,7 +61,7 @@ class _TrendingFandomsState extends State<TrendingFandoms> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-      const Color(0xFF0B0A24),
+      Theme.of(context).cardColor,
 
       // ========================================
       // APP BAR
@@ -69,7 +69,7 @@ class _TrendingFandomsState extends State<TrendingFandoms> {
 
       appBar: AppBar(
         backgroundColor:
-        const Color(0xFF0B0A24),
+        Theme.of(context).cardColor,
 
         elevation: 0,
         // for the back button
@@ -78,17 +78,17 @@ class _TrendingFandomsState extends State<TrendingFandoms> {
             Navigator.pop(context);
           },
 
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
         // the app title
-        title: const Text(
+        title: Text(
           'Trending Fandoms',
 
           style: TextStyle(
-            color: Colors.white,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -107,7 +107,7 @@ class _TrendingFandomsState extends State<TrendingFandoms> {
 
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
-            return const SafeArea(
+            return SafeArea(
               child: Center(
                 child: CircularProgressIndicator(),
               ),
@@ -117,14 +117,14 @@ class _TrendingFandomsState extends State<TrendingFandoms> {
           // ERROR if it did not connect to the firestore
 
           if (snapshot.hasError) {
-            return const SafeArea(
+            return SafeArea(
               child: Padding(
                 padding: EdgeInsets.all(16),
 
                 child: Text(
                   'Unable to load Trending fandoms, Try again later',
                   style: TextStyle(
-                    color: Colors.white70,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
                   ),
                 ),
               ),
@@ -159,7 +159,7 @@ class _TrendingFandomsState extends State<TrendingFandoms> {
 
                   // FILTER
 
-                  const SizedBox(
+                  SizedBox(
                     height: 10,
                   ),
 
@@ -180,7 +180,7 @@ class _TrendingFandomsState extends State<TrendingFandoms> {
                   // SPACE BEFORE CARDS
 
 
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
 
@@ -189,7 +189,7 @@ class _TrendingFandomsState extends State<TrendingFandoms> {
 
                   if (fandoms.isEmpty)
 
-                    const Padding(
+                    Padding(
                       padding:
                       EdgeInsets.symmetric(
                         horizontal: 16,
@@ -201,8 +201,7 @@ class _TrendingFandomsState extends State<TrendingFandoms> {
                           'No fandoms found',
 
                           style: TextStyle(
-                            color:
-                            Colors.white54,
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
                           ),
                         ),
                       ),
@@ -228,7 +227,7 @@ class _TrendingFandomsState extends State<TrendingFandoms> {
 
                         separatorBuilder:
                             (context, index) {
-                          return const SizedBox(
+                          return SizedBox(
                             height: 10,
                           );
                         },
@@ -267,7 +266,7 @@ class _TrendingFandomsState extends State<TrendingFandoms> {
 
                   // BOTTOM SPACE
 
-                  const SizedBox(
+                  SizedBox(
                     height: 24,
                   ),
                 ],

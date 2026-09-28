@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../app/theme/theme_cubit.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_dialog.dart';
@@ -40,10 +41,75 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
+  Future<void> _confirmDeleteAccount(BuildContext context) async {
+    final confirmed = await AppDialog.confirm(
+      context,
+      title: 'Delete Account',
+      message: 'Are you sure you want to permanently delete your account? This action cannot be undone.',
+      confirmText: 'Delete',
+      isDestructive: true,
+    );
+    if (confirmed && context.mounted) {
+      context.read<AuthBloc>().add(const AuthAccountDeleted());
+    }
+  }
+
+  Future<void> _showUpdatePasswordDialog(BuildContext context) async {
+    final passwordController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Update Password'),
+        content: Form(
+          key: formKey,
+          child: TextFormField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: const InputDecoration(
+              labelText: 'New Password',
+              hintText: 'Enter new password',
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty || value.length < 6) {
+                return 'Password must be at least 6 characters';
+              }
+              return null;
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (formKey.currentState?.validate() ?? false) {
+                Navigator.of(ctx).pop(true);
+              }
+            },
+            child: Text('Update'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && context.mounted) {
+      context.read<AuthBloc>().add(
+            AuthPasswordUpdateSubmitted(passwordController.text),
+          );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password updating...')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text('Setting and security')),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(AppConstants.spaceMd),
@@ -51,32 +117,58 @@ class _SettingsScreenState extends State<SettingsScreen> {
             AppCard(
               padding: EdgeInsets.zero,
               child: SwitchListTile(
-                title: const Text('Push notifications'),
-                subtitle: const Text('Get notified about updates'),
+                title: Text('Push notifications'),
+                subtitle: Text('Get notified about updates'),
                 value: _notificationsEnabled,
                 onChanged: (value) => setState(() => _notificationsEnabled = value),
               ),
             ),
-            const SizedBox(height: AppConstants.spaceSm),
+            SizedBox(height: AppConstants.spaceSm),
+            AppCard(
+              padding: EdgeInsets.zero,
+              child: BlocBuilder<ThemeCubit, ThemeMode>(
+                builder: (context, themeMode) {
+                  return SwitchListTile(
+                    title: Text('Dark Mode'),
+                    subtitle: Text('Enable dark theme'),
+                    value: themeMode == ThemeMode.dark || themeMode == ThemeMode.system,
+                    onChanged: (value) {
+                      context.read<ThemeCubit>().toggleTheme(value);
+                    },
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: AppConstants.spaceSm),
             AppCard(
               padding: EdgeInsets.zero,
               child: ListTile(
-                leading: const Icon(Icons.info_outline),
-                title: const Text('About'),
+                leading: Icon(Icons.lock_outline),
+                title: Text('Change password'),
+                onTap: () => _showUpdatePasswordDialog(context),
+                trailing: Icon(Icons.chevron_right),
+              ),
+            ),
+            SizedBox(height: AppConstants.spaceSm),
+            const AppCard(
+              padding: EdgeInsets.zero,
+              child: ListTile(
+                leading: Icon(Icons.info_outline),
+                title: Text('About'),
                 subtitle: Text('${AppConstants.appName} • v0.1.0'),
               ),
             ),
-            const SizedBox(height: AppConstants.spaceSm),
+            SizedBox(height: AppConstants.spaceSm),
             AppCard(
               padding: EdgeInsets.zero,
               child: ListTile(
-                leading: const Icon(Icons.help_outline),
-                title: const Text('Help & support'),
+                leading: Icon(Icons.help_outline),
+                title: Text('Help & support'),
                 onTap: () {},
-                trailing: const Icon(Icons.chevron_right),
+                trailing: Icon(Icons.chevron_right),
               ),
             ),
-            const SizedBox(height: AppConstants.spaceLg),
+            SizedBox(height: AppConstants.spaceLg),
             AppCard(
               padding: EdgeInsets.zero,
               child: ListTile(
@@ -86,6 +178,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
                 onTap: () => _confirmLogout(context),
+              ),
+            ),
+            SizedBox(height: AppConstants.spaceSm),
+            AppCard(
+              padding: EdgeInsets.zero,
+              child: ListTile(
+                leading: Icon(Icons.delete_forever, color: Theme.of(context).colorScheme.error),
+                title: Text(
+                  'Delete account',
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+                onTap: () => _confirmDeleteAccount(context),
               ),
             ),
           ],

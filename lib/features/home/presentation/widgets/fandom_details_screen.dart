@@ -21,7 +21,7 @@ class FandomDetailsScreen extends StatelessWidget {
     final fandomService = FandomService();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0B0A24),
+      backgroundColor: Theme.of(context).cardColor,
 
       body: FutureBuilder<FandomModels?>(
         future: fandomService.getFandom(fandomId),
@@ -33,7 +33,7 @@ class FandomDetailsScreen extends StatelessWidget {
 
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -43,11 +43,11 @@ class FandomDetailsScreen extends StatelessWidget {
           // ==========================================
 
           if (snapshot.hasError) {
-            return const Center(
+            return Center(
               child: Text(
                 'Unable to load fandom',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
             );
@@ -60,11 +60,11 @@ class FandomDetailsScreen extends StatelessWidget {
           final fandom = snapshot.data;
 
           if (fandom == null) {
-            return const Center(
+            return Center(
               child: Text(
                 'Fandom not found',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
             );
@@ -85,15 +85,15 @@ class FandomDetailsScreen extends StatelessWidget {
                 pinned: true,
 
                 backgroundColor:
-                const Color(0xFF0B0A24),
+                Theme.of(context).cardColor,
 
                 leading: IconButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.arrow_back,
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                 ),
 
@@ -108,8 +108,8 @@ class FandomDetailsScreen extends StatelessWidget {
                         errorBuilder:
                             (context, error, stackTrace) {
                           return Container(
-                            color: const Color(0xFF17163D),
-                            child: const Icon(
+                            color: Theme.of(context).cardColor,
+                            child: Icon(
                               Icons.image_not_supported,
                               color: Colors.white38,
                               size: 50,
@@ -120,13 +120,13 @@ class FandomDetailsScreen extends StatelessWidget {
 
                       // Dark overlay
                       Container(
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
                               Colors.transparent,
-                              Color(0xFF0B0A24),
+                              Theme.of(context).cardColor,
                             ],
                           ),
                         ),
@@ -152,7 +152,7 @@ class FandomDetailsScreen extends StatelessWidget {
                     CrossAxisAlignment.start,
 
                     children: [
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
 
                       // ==================================
                       // NAME
@@ -161,14 +161,14 @@ class FandomDetailsScreen extends StatelessWidget {
                       Text(
                         fandom.name,
 
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
 
-                      const SizedBox(height: 6),
+                      SizedBox(height: 6),
 
                       // ==================================
                       // CATEGORY
@@ -177,13 +177,13 @@ class FandomDetailsScreen extends StatelessWidget {
                       Text(
                         fandom.category,
 
-                        style: const TextStyle(
-                          color: Colors.white54,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
                           fontSize: 14,
                         ),
                       ),
 
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
 
                       // FOLLOWER COUNT
 
@@ -191,7 +191,7 @@ class FandomDetailsScreen extends StatelessWidget {
                         fandomId: fandom.id,
                       ),
 
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18),
 
                       // FOLLOW BUTTON
 
@@ -199,45 +199,45 @@ class FandomDetailsScreen extends StatelessWidget {
                         fandomId: fandom.id,
                       ),
 
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24),
 
                       // DESCRIPTION
 
-                      const Text(
+                      Text(
                         'About',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
 
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
 
                       Text(
                         fandom.description,
 
-                        style: const TextStyle(
-                          color: Colors.white70,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
                           fontSize: 14,
                           height: 1.6,
                         ),
                       ),
 
-                      const SizedBox(height: 30),
+                      SizedBox(height: 30),
 
                       // CONTENT SECTIONS
 
-                      const Text(
+                      Text(
                         'Explore',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
 
-                      const SizedBox(height: 15),
+                      SizedBox(height: 15),
 
                       _ExploreButton(
                         icon: Icons.newspaper_outlined,
@@ -298,7 +298,7 @@ class FandomDetailsScreen extends StatelessWidget {
                       //   },
                       // ),
 
-                      const SizedBox(height: 40),
+                      SizedBox(height: 40),
                     ],
                   ),
                 ),
@@ -332,7 +332,7 @@ class _ExploreButton extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
 
       child: Material(
-        color: const Color(0xFF17163D),
+        color: Theme.of(context).cardColor,
 
         borderRadius:
         BorderRadius.circular(12),
@@ -358,23 +358,23 @@ class _ExploreButton extends StatelessWidget {
                   size: 24,
                 ),
 
-                const SizedBox(width: 14),
+                SizedBox(width: 14),
 
                 Expanded(
                   child: Text(
                     title,
 
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
 
-                const Icon(
+                Icon(
                   Icons.chevron_right,
-                  color: Colors.white54,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ],
             ),

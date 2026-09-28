@@ -13,19 +13,19 @@ class ChooseFandomScreen extends StatelessWidget {
     final fandomService = FandomService();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF05052B),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       appBar: AppBar(
-        backgroundColor: const Color(0xFF05052B),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
 
         leading: IconButton(
           onPressed: () {
             context.pop();
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: Theme.of(context).iconTheme.color,
           ),
         ),
       ),
@@ -38,26 +38,26 @@ class ChooseFandomScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Choose Your Fandom',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
 
-              const Text(
+              Text(
                 'Select the fandoms you want to play trivia about.',
                 style: TextStyle(
-                  color: Colors.white70,
+                  color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                   fontSize: 13,
                 ),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 30),
 
               // FIREBASE FANDOMS
               Expanded(
@@ -68,7 +68,7 @@ class ChooseFandomScreen extends StatelessWidget {
                     // Loading
                     if (snapshot.connectionState ==
                         ConnectionState.waiting) {
-                      return const Center(
+                      return Center(
                         child: CircularProgressIndicator(
                           color: Color(0xFF7027FF),
                         ),
@@ -77,11 +77,11 @@ class ChooseFandomScreen extends StatelessWidget {
 
                     // Error
                     if (snapshot.hasError) {
-                      return const Center(
+                      return Center(
                         child: Text(
                           'Unable to load fandoms',
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                           ),
                         ),
                       );
@@ -92,11 +92,11 @@ class ChooseFandomScreen extends StatelessWidget {
 
                     // No fandoms
                     if (fandoms.isEmpty) {
-                      return const Center(
+                      return Center(
                         child: Text(
                           'No fandoms available',
                           style: TextStyle(
-                            color: Colors.white54,
+                            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.54),
                           ),
                         ),
                       );
@@ -141,8 +141,7 @@ class ChooseFandomScreen extends StatelessWidget {
                                 width: 1,
                               ),
 
-                              color:
-                              const Color(0xFF11113A),
+                              color: Theme.of(context).cardColor,
                             ),
 
                             clipBehavior: Clip.antiAlias,
@@ -166,10 +165,8 @@ class ChooseFandomScreen extends StatelessWidget {
                                         stackTrace,
                                         ) {
                                       return Container(
-                                        color: const Color(
-                                          0xFF181747,
-                                        ),
-                                        child: const Icon(
+                                        color: Theme.of(context).cardColor,
+                                        child: Icon(
                                           Icons
                                               .image_outlined,
                                           color:
@@ -219,8 +216,8 @@ class ChooseFandomScreen extends StatelessWidget {
                                     TextOverflow.ellipsis,
 
                                     style:
-                                    const TextStyle(
-                                      color: Colors.white,
+                                    TextStyle(
+                                      color: Theme.of(context).textTheme.bodyLarge?.color,
                                       fontSize: 12,
                                       fontWeight:
                                       FontWeight.w600,
@@ -237,7 +234,7 @@ class ChooseFandomScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 15),
+              SizedBox(height: 15),
 
               // Continue button
               // SizedBox(
@@ -259,11 +256,11 @@ class ChooseFandomScreen extends StatelessWidget {
               //       ),
               //     ),
               //
-              //     child: const Text(
+              //     child: Text(
               //       'Continue',
               //
               //       style: TextStyle(
-              //         color: Colors.white,
+              //         color: Theme.of(context).textTheme.bodyLarge?.color,
               //         fontSize: 15,
               //         fontWeight: FontWeight.w600,
               //       ),
@@ -271,7 +268,7 @@ class ChooseFandomScreen extends StatelessWidget {
               //   ),
               // ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
             ],
           ),
         ),

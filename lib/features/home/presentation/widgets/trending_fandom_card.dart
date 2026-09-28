@@ -80,7 +80,7 @@ class TrendingFandomCard extends StatelessWidget {
                       return Container(
                         color: const Color(0xFF292745),
 
-                        child: const Icon(
+                        child: Icon(
                           Icons.image_not_supported_outlined,
                           color: Colors.white38,
                           size: 22,
@@ -91,7 +91,7 @@ class TrendingFandomCard extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
 
               // ==========================
               // NAME + FOLLOWERS
@@ -113,14 +113,14 @@ class TrendingFandomCard extends StatelessWidget {
                       overflow:
                       TextOverflow.ellipsis,
 
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
 
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
 
                     // REAL FOLLOWER COUNT
                     StreamBuilder<int>(
@@ -137,15 +137,15 @@ class TrendingFandomCard extends StatelessWidget {
                           '$count followers',
 
                           style:
-                          const TextStyle(
-                            color: Colors.white70,
+                          TextStyle(
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
                             fontSize: 11,
                           ),
                         );
                       },
                     ),
 
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
 
                     Text(
                       category,
@@ -154,8 +154,8 @@ class TrendingFandomCard extends StatelessWidget {
                       overflow:
                       TextOverflow.ellipsis,
 
-                      style: const TextStyle(
-                        color: Colors.white54,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                         fontSize: 9,
                       ),
                     ),
@@ -163,9 +163,9 @@ class TrendingFandomCard extends StatelessWidget {
                 ),
               ),
 
-              const Icon(
+              Icon(
                 Icons.chevron_right,
-                color: Colors.white70,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
                 size: 21,
               ),
             ],

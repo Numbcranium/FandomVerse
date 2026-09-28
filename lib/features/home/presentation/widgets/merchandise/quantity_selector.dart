@@ -18,13 +18,14 @@ class QuantitySelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: MerchColors.surfaceLight,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           _button(
+            context,
             Icons.remove,
                 () {
               if (quantity > min) {
@@ -37,13 +38,14 @@ class QuantitySelector extends StatelessWidget {
             child: Text(
               '$quantity',
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: MerchColors.textPrimary,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
           _button(
+            context,
             Icons.add,
                 () => onChanged(quantity + 1),
           ),
@@ -53,6 +55,7 @@ class QuantitySelector extends StatelessWidget {
   }
 
   Widget _button(
+      BuildContext context,
       IconData icon,
       VoidCallback onTap,
       ) {
@@ -64,7 +67,7 @@ class QuantitySelector extends StatelessWidget {
         child: Icon(
           icon,
           size: 16,
-          color: MerchColors.textPrimary,
+          color: Theme.of(context).textTheme.bodyLarge?.color,
         ),
       ),
     );

@@ -85,7 +85,7 @@ class _EventsScreenState extends State<EventsScreen> {
     return BlocProvider.value(
       value: _eventsCubit,
       child: Scaffold(
-        backgroundColor: AppColors.backgroundDark,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
         // Use the same bottom navigation used throughout the app.
         // Index 2 represents the Events section.
@@ -116,7 +116,7 @@ class _EventsScreenState extends State<EventsScreen> {
                       return _buildEventsContent(state.events);
                     }
 
-                    return const SizedBox.shrink();
+                    return SizedBox.shrink();
                   },
                 ),
               ),
@@ -174,7 +174,9 @@ class _EventsScreenState extends State<EventsScreen> {
               Expanded(
                 child: Text(
                   'Discover Events',
-                  style: AppTextStyles.titleLarge,
+                  style: AppTextStyles.titleLarge.copyWith(
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                  ),
                 ),
               ),
 
@@ -202,11 +204,11 @@ class _EventsScreenState extends State<EventsScreen> {
             ],
           ),
 
-          const SizedBox(height: AppConstants.spaceMd),
+          SizedBox(height: AppConstants.spaceMd),
 
           _buildSearchField(),
 
-          const SizedBox(height: AppConstants.spaceSm),
+          SizedBox(height: AppConstants.spaceSm),
 
           Row(
             children: [
@@ -218,15 +220,15 @@ class _EventsScreenState extends State<EventsScreen> {
                       RouteNames.nearbyEventsName,
                     );
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.location_on_outlined,
                     size: 19,
                   ),
-                  label: const Text('Nearby'),
+                  label: Text('Nearby'),
                 ),
               ),
 
-              const SizedBox(width: AppConstants.spaceSm),
+              SizedBox(width: AppConstants.spaceSm),
 
               // Filters button.
               OutlinedButton(
@@ -240,7 +242,7 @@ class _EventsScreenState extends State<EventsScreen> {
                     AppConstants.spaceSm,
                   ),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.tune,
                   size: 20,
                 ),
@@ -260,15 +262,15 @@ class _EventsScreenState extends State<EventsScreen> {
       decoration: InputDecoration(
         hintText: 'Search events...',
         hintStyle: AppTextStyles.bodySmall.copyWith(
-          color: AppColors.textSecondaryDark,
+          color: Theme.of(context).textTheme.bodyMedium?.color,
         ),
-        prefixIcon: const Icon(Icons.search),
+        prefixIcon: Icon(Icons.search),
 
         // Only show the clear button when the user has typed something.
         suffixIcon: _searchController.text.isNotEmpty
             ? IconButton(
           onPressed: _searchController.clear,
-          icon: const Icon(Icons.clear),
+          icon: Icon(Icons.clear),
           tooltip: 'Clear search',
         )
             : null,
@@ -286,7 +288,7 @@ class _EventsScreenState extends State<EventsScreen> {
       onPressed: onPressed,
       icon: Icon(
         icon,
-        color: AppColors.textPrimaryDark,
+        color: Theme.of(context).textTheme.bodyLarge?.color,
       ),
     );
   }
@@ -305,7 +307,7 @@ class _EventsScreenState extends State<EventsScreen> {
         scrollDirection: Axis.horizontal,
         itemCount: _categories.length,
         separatorBuilder: (_, __) {
-          return const SizedBox(
+          return SizedBox(
             width: AppConstants.spaceSm,
           );
         },
@@ -324,18 +326,18 @@ class _EventsScreenState extends State<EventsScreen> {
             },
 
             selectedColor: AppColors.primary,
-            backgroundColor: AppColors.surfaceDark,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
             side: BorderSide(
               color: isSelected
                   ? AppColors.primary
-                  : AppColors.borderDark,
+                  : Theme.of(context).dividerColor,
             ),
 
             labelStyle: AppTextStyles.bodySmall.copyWith(
               color: isSelected
                   ? Colors.white
-                  : AppColors.textSecondaryDark,
+                  : Theme.of(context).textTheme.bodyMedium?.color,
               fontWeight: FontWeight.w600,
             ),
 
@@ -363,7 +365,7 @@ class _EventsScreenState extends State<EventsScreen> {
 
     return RefreshIndicator(
       color: AppColors.primary,
-      backgroundColor: AppColors.surfaceDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       // Pulling down reloads the latest events from Firebase.
       onRefresh: () async {
@@ -383,7 +385,7 @@ class _EventsScreenState extends State<EventsScreen> {
         itemCount: filteredEvents.length,
 
         separatorBuilder: (_, __) {
-          return const SizedBox(
+          return SizedBox(
             height: AppConstants.spaceMd,
           );
         },
@@ -501,7 +503,7 @@ class _EventsScreenState extends State<EventsScreen> {
   // ---------------------------------------------------------------------------
 
   Widget _buildLoadingState() {
-    return const Center(
+    return Center(
       child: CircularProgressIndicator(
         color: AppColors.primary,
       ),
@@ -531,14 +533,14 @@ class _EventsScreenState extends State<EventsScreen> {
                 ),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.error_outline,
                 color: AppColors.error,
                 size: 32,
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceMd,
             ),
 
@@ -548,7 +550,7 @@ class _EventsScreenState extends State<EventsScreen> {
               style: AppTextStyles.bodySmall,
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceSm,
             ),
 
@@ -556,11 +558,11 @@ class _EventsScreenState extends State<EventsScreen> {
               message,
               textAlign: TextAlign.center,
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textSecondaryDark,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceLg,
             ),
 
@@ -568,8 +570,8 @@ class _EventsScreenState extends State<EventsScreen> {
               onPressed: () {
                 _eventsCubit.loadEvents();
               },
-              icon: const Icon(Icons.refresh),
-              label: const Text('Try Again'),
+              icon: Icon(Icons.refresh),
+              label: Text('Try Again'),
             ),
           ],
         ),
@@ -607,14 +609,14 @@ class _EventsScreenState extends State<EventsScreen> {
                 ),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.event_busy_outlined,
                 color: AppColors.primaryMuted,
                 size: 36,
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceLg,
             ),
 
@@ -626,7 +628,7 @@ class _EventsScreenState extends State<EventsScreen> {
               style: AppTextStyles.bodySmall,
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceSm,
             ),
 
@@ -636,13 +638,13 @@ class _EventsScreenState extends State<EventsScreen> {
                   : 'There are no events to show right now.',
               textAlign: TextAlign.center,
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textSecondaryDark,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
               ),
             ),
 
             // Allow the user to quickly clear the filters/search.
             if (hasSearch || hasFilters) ...[
-              const SizedBox(
+              SizedBox(
                 height: AppConstants.spaceLg,
               ),
               OutlinedButton(
@@ -653,7 +655,7 @@ class _EventsScreenState extends State<EventsScreen> {
                     _selectedPriceFilter = 'All';
                   });
                 },
-                child: const Text('Clear Filters'),
+                child: Text('Clear Filters'),
               ),
             ],
           ],

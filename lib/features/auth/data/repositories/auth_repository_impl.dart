@@ -99,4 +99,22 @@ class AuthRepositoryImpl implements AuthRepository {
       throw AppException.from(e);
     }
   }
+
+  @override
+  Future<void> updatePassword(String newPassword) async {
+    try {
+      await _remoteDataSource.updatePassword(newPassword);
+    } catch (e) {
+      throw AppException.from(e);
+    }
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    try {
+      await _remoteDataSource.deleteAccount();
+    } catch (e) {
+      throw AppException.from(e);
+    }
+  }
 }

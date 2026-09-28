@@ -75,7 +75,7 @@ class AppDialog {
             mainAxisSize: MainAxisSize.min,
             children: [
               const CircularProgressIndicator(strokeWidth: 2.5),
-              const SizedBox(width: 20),
+              SizedBox(width: 20),
               Flexible(child: Text(message ?? 'Please wait…')),
             ],
           ),

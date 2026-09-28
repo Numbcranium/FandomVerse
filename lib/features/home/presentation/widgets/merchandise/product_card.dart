@@ -25,7 +25,7 @@ class ProductCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: MerchColors.surface,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16),
         ),
         clipBehavior: Clip.antiAlias,
@@ -55,7 +55,7 @@ class ProductCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                           child: CircleAvatar(
                             radius: 15,
-                            backgroundColor: Colors.black54,
+                            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                             child: Icon(
                               isWishlisted
                                   ? Icons.favorite
@@ -83,13 +83,13 @@ class ProductCard extends StatelessWidget {
                     product.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: MerchColors.textPrimary,
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  SizedBox(height: 5),
                   PriceWidget(
                     price: product.price,
                     fontSize: 14,

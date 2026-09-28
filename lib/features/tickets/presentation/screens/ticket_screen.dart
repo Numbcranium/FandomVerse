@@ -49,12 +49,12 @@ class _TicketScreenState extends State<TicketScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       appBar: AppBar(
         title: Text(
           'My Ticket',
-          style: AppTextStyles.bodySmall,
+          style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
         ),
       ),
 
@@ -64,7 +64,7 @@ class _TicketScreenState extends State<TicketScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -99,12 +99,12 @@ class _TicketScreenState extends State<TicketScreen> {
           // Ticket card.
           Container(
             decoration: BoxDecoration(
-              color: AppColors.surfaceDark,
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(
                 AppConstants.radiusLg,
               ),
               border: Border.all(
-                color: AppColors.borderDark,
+                color: Theme.of(context).dividerColor,
               ),
             ),
             child: Column(
@@ -126,11 +126,11 @@ class _TicketScreenState extends State<TicketScreen> {
                         (context, error, stackTrace) {
                       return Container(
                         height: 190,
-                        color: AppColors.surfaceDarkElevated,
-                        child: const Icon(
+                        color: Theme.of(context).cardColor,
+                        child: Icon(
                           Icons.event,
                           size: 48,
-                          color: AppColors.textSecondaryDark,
+                          color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white54),
                         ),
                       );
                     },
@@ -147,38 +147,38 @@ class _TicketScreenState extends State<TicketScreen> {
                     children: [
                       Text(
                         ticket.eventTitle,
-                        style: AppTextStyles.bodySmall,
+                        style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
                       ),
 
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
 
                       Text(
                         ticket.locationName,
-                        style: AppTextStyles.bodyMedium,
+                        style: AppTextStyles.bodyMedium.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
                       ),
 
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
 
                       Text(
                         ticket.address,
-                        style: AppTextStyles.bodySmall,
+                        style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
                       ),
 
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       _TicketInfoRow(
                         icon: Icons.calendar_today_outlined,
                         text: formattedDate,
                       ),
 
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
 
                       _TicketInfoRow(
                         icon: Icons.access_time,
                         text: ticket.eventTime,
                       ),
 
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
 
                       _TicketInfoRow(
                         icon: Icons.location_on_outlined,
@@ -188,8 +188,8 @@ class _TicketScreenState extends State<TicketScreen> {
                   ),
                 ),
 
-                const Divider(
-                  color: AppColors.borderDark,
+                Divider(
+                  color: Theme.of(context).dividerColor,
                   height: 1,
                 ),
 
@@ -202,10 +202,10 @@ class _TicketScreenState extends State<TicketScreen> {
                     children: [
                       Text(
                         'Show this QR code at the event',
-                        style: AppTextStyles.bodyMedium,
+                        style: AppTextStyles.bodyMedium.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
                       ),
 
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       Container(
                         padding: const EdgeInsets.all(16),
@@ -220,11 +220,11 @@ class _TicketScreenState extends State<TicketScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
 
                       Text(
                         ticket.ticketCode,
-                        style: AppTextStyles.bodySmall,
+                        style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
                       ),
                     ],
                   ),
@@ -233,7 +233,7 @@ class _TicketScreenState extends State<TicketScreen> {
             ),
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
 
           // Price/status information.
           Row(
@@ -247,7 +247,7 @@ class _TicketScreenState extends State<TicketScreen> {
                 ),
               ),
 
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
 
               Expanded(
                 child: _InfoCard(
@@ -258,7 +258,7 @@ class _TicketScreenState extends State<TicketScreen> {
             ],
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
 
           // Return to event details.
           SizedBox(
@@ -272,10 +272,10 @@ class _TicketScreenState extends State<TicketScreen> {
                   },
                 );
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.event_outlined,
               ),
-              label: const Text(
+              label: Text(
                 'View Event',
               ),
             ),
@@ -292,20 +292,20 @@ class _TicketScreenState extends State<TicketScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
+            Icon(
               Icons.error_outline,
               size: 48,
               color: AppColors.error,
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             Text(
               'Unable to load ticket.',
               style: AppTextStyles.bodyMedium,
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             ElevatedButton(
               onPressed: () {
@@ -313,7 +313,7 @@ class _TicketScreenState extends State<TicketScreen> {
                   _ticketFuture = _loadTicket();
                 });
               },
-              child: const Text('Try Again'),
+              child: Text('Try Again'),
             ),
           ],
         ),
@@ -349,11 +349,11 @@ class _TicketInfoRow extends StatelessWidget {
           size: 20,
           color: AppColors.primaryMuted,
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: 10),
         Expanded(
           child: Text(
             text,
-            style: AppTextStyles.bodyMedium,
+            style: AppTextStyles.bodyMedium.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
           ),
         ),
       ],
@@ -375,10 +375,10 @@ class _InfoCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceDark,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.borderDark,
+          color: Theme.of(context).dividerColor,
         ),
       ),
       child: Column(
@@ -387,12 +387,12 @@ class _InfoCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: AppTextStyles.bodySmall,
+            style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Text(
             value,
-            style: AppTextStyles.bodySmall,
+            style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
           ),
         ],
       ),

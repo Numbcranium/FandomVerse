@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../app/theme/merchandise_colors.dart';
+import '../../../../../core/widgets/cart_badge.dart';
 import '../../../../../models/merchandise/product_model.dart';
 import '../../../../auth/data/repositories/merchandise/product_repository.dart';
 import '../../widgets/merchandise/product_card.dart';
@@ -94,12 +95,12 @@ Widget build(BuildContext context) {
 final products = filteredProducts;
 
 return Scaffold(
-backgroundColor: MerchColors.background,
+backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 appBar: AppBar(
-backgroundColor: MerchColors.background,
-foregroundColor: MerchColors.textPrimary,
+backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
 elevation: 0,
-title: const Text(
+title: Text(
 'Shop',
 style: TextStyle(
 fontWeight: FontWeight.bold,
@@ -116,11 +117,14 @@ builder: (_) => const WishlistScreen(),
 ),
 );
 },
-icon: const Icon(
+icon: Icon(
 Icons.favorite_border,
 ),
 ),
-IconButton(
+CartBadge(
+top: 0,
+right: 4,
+child: IconButton(
 tooltip: 'Cart',
 onPressed: () {
 Navigator.push(
@@ -130,14 +134,33 @@ builder: (_) => const CartScreen(),
 ),
 );
 },
-icon: const Icon(
+icon: Icon(
 Icons.shopping_cart_outlined,
+),
 ),
 ),
 ],
 ),
+floatingActionButton: CartBadge(
+  top: -4,
+  right: -4,
+  child: FloatingActionButton(
+    heroTag: 'shopCartFab',
+    backgroundColor: MerchColors.primary,
+    foregroundColor: Colors.white,
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (_) => const CartScreen(),
+        ),
+      );
+    },
+    child: Icon(Icons.shopping_cart_outlined),
+  ),
+),
 body: _isLoading
-? const Center(
+? Center(
 child: CircularProgressIndicator(
 color: MerchColors.primary,
 ),
@@ -148,7 +171,7 @@ color: MerchColors.primary,
 children: [
 _buildSearchBar(),
 _buildCategoryChips(),
-const SizedBox(height: 8),
+SizedBox(height: 8),
 Expanded(
 child: products.isEmpty
 ? _buildEmptyState()
@@ -213,10 +236,10 @@ builder: (_) => const CategoryScreen(),
 ),
 );
 },
-icon: const Icon(
+icon: Icon(
 Icons.grid_view_outlined,
 ),
-label: const Text('Categories'),
+label: Text('Categories'),
 style: OutlinedButton.styleFrom(
 foregroundColor: MerchColors.primaryLight,
 side: const BorderSide(
@@ -231,7 +254,7 @@ borderRadius: BorderRadius.circular(14),
 ),
 ),
 ),
-const SizedBox(width: 10),
+SizedBox(width: 10),
 Expanded(
 child: OutlinedButton.icon(
 onPressed: () {
@@ -242,10 +265,10 @@ builder: (_) => const OrderHistoryScreen(),
 ),
 );
 },
-icon: const Icon(
+icon: Icon(
 Icons.receipt_long_outlined,
 ),
-label: const Text('Orders'),
+label: Text('Orders'),
 style: OutlinedButton.styleFrom(
 foregroundColor: MerchColors.primaryLight,
 side: const BorderSide(
@@ -281,20 +304,20 @@ setState(() {
 searchQuery = value;
 });
 },
-style: const TextStyle(
-color: MerchColors.textPrimary,
+style: TextStyle(
+color: Theme.of(context).textTheme.bodyLarge?.color,
 ),
 decoration: InputDecoration(
 hintText: 'Search anime merchandise...',
-hintStyle: const TextStyle(
-color: MerchColors.textSecondary,
+hintStyle: TextStyle(
+color: Theme.of(context).textTheme.bodyMedium?.color,
 ),
-prefixIcon: const Icon(
+prefixIcon: Icon(
 Icons.search,
-color: MerchColors.textSecondary,
+color: Theme.of(context).textTheme.bodyMedium?.color,
 ),
 filled: true,
-fillColor: MerchColors.surface,
+fillColor: Theme.of(context).cardColor,
 contentPadding: const EdgeInsets.symmetric(
 vertical: 14,
 ),
@@ -335,7 +358,7 @@ horizontal: 16,
 scrollDirection: Axis.horizontal,
 itemCount: categories.length,
 separatorBuilder: (_, __) =>
-const SizedBox(width: 8),
+SizedBox(width: 8),
 itemBuilder: (context, index) {
 final category = categories[index];
 final selected =
@@ -350,16 +373,16 @@ selectedCategory = category;
 });
 },
 selectedColor: MerchColors.primary,
-backgroundColor: MerchColors.surface,
+backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 side: BorderSide(
 color: selected
 ? MerchColors.primary
-    : MerchColors.divider,
+    : Theme.of(context).dividerColor,
 ),
 labelStyle: TextStyle(
 color: selected
 ? Colors.white
-    : MerchColors.textSecondary,
+    : Theme.of(context).textTheme.bodyMedium?.color,
 fontWeight: FontWeight.w600,
 fontSize: 12,
 ),
@@ -376,29 +399,29 @@ padding: const EdgeInsets.all(24),
 child: Column(
 mainAxisAlignment: MainAxisAlignment.center,
 children: [
-const Icon(
+Icon(
 Icons.search_off,
 size: 54,
-color: MerchColors.textSecondary,
+color: Theme.of(context).textTheme.bodyMedium?.color,
 ),
-const SizedBox(height: 14),
-const Text(
+SizedBox(height: 14),
+Text(
 'No merchandise found',
 style: TextStyle(
-color: MerchColors.textPrimary,
+color: Theme.of(context).textTheme.bodyLarge?.color,
 fontSize: 17,
 fontWeight: FontWeight.bold,
 ),
 ),
-const SizedBox(height: 8),
-const Text(
+SizedBox(height: 8),
+Text(
 'Try another search or category.',
 textAlign: TextAlign.center,
 style: TextStyle(
-color: MerchColors.textSecondary,
+color: Theme.of(context).textTheme.bodyMedium?.color,
 ),
 ),
-const SizedBox(height: 18),
+SizedBox(height: 18),
 OutlinedButton(
 onPressed: () {
 setState(() {
@@ -406,7 +429,7 @@ selectedCategory = 'All';
 searchQuery = '';
 });
 },
-child: const Text('Clear Filters'),
+child: Text('Clear Filters'),
 ),
 ],
 ),
@@ -421,20 +444,20 @@ padding: const EdgeInsets.all(24),
 child: Column(
 mainAxisAlignment: MainAxisAlignment.center,
 children: [
-const Icon(
+Icon(
 Icons.error_outline,
 size: 54,
-color: MerchColors.textSecondary,
+color: Theme.of(context).textTheme.bodyMedium?.color,
 ),
-const SizedBox(height: 14),
+SizedBox(height: 14),
 Text(
 _errorMessage!,
 textAlign: TextAlign.center,
-style: const TextStyle(
-color: MerchColors.textSecondary,
+style: TextStyle(
+color: Theme.of(context).textTheme.bodyMedium?.color,
 ),
 ),
-const SizedBox(height: 18),
+SizedBox(height: 18),
 ElevatedButton(
 onPressed: () {
 setState(() {
@@ -444,7 +467,7 @@ _errorMessage = null;
 
 _loadProducts();
 },
-child: const Text('Try Again'),
+child: Text('Try Again'),
 ),
 ],
 ),

@@ -17,7 +17,7 @@ class AppLoading extends StatelessWidget {
         children: [
           const CircularProgressIndicator(strokeWidth: 2.5),
           if (message != null) ...[
-            const SizedBox(height: AppConstants.spaceMd),
+            SizedBox(height: AppConstants.spaceMd),
             Text(message!, style: Theme.of(context).textTheme.bodyMedium),
           ],
         ],

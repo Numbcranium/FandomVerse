@@ -51,8 +51,8 @@ class AppNetworkImage extends StatelessWidget {
           radius: radius,
           backgroundColor: AppColors.primaryLight,
           child: Text(
-            (_fallbackText != null && _fallbackText!.isNotEmpty)
-                ? _fallbackText![0].toUpperCase()
+            (_fallbackText != null && _fallbackText.isNotEmpty)
+                ? _fallbackText[0].toUpperCase()
                 : '?',
             style: TextStyle(
               color: AppColors.primary,
@@ -90,7 +90,7 @@ class AppNetworkImage extends StatelessWidget {
             height: height,
             color: AppColors.neutralBg,
             alignment: Alignment.center,
-            child: const Icon(Icons.image_outlined, color: AppColors.textDisabled),
+            child: Icon(Icons.image_outlined, color: AppColors.textDisabled),
           )
         : CachedNetworkImage(
             imageUrl: imageUrl!,
@@ -109,7 +109,7 @@ class AppNetworkImage extends StatelessWidget {
               height: height,
               color: AppColors.neutralBg,
               alignment: Alignment.center,
-              child: const Icon(Icons.broken_image_outlined, color: AppColors.textDisabled),
+              child: Icon(Icons.broken_image_outlined, color: AppColors.textDisabled),
             ),
           );
 

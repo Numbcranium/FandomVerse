@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/admin/presentation/screens/admin_dashboard_screen.dart';
+import '../../features/ai_helper/presentation/screens/ai_helper_screen.dart';
 import '../../features/auth/presentation/bloc/auth_state.dart' show AuthStatus;
 import '../../features/auth/presentation/screens/forgot_password_screen.dart';
 import '../../features/auth/presentation/screens/interests_screen.dart';
@@ -10,24 +12,17 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
-
+import '../../features/community/presentation/screens/community_screen.dart';
 // event routes
 import '../../features/events/presentation/screens/calender_screen.dart';
-import '../../features/events/presentation/screens/events_screen.dart';
 import '../../features/events/presentation/screens/events_details_screen.dart';
 import '../../features/events/presentation/screens/events_filters_screen.dart';
+import '../../features/events/presentation/screens/events_screen.dart';
 import '../../features/events/presentation/screens/events_search_screen.dart';
 import '../../features/events/presentation/screens/map_screen.dart';
 import '../../features/events/presentation/screens/nearby_events_screen.dart';
-
-//ticket routes
-import '../../features/tickets/presentation/screens/my_tickets_screen.dart';
-import '../../features/tickets/presentation/screens/ticket_screen.dart';
-
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/home/presentation/screens/merchandise/shop_screen.dart';
-import '../../features/community/presentation/screens/community_screen.dart';
-import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/home/presentation/widgets/fandom_details_screen.dart';
 import '../../features/home/presentation/widgets/fandom_gallery_screen.dart';
 import '../../features/home/presentation/widgets/fandom_news_screen.dart';
@@ -42,12 +37,12 @@ import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/purchase_history_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
-import '../../features/home/presentation/screens/merchandise/shop_screen.dart';
+//ticket routes
+import '../../features/tickets/presentation/screens/my_tickets_screen.dart';
+import '../../features/tickets/presentation/screens/ticket_screen.dart';
 import '../../features/trivia/presentation/screens/choose_fandom_screen.dart';
 import '../../features/trivia/presentation/screens/trivia_leaderboard_screen.dart';
 import '../../features/trivia/presentation/screens/trivia_pop_start_screen.dart';
-import '../../features/ai_helper/presentation/screens/ai_helper_screen.dart';
-import '../../features/admin/presentation/screens/admin_dashboard_screen.dart';
 import '../../features/trivia/presentation/screens/trivia_question_screen.dart';
 import 'route_names.dart';
 

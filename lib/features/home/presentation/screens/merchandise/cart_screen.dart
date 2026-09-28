@@ -135,32 +135,32 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MerchColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: MerchColors.background,
-        foregroundColor: MerchColors.textPrimary,
-        title: const Text('Cart'),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
+        title: Text('Cart'),
         actions: [
           if (cartItems.isNotEmpty)
             IconButton(
               onPressed: _clearCart,
-              icon: const Icon(Icons.delete_outline),
+              icon: Icon(Icons.delete_outline),
               tooltip: 'Clear cart',
             ),
         ],
       ),
       body: isLoading
-          ? const Center(
+          ? Center(
         child: CircularProgressIndicator(
           color: MerchColors.primary,
         ),
       )
           : cartItems.isEmpty
-          ? const Center(
+          ? Center(
         child: Text(
           'Your cart is empty',
           style: TextStyle(
-            color: MerchColors.textSecondary,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
             fontSize: 16,
           ),
         ),
@@ -191,8 +191,8 @@ class _CartScreenState extends State<CartScreen> {
           ),
           Container(
             padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: MerchColors.surface,
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
             ),
             child: Column(
               children: [
@@ -200,23 +200,23 @@ class _CartScreenState extends State<CartScreen> {
                   mainAxisAlignment:
                   MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'Total',
                       style: TextStyle(
-                        color: MerchColors.textSecondary,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                       ),
                     ),
                     Text(
                       '₦${total.toStringAsFixed(0)}',
-                      style: const TextStyle(
-                        color: MerchColors.textPrimary,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -231,7 +231,7 @@ class _CartScreenState extends State<CartScreen> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Checkout',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,

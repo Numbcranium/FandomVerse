@@ -25,7 +25,7 @@ class ProductImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!_hasImage) {
-      return _buildNoImage();
+      return _buildNoImage(context);
     }
 
     return ClipRRect(
@@ -46,7 +46,7 @@ class ProductImage extends StatelessWidget {
             return child;
           }
 
-          return _buildLoading();
+          return _buildLoading(context);
         },
 
         // Only show "No image available" when the URL actually fails.
@@ -59,7 +59,7 @@ class ProductImage extends StatelessWidget {
           debugPrint('Image URL: $imageUrl');
           debugPrint('Error: $error');
 
-          return _buildNoImage();
+          return _buildNoImage(context);
         },
       ),
     );
@@ -69,18 +69,18 @@ class ProductImage extends StatelessWidget {
   // LOADING
   // =====================================================
 
-  Widget _buildLoading() {
+  Widget _buildLoading(BuildContext context) {
     return Container(
       width: width,
       height: height,
-      color: MerchColors.surfaceLight,
+      color: Theme.of(context).cardColor,
       alignment: Alignment.center,
-      child: const SizedBox(
+      child: SizedBox(
         width: 28,
         height: 28,
         child: CircularProgressIndicator(
           strokeWidth: 2.5,
-          color: MerchColors.textSecondary,
+          color: Theme.of(context).textTheme.bodyMedium?.color,
         ),
       ),
     );
@@ -90,26 +90,26 @@ class ProductImage extends StatelessWidget {
   // NO IMAGE
   // =====================================================
 
-  Widget _buildNoImage() {
+  Widget _buildNoImage(BuildContext context) {
     return Container(
       width: width,
       height: height,
-      color: MerchColors.surfaceLight,
+      color: Theme.of(context).cardColor,
       alignment: Alignment.center,
-      child: const Column(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.image_not_supported_outlined,
             size: 36,
-            color: MerchColors.textSecondary,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
           ),
           SizedBox(height: 8),
           Text(
             'No image available',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: MerchColors.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),

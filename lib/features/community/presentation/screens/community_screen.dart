@@ -17,15 +17,15 @@ class _CommunityScreenState extends State<CommunityScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F111A), // Dark background matching app theme
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0F111A),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Theme.of(context).iconTheme.color),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Community', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: Text('Community', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold)),
       ),
       body: Column(
         children: [
@@ -35,16 +35,16 @@ class _CommunityScreenState extends State<CommunityScreen> {
               stream: FirebaseFirestore.instance.collection('posts').orderBy('createdAt', descending: true).snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return const Center(child: Text('Error loading posts', style: TextStyle(color: Colors.white)));
+                  return Center(child: Text('Error loading posts', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color)));
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator());
                 }
 
                 final docs = snapshot.data?.docs ?? [];
                 if (docs.isEmpty) {
-                  return const Center(child: Text('No discussions yet. Start one!', style: TextStyle(color: Colors.white70)));
+                  return Center(child: Text('No discussions yet. Start one!', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)));
                 }
 
                 return ListView.builder(
@@ -57,7 +57,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
                       'username': data['username'] ?? 'User',
                       'avatar': data['avatar'] ?? 'https://ui-avatars.com/api/?name=User&background=random',
                       'time': 'Just now', // Ideally formatted from timestamp
-                      'content': data['content'] ?? '',
+                      'content': data['content'] as String? ?? '' ?? '',
                       'likes': data['likes'] ?? 0,
                       'comments': data['comments'] ?? 0,
                     };
@@ -70,14 +70,14 @@ class _CommunityScreenState extends State<CommunityScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF6C4DFF), // Purple accent
+        backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const CreateDiscussionScreen()),
           );
         },
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: Theme.of(context).textTheme.bodyLarge?.color),
       ),
     );
   }
@@ -88,7 +88,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
       child: Container(
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: const Color(0xFF1A1D2D), // Slightly lighter dark background
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(30),
         ),
         child: Row(
@@ -110,14 +110,14 @@ class _CommunityScreenState extends State<CommunityScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF6C4DFF) : Colors.transparent,
+            color: isSelected ? Theme.of(context).colorScheme.primary : Colors.transparent,
             borderRadius: BorderRadius.circular(25),
           ),
           child: Center(
             child: Text(
               title,
               style: TextStyle(
-                color: isSelected ? Colors.white : Colors.white54,
+                color: isSelected ? Colors.white : Theme.of(context).textTheme.bodyMedium?.color,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
             ),
@@ -139,7 +139,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF1A1D2D),
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -149,30 +149,30 @@ class _CommunityScreenState extends State<CommunityScreen> {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundImage: NetworkImage(post['avatar']),
+                  backgroundImage: NetworkImage(post['avatar'] as String? ?? ''),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(post['username'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                    Text(post['time'], style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                    Text(post['username'] as String? ?? '', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold)),
+                    Text(post['time'] as String? ?? '', style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color, fontSize: 12)),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 12),
-            Text(post['content'], style: const TextStyle(color: Colors.white, fontSize: 16)),
-            const SizedBox(height: 16),
+            SizedBox(height: 12),
+            Text(post['content'] as String? ?? '', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontSize: 16)),
+            SizedBox(height: 16),
             Row(
               children: [
-                const Icon(Icons.favorite_border, color: Colors.white54, size: 20),
-                const SizedBox(width: 4),
-                Text('${post['likes']}', style: const TextStyle(color: Colors.white54)),
-                const SizedBox(width: 16),
-                const Icon(Icons.chat_bubble_outline, color: Colors.white54, size: 20),
-                const SizedBox(width: 4),
-                Text('${post['comments']}', style: const TextStyle(color: Colors.white54)),
+                Icon(Icons.favorite_border, color: Theme.of(context).iconTheme.color, size: 20),
+                SizedBox(width: 4),
+                Text('${post['likes']}', style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color)),
+                SizedBox(width: 16),
+                Icon(Icons.chat_bubble_outline, color: Theme.of(context).iconTheme.color, size: 20),
+                SizedBox(width: 4),
+                Text('${post['comments']}', style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color)),
               ],
             ),
           ],

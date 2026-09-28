@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'router/route_names.dart';
 
 import '../core/constants/app_constants.dart';
+import 'router/route_names.dart';
 import 'theme/app_theme.dart';
+import 'theme/theme_cubit.dart';
 
 
 /// Root widget: wires [AppTheme] and a [GoRouter] together.
@@ -19,23 +21,23 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: AppConstants.appName,
-      builder: (context, child) {
-        return _GlobalFabOverlay(
-          router: router,
-          child: child ?? const SizedBox.shrink(),
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) {
+        return MaterialApp.router(
+          title: AppConstants.appName,
+          builder: (context, child) {
+            return _GlobalFabOverlay(
+              router: router,
+              child: child ?? const SizedBox.shrink(),
+            );
+          },
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          themeMode: themeMode,
+          routerConfig: router,
         );
       },
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      // The product is designed dark-first (every mockup uses the dark
-      // palette) — force dark rather than following system settings so
-      // the app always matches the team's design during grading/demo.
-      // Flip to ThemeMode.system once/if a light-mode toggle is wanted.
-      themeMode: ThemeMode.dark,
-      routerConfig: router,
     );
   }
 }
@@ -84,6 +86,7 @@ class _GlobalFabOverlayState extends State<_GlobalFabOverlay> {
       RouteNames.forgotPassword,
       RouteNames.aiHelper,
       RouteNames.adminDashboard,
+      '/merchandise',
       '/', // Hide on root before redirect
     ];
 
@@ -103,7 +106,7 @@ class _GlobalFabOverlayState extends State<_GlobalFabOverlay> {
         widget.child,
         if (_showFab)
           Positioned(
-            right: 16,
+            left: 16,
             bottom: 96,
             child: SafeArea(
               child: FloatingActionButton(
@@ -111,7 +114,7 @@ class _GlobalFabOverlayState extends State<_GlobalFabOverlay> {
                 onPressed: () {
                   widget.router.push(RouteNames.aiHelper);
                 },
-                child: const Icon(Icons.smart_toy),
+                child: Icon(Icons.smart_toy),
               ),
             ),
           ),

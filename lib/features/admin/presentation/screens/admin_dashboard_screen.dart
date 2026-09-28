@@ -28,12 +28,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F111A),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(child: tabs[_currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (i) => setState(() => _currentIndex = i),
-        backgroundColor: const Color(0xFF1A1D2D),
+        backgroundColor: Theme.of(context).cardColor,
         selectedItemColor: const Color(0xFF6C4DFF),
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
@@ -196,7 +196,7 @@ class _DashboardTab extends StatelessWidget {
         Icon(icon, color: const Color(0xFF6C4DFF), size: 20),
         const SizedBox(width: 12),
         Expanded(child: Text(label, style: const TextStyle(color: Colors.white70))),
-        Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+        Text(value.toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
       ]),
     );
   }
@@ -206,7 +206,7 @@ class _DashboardTab extends StatelessWidget {
       onTap: onTap,
       contentPadding: EdgeInsets.zero,
       leading: Icon(icon, color: color ?? Colors.white54),
-      title: Text(title, style: TextStyle(color: color ?? Colors.white)),
+      title: Text(title.toString(), style: TextStyle(color: color ?? Colors.white)),
       subtitle: Text(subtitle, style: TextStyle(color: color?.withOpacity(0.7) ?? Colors.white38, fontSize: 12)),
       trailing: Icon(Icons.chevron_right, color: color?.withOpacity(0.5) ?? Colors.white38),
     );
@@ -217,9 +217,9 @@ class _DashboardTab extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(title, style: const TextStyle(color: Colors.black54, fontSize: 13)),
+        Text(title.toString(), style: const TextStyle(color: Colors.black54, fontSize: 13)),
         const SizedBox(height: 6),
-        Text(value, style: const TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold)),
+        Text(value.toString(), style: const TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold)),
       ]),
     );
   }
@@ -231,7 +231,7 @@ class _DashboardTab extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         leading: Icon(icon, color: Colors.white54),
-        title: Text(title, style: const TextStyle(color: Colors.white)),
+        title: Text(title.toString(), style: const TextStyle(color: Colors.white)),
         trailing: const Icon(Icons.chevron_right, color: Colors.white54),
       ),
     );
@@ -388,19 +388,19 @@ class _UserManagementTabState extends State<_UserManagementTab> {
                       CircleAvatar(backgroundColor: color.withOpacity(0.2), child: Icon(Icons.person, color: color)),
                       const SizedBox(width: 12),
                       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                        Text(d['email'] ?? '', style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                        Text(name.toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        Text((d['email'] ?? '').toString(), style: const TextStyle(color: Colors.white54, fontSize: 12)),
                       ])),
                       GestureDetector(
-                        onTap: () => _editRole(id, role),
+                        onTap: () => _editRole(id, role.toString()),
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(color: const Color(0xFF6C4DFF).withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
-                          child: Text(role, style: const TextStyle(color: Color(0xFF6C4DFF), fontSize: 12)),
+                          child: Text(role.toString(), style: const TextStyle(color: Color(0xFF6C4DFF), fontSize: 12)),
                         ),
                       ),
                       const SizedBox(width: 8),
-                      GestureDetector(onTap: () => _deleteUser(id, name), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
+                      GestureDetector(onTap: () => _deleteUser(id, name.toString()), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
                     ]),
                   );
                 },
@@ -642,7 +642,7 @@ class _EventManagementTabState extends State<_EventManagementTab> {
         Container(width: 12, height: 12, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
         const SizedBox(width: 12),
         Expanded(child: Text(label, style: const TextStyle(color: Colors.white70))),
-        Text(value, style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 20)),
+        Text(value.toString(), style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 20)),
       ]),
     );
   }
@@ -886,11 +886,11 @@ class _CategoryManagementTabState extends State<_CategoryManagementTab> {
                   decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(16)),
                   child: ListTile(
                     leading: Icon(_iconFromKey(iconKey), color: Colors.white54),
-                    title: Text(name, style: const TextStyle(color: Colors.white)),
+                    title: Text(name.toString(), style: const TextStyle(color: Colors.white)),
                     trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                      GestureDetector(onTap: () => _editCategory(docs[i].id, name), child: const Icon(Icons.edit_outlined, color: Colors.white54, size: 20)),
+                      GestureDetector(onTap: () => _editCategory(docs[i].id, name.toString()), child: const Icon(Icons.edit_outlined, color: Colors.white54, size: 20)),
                       const SizedBox(width: 12),
-                      GestureDetector(onTap: () => _delete(docs[i].id, name), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
+                      GestureDetector(onTap: () => _delete(docs[i].id, name.toString()), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
                     ]),
                   ),
                 );
@@ -911,7 +911,7 @@ Widget _appBar(String title) => Padding(
   child: Row(children: [
     const Icon(Icons.admin_panel_settings, color: Color(0xFF6C4DFF)),
     const SizedBox(width: 12),
-    Text(title, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+    Text(title.toString(), style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
   ]),
 );
 
@@ -926,7 +926,7 @@ Widget _topBtn(String title, VoidCallback onTap) => Padding(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
       onPressed: onTap,
-      child: Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      child: Text(title.toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
     ),
   ),
 );
@@ -992,7 +992,7 @@ Widget _dismissibleTile(String id, IconData icon, String title, Future<void> Fun
     decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(16)),
     child: ListTile(
       leading: Icon(icon, color: Colors.white54),
-      title: Text(title, style: const TextStyle(color: Colors.white)),
+      title: Text(title.toString(), style: const TextStyle(color: Colors.white)),
       trailing: GestureDetector(onTap: () => onDelete(id), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
     ),
   );

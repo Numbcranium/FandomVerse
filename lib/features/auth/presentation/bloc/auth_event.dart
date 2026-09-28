@@ -66,6 +66,19 @@ class AuthPasswordResetSubmitted extends AuthEvent {
   List<Object?> get props => [email];
 }
 
+class AuthPasswordUpdateSubmitted extends AuthEvent {
+  const AuthPasswordUpdateSubmitted(this.newPassword);
+
+  final String newPassword;
+
+  @override
+  List<Object?> get props => [newPassword];
+}
+
+class AuthAccountDeleted extends AuthEvent {
+  const AuthAccountDeleted();
+}
+
 /// Clears `AuthState.errorMessage` — dispatch after showing the error
 /// (e.g. in a SnackBar's `onVisible`) so it doesn't reappear on rebuild.
 class AuthErrorCleared extends AuthEvent {

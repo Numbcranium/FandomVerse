@@ -34,10 +34,10 @@ class AppEmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon, size: 56, color: AppColors.textDisabled),
-            const SizedBox(height: AppConstants.spaceMd),
+            SizedBox(height: AppConstants.spaceMd),
             if (title != null) ...[
               Text(title!, style: theme.textTheme.titleMedium),
-              const SizedBox(height: AppConstants.spaceSm),
+              SizedBox(height: AppConstants.spaceSm),
             ],
             Text(
               message,
@@ -47,7 +47,7 @@ class AppEmptyState extends StatelessWidget {
               ),
             ),
             if (actionText != null && onAction != null) ...[
-              const SizedBox(height: AppConstants.spaceLg),
+              SizedBox(height: AppConstants.spaceLg),
               AppButton(
                 text: actionText!,
                 onPressed: onAction,

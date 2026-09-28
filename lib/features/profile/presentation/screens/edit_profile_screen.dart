@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +15,6 @@ import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
 import '../../data/datasources/user_remote_datasource.dart';
 import '../../data/repositories/user_repository_impl.dart';
-import '../../domain/repositories/user_repository.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
 import '../bloc/profile_state.dart';
@@ -59,7 +58,8 @@ class _EditProfileViewState extends State<_EditProfileView> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _fullNameController;
   late final TextEditingController _phoneController;
-  File? _pickedPhoto;
+  Uint8List? _pickedPhotoBytes;
+  String? _pickedPhotoExtension;
 
   @override
   void initState() {
@@ -83,7 +83,35 @@ class _EditProfileViewState extends State<_EditProfileView> {
       imageQuality: 85,
     );
     if (picked != null) {
-      setState(() => _pickedPhoto = File(picked.path));
+      // Strict Check 1: File size (Max 5MB)
+      final sizeInBytes = await picked.length();
+      final sizeInMb = sizeInBytes / (1024 * 1024);
+      if (sizeInMb > 5) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Image is too large. Maximum size is 5MB.')),
+          );
+        }
+        return;
+      }
+
+      // Strict Check 2: Extension
+      final name = picked.name.toLowerCase();
+      if (!name.endsWith('.jpg') && !name.endsWith('.jpeg') && !name.endsWith('.png')) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Invalid file format. Only JPG and PNG are allowed.')),
+          );
+        }
+        return;
+      }
+
+      final bytes = await picked.readAsBytes();
+      final extension = name.split('.').last;
+      setState(() {
+        _pickedPhotoBytes = bytes;
+        _pickedPhotoExtension = extension;
+      });
     }
   }
 
@@ -93,7 +121,8 @@ class _EditProfileViewState extends State<_EditProfileView> {
           ProfileUpdateSubmitted(
             fullName: _fullNameController.text.trim(),
             phone: _phoneController.text.trim(),
-            photoFile: _pickedPhoto,
+            photoBytes: _pickedPhotoBytes,
+            photoExtension: _pickedPhotoExtension,
           ),
         );
   }
@@ -101,7 +130,7 @@ class _EditProfileViewState extends State<_EditProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit profile')),
+      appBar: AppBar(title: Text('Edit profile')),
       body: SafeArea(
         child: BlocListener<ProfileBloc, ProfileState>(
           listener: (context, state) {
@@ -132,10 +161,10 @@ class _EditProfileViewState extends State<_EditProfileView> {
                       Center(
                         child: Stack(
                           children: [
-                            _pickedPhoto != null
+                            _pickedPhotoBytes != null
                                 ? CircleAvatar(
                                     radius: 48,
-                                    backgroundImage: FileImage(_pickedPhoto!),
+                                    backgroundImage: MemoryImage(_pickedPhotoBytes!),
                                   )
                                 : AppNetworkImage.avatar(
                                     imageUrl: user.photoUrl,
@@ -151,9 +180,9 @@ class _EditProfileViewState extends State<_EditProfileView> {
                                 child: InkWell(
                                   customBorder: const CircleBorder(),
                                   onTap: isSubmitting ? null : _pickPhoto,
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(8),
-                                    child: Icon(Icons.camera_alt, size: 18, color: Colors.white),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Icon(Icons.camera_alt, size: 18, color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white),
                                   ),
                                 ),
                               ),
@@ -161,7 +190,7 @@ class _EditProfileViewState extends State<_EditProfileView> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: AppConstants.spaceXl),
+                      SizedBox(height: AppConstants.spaceXl),
                       AppTextField(
                         label: 'Full name',
                         controller: _fullNameController,
@@ -169,7 +198,7 @@ class _EditProfileViewState extends State<_EditProfileView> {
                         validator: Validators.fullName,
                         enabled: !isSubmitting,
                       ),
-                      const SizedBox(height: AppConstants.spaceMd),
+                      SizedBox(height: AppConstants.spaceMd),
                       AppTextField(
                         label: 'Phone number',
                         controller: _phoneController,
@@ -178,7 +207,7 @@ class _EditProfileViewState extends State<_EditProfileView> {
                         validator: Validators.phone,
                         enabled: !isSubmitting,
                       ),
-                      const SizedBox(height: AppConstants.spaceLg),
+                      SizedBox(height: AppConstants.spaceLg),
                       AppButton(
                         text: 'Save changes',
                         isLoading: isSubmitting,

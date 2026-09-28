@@ -44,6 +44,9 @@ class AppTheme {
       brightness: Brightness.dark,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.backgroundDark,
+      cardColor: AppColors.surfaceDark,
+      dialogBackgroundColor: AppColors.surfaceDarkElevated,
+      iconTheme: const IconThemeData(color: AppColors.textPrimaryDark),
       textTheme: TextTheme(
         displayLarge: AppTextStyles.displayLarge,
         headlineMedium: AppTextStyles.headlineMedium,
@@ -172,6 +175,9 @@ class AppTheme {
       brightness: Brightness.light,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.background,
+      cardColor: AppColors.surface,
+      dialogBackgroundColor: AppColors.surface,
+      iconTheme: const IconThemeData(color: AppColors.textPrimary),
       textTheme: base.textTheme.apply(
         bodyColor: AppColors.textPrimary,
         displayColor: AppColors.textPrimary,
@@ -180,6 +186,7 @@ class AppTheme {
         backgroundColor: AppColors.surface,
         foregroundColor: AppColors.textPrimary,
         iconTheme: const IconThemeData(color: AppColors.textPrimary),
+        titleTextStyle: AppTextStyles.titleLarge.copyWith(color: AppColors.textPrimary),
       ),
       cardTheme: base.cardTheme.copyWith(
         color: AppColors.surface,

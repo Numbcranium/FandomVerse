@@ -79,19 +79,19 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundDark,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Colors.transparent,
 
         leading: IconButton(
           onPressed: () => context.pop(),
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Theme.of(context).iconTheme.color),
         ),
 
         title: Text(
           'My Tickets',
-          style: AppTextStyles.bodySmall,
+          style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
         ),
       ),
       body: _buildBody(),
@@ -100,7 +100,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(
           color: AppColors.primary,
         ),
@@ -117,7 +117,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
 
     return RefreshIndicator(
       color: AppColors.primary,
-      backgroundColor: AppColors.surfaceDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       // Pull-to-refresh retrieves the latest tickets from Firebase.
       onRefresh: _loadTickets,
@@ -135,7 +135,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
         itemCount: _tickets.length,
 
         separatorBuilder: (_, __) {
-          return const SizedBox(
+          return SizedBox(
             height: AppConstants.spaceMd,
           );
         },
@@ -170,12 +170,12 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.surfaceDark,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(
               AppConstants.radiusLg,
             ),
             border: Border.all(
-              color: AppColors.borderDark,
+              color: Theme.of(context).dividerColor,
             ),
           ),
           clipBehavior: Clip.antiAlias,
@@ -193,7 +193,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
                   children: [
                     _buildTicketHeader(ticket),
 
-                    const SizedBox(
+                    SizedBox(
                       height: AppConstants.spaceMd,
                     ),
 
@@ -201,7 +201,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
                       ticket,
                     ),
 
-                    const SizedBox(
+                    SizedBox(
                       height: AppConstants.spaceMd,
                     ),
 
@@ -221,11 +221,11 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
       return Container(
         height: 150,
         width: double.infinity,
-        color: AppColors.surfaceDarkElevated,
-        child: const Icon(
+        color: Theme.of(context).dialogBackgroundColor,
+        child: Icon(
           Icons.event,
           size: 48,
-          color: AppColors.textSecondaryDark,
+          color: Theme.of(context).textTheme.bodyMedium?.color,
         ),
       );
     }
@@ -240,11 +240,11 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
         return Container(
           height: 150,
           width: double.infinity,
-          color: AppColors.surfaceDarkElevated,
-          child: const Icon(
+          color: Theme.of(context).dialogBackgroundColor,
+          child: Icon(
             Icons.broken_image_outlined,
             size: 40,
-            color: AppColors.textSecondaryDark,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
           ),
         );
       },
@@ -258,11 +258,11 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
         Expanded(
           child: Text(
             ticket.eventTitle,
-            style: AppTextStyles.bodySmall,
+            style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
           ),
         ),
 
-        const SizedBox(
+        SizedBox(
           width: AppConstants.spaceSm,
         ),
 
@@ -280,9 +280,9 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
 
     switch (normalizedStatus) {
       case 'used':
-        backgroundColor = AppColors.textDisabledDark
+        backgroundColor = Theme.of(context).disabledColor
             .withValues(alpha: 0.15);
-        textColor = AppColors.textSecondaryDark;
+        textColor = Theme.of(context).textTheme.bodyMedium?.color ?? (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white54);
         label = 'Used';
         break;
 
@@ -336,7 +336,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
           text: _formatDate(ticket.eventDate),
         ),
 
-        const SizedBox(
+        SizedBox(
           height: AppConstants.spaceSm,
         ),
 
@@ -345,7 +345,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
           text: ticket.eventTime,
         ),
 
-        const SizedBox(
+        SizedBox(
           height: AppConstants.spaceSm,
         ),
 
@@ -369,7 +369,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
           color: AppColors.primaryMuted,
         ),
 
-        const SizedBox(
+        SizedBox(
           width: AppConstants.spaceSm,
         ),
 
@@ -377,7 +377,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
           child: Text(
             text,
             style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.textSecondaryDark,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
         ),
@@ -406,7 +406,7 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
           ),
         ),
 
-        const SizedBox(
+        SizedBox(
           width: AppConstants.spaceSm,
         ),
 
@@ -418,11 +418,11 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
           ),
         ),
 
-        const SizedBox(
+        SizedBox(
           width: AppConstants.spaceXs,
         ),
 
-        const Icon(
+        Icon(
           Icons.arrow_forward_ios,
           size: 14,
           color: AppColors.primaryMuted,
@@ -454,23 +454,23 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
                 ),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.confirmation_num_outlined,
                 size: 42,
                 color: AppColors.primaryMuted,
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceLg,
             ),
 
             Text(
               'No tickets yet',
-              style: AppTextStyles.bodySmall,
+              style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceSm,
             ),
 
@@ -478,20 +478,20 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
               'Tickets you purchase will appear here.',
               textAlign: TextAlign.center,
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textSecondaryDark,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceLg,
             ),
 
             ElevatedButton.icon(
               onPressed: () => context.pop(),
-              icon: const Icon(
+              icon: Icon(
                 Icons.explore_outlined,
               ),
-              label: const Text(
+              label: Text(
                 'Discover Events',
               ),
             ),
@@ -514,13 +514,13 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.error_outline,
               size: 48,
               color: AppColors.error,
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceMd,
             ),
 
@@ -528,18 +528,18 @@ class _MyTicketsScreenState extends State<MyTicketsScreen> {
               _errorMessage!,
               textAlign: TextAlign.center,
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textSecondaryDark,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
               ),
             ),
 
-            const SizedBox(
+            SizedBox(
               height: AppConstants.spaceLg,
             ),
 
             ElevatedButton.icon(
               onPressed: _loadTickets,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Try Again'),
+              icon: Icon(Icons.refresh),
+              label: Text('Try Again'),
             ),
           ],
         ),

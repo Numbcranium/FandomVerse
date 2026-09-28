@@ -9,7 +9,7 @@ class TriviaPopStartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF05052B),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       body: SafeArea(
         child: Column(
@@ -26,9 +26,9 @@ class TriviaPopStartScreen extends StatelessWidget {
                   onPressed: () {
                     context.go(RouteNames.home);
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.arrow_back,
-                    color: Colors.white,
+                    color: Theme.of(context).iconTheme.color,
                     size: 28,
                   ),
                 ),
@@ -43,7 +43,7 @@ class TriviaPopStartScreen extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
 
                     // Trivia Pop image/logo
                     SizedBox(
@@ -57,7 +57,7 @@ class TriviaPopStartScreen extends StatelessWidget {
                             error,
                             stackTrace,
                             ) {
-                          return const Center(
+                          return Center(
                             child: Icon(
                               Icons.quiz,
                               color: Color(0xFF7C2CFF),
@@ -68,24 +68,24 @@ class TriviaPopStartScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
 
                     // Heading
-                    const Text(
+                    Text(
                       'Think. Guess. Be a Fandom Pro!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
 
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32),
 
                     // Description
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 25,
                       ),
                       child: Text(
@@ -94,14 +94,14 @@ class TriviaPopStartScreen extends StatelessWidget {
                             'your favorite fandoms.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.white70,
+                          color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                           fontSize: 15,
                           height: 1.5,
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 38),
+                    SizedBox(height: 38),
 
                     // Start Playing button
                     SizedBox(
@@ -130,10 +130,10 @@ class TriviaPopStartScreen extends StatelessWidget {
                               BorderRadius.circular(30),
                             ),
                           ),
-                          child: const Text(
+                          child: Text(
                             'Start Playing',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                             ),
@@ -142,7 +142,7 @@ class TriviaPopStartScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 40),
+                    SizedBox(height: 40),
                   ],
                 ),
               ),

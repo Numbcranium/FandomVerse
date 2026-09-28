@@ -247,7 +247,7 @@ class _TriviaQuestionsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF05052B),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       body: SafeArea(
         child: StreamBuilder<List<FandomQuizQuestion>>(
@@ -262,7 +262,7 @@ class _TriviaQuestionsScreenState
 
             if (snapshot.connectionState ==
                 ConnectionState.waiting) {
-              return const Center(
+              return Center(
                 child: CircularProgressIndicator(
                   color: Color(0xFF7027FF),
                 ),
@@ -278,11 +278,11 @@ class _TriviaQuestionsScreenState
                 'Quiz error: ${snapshot.error}',
               );
 
-              return const Center(
+              return Center(
                 child: Text(
                   'Unable to load quiz questions',
                   style: TextStyle(
-                    color: Colors.white70,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
                   ),
                 ),
               );
@@ -300,14 +300,14 @@ class _TriviaQuestionsScreenState
             // ==================================================
 
             if (questions.length < 5) {
-              return const Center(
+              return Center(
                 child: Padding(
                   padding: EdgeInsets.all(25),
                   child: Text(
                     'This fandom does not have enough questions yet.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.white70,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                     ),
                   ),
                 ),
@@ -319,7 +319,7 @@ class _TriviaQuestionsScreenState
             // ==================================================
 
             if (currentQuestion >= questions.length) {
-              return const Center(
+              return Center(
                 child: CircularProgressIndicator(
                   color: Color(0xFF7027FF),
                 ),
@@ -358,7 +358,7 @@ class _TriviaQuestionsScreenState
 
               child: Column(
                 children: [
-                  const SizedBox(height: 15),
+                  SizedBox(height: 15),
 
                   // =================================================
                   // TOP BAR
@@ -372,9 +372,9 @@ class _TriviaQuestionsScreenState
                             : () {
                           Navigator.of(context).pop();
                         },
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.arrow_back,
-                          color: Colors.white,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                       ),
 
@@ -382,8 +382,8 @@ class _TriviaQuestionsScreenState
 
                       Text(
                         '${currentQuestion + 1}/${questions.length}',
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
@@ -391,7 +391,7 @@ class _TriviaQuestionsScreenState
                     ],
                   ),
 
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
 
                   // =================================================
                   // CATEGORY
@@ -414,15 +414,15 @@ class _TriviaQuestionsScreenState
 
                       child: Text(
                         question.category,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                   ),
 
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18),
 
                   // =================================================
                   // QUESTION
@@ -434,8 +434,8 @@ class _TriviaQuestionsScreenState
                     child: Text(
                       question.question,
 
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                         height: 1.4,
@@ -443,7 +443,7 @@ class _TriviaQuestionsScreenState
                     ),
                   ),
 
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18),
 
                   // =================================================
                   // QUESTION IMAGE
@@ -466,11 +466,11 @@ class _TriviaQuestionsScreenState
                               (context, error, stackTrace) {
                             return Container(
                               color:
-                              const Color(0xFF17163D),
+                              Theme.of(context).cardColor,
 
-                              child: const Icon(
+                              child: Icon(
                                 Icons.image_outlined,
-                                color: Colors.white38,
+                                color: Theme.of(context).disabledColor,
                                 size: 45,
                               ),
                             );
@@ -479,7 +479,7 @@ class _TriviaQuestionsScreenState
                       ),
                     ),
 
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18),
 
                   // =================================================
                   // ANSWERS
@@ -492,7 +492,7 @@ class _TriviaQuestionsScreenState
 
                       separatorBuilder:
                           (context, index) {
-                        return const SizedBox(
+                        return SizedBox(
                           height: 10,
                         );
                       },
@@ -516,7 +516,7 @@ class _TriviaQuestionsScreenState
                                 question.correctAnswer;
 
                         Color background =
-                        const Color(0xFF111F55);
+                        Theme.of(context).dialogBackgroundColor;
 
                         if (selectedAnswer != null &&
                             isSelected) {
@@ -569,7 +569,7 @@ class _TriviaQuestionsScreenState
                                   Alignment.center,
 
                                   decoration:
-                                  const BoxDecoration(
+                                  BoxDecoration(
                                     color:
                                     Color(0xFF7027FF),
                                     shape:
@@ -580,15 +580,15 @@ class _TriviaQuestionsScreenState
                                     letter,
 
                                     style:
-                                    const TextStyle(
-                                      color: Colors.white,
+                                    TextStyle(
+                                      color: Theme.of(context).textTheme.bodyLarge?.color,
                                       fontWeight:
                                       FontWeight.bold,
                                     ),
                                   ),
                                 ),
 
-                                const SizedBox(width: 14),
+                                SizedBox(width: 14),
 
                                 // ANSWER TEXT
 
@@ -597,8 +597,8 @@ class _TriviaQuestionsScreenState
                                     answer,
 
                                     style:
-                                    const TextStyle(
-                                      color: Colors.white,
+                                    TextStyle(
+                                      color: Theme.of(context).textTheme.bodyLarge?.color,
                                       fontSize: 14,
                                     ),
                                   ),
@@ -612,7 +612,7 @@ class _TriviaQuestionsScreenState
                                     isCorrect
                                         ? Icons.check
                                         : Icons.close,
-                                    color: Colors.white,
+                                    color: Theme.of(context).textTheme.bodyLarge?.color,
                                   ),
                               ],
                             ),
@@ -628,12 +628,12 @@ class _TriviaQuestionsScreenState
 
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.timer_outlined,
-                        color: Colors.white,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                       ),
 
-                      const SizedBox(width: 5),
+                      SizedBox(width: 5),
 
                       // 15 SECOND QUESTION TIMER
 
@@ -691,7 +691,7 @@ class _TriviaQuestionsScreenState
                             ),
                           ),
 
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment:
                             MainAxisAlignment.center,
 
@@ -700,7 +700,7 @@ class _TriviaQuestionsScreenState
                                 'Next',
 
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Theme.of(context).textTheme.bodyLarge?.color,
                                   fontWeight:
                                   FontWeight.bold,
                                 ),
@@ -710,7 +710,7 @@ class _TriviaQuestionsScreenState
 
                               Icon(
                                 Icons.arrow_forward,
-                                color: Colors.white,
+                                color: Theme.of(context).textTheme.bodyLarge?.color,
                                 size: 18,
                               ),
                             ],
@@ -720,7 +720,7 @@ class _TriviaQuestionsScreenState
                     ],
                   ),
 
-                  const SizedBox(height: 15),
+                  SizedBox(height: 15),
                 ],
               ),
             );
@@ -795,8 +795,8 @@ class _QuizTimerState extends State<QuizTimer> {
     return Text(
       '00:${secondsLeft.toString().padLeft(2, '0')}',
 
-      style: const TextStyle(
-        color: Colors.white,
+      style: TextStyle(
+        color: Theme.of(context).textTheme.bodyLarge?.color,
         fontWeight: FontWeight.bold,
       ),
     );

@@ -179,11 +179,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MerchColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: MerchColors.background,
-        foregroundColor: MerchColors.textPrimary,
-        title: const Text('Wishlist'),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
+        title: Text('Wishlist'),
       ),
       body: _buildBody(),
     );
@@ -191,7 +191,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(
           color: MerchColors.primary,
         ),
@@ -205,20 +205,20 @@ class _WishlistScreenState extends State<WishlistScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.error_outline,
-                color: MerchColors.textSecondary,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
                 size: 48,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Text(
                 _errorMessage!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: MerchColors.textSecondary,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   setState(() {
@@ -228,7 +228,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
                   _loadWishlist();
                 },
-                child: const Text('Try Again'),
+                child: Text('Try Again'),
               ),
             ],
           ),
@@ -237,20 +237,20 @@ class _WishlistScreenState extends State<WishlistScreen> {
     }
 
     if (items.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.favorite_border,
-              color: MerchColors.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
               size: 60,
             ),
             SizedBox(height: 16),
             Text(
               'Your wishlist is empty',
               style: TextStyle(
-                color: MerchColors.textSecondary,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
                 fontSize: 16,
               ),
             ),
@@ -259,7 +259,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
               'Save your favourite anime products here.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: MerchColors.textSecondary,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
                 fontSize: 13,
               ),
             ),

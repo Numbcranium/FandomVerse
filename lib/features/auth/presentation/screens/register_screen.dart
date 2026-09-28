@@ -50,7 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create account')),
+      appBar: AppBar(title: Text('Create account')),
       body: SafeArea(
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
@@ -79,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       validator: Validators.fullName,
                       enabled: !isLoading,
                     ),
-                    const SizedBox(height: AppConstants.spaceMd),
+                    SizedBox(height: AppConstants.spaceMd),
                     AppTextField(
                       label: 'Email',
                       hint: 'you@example.com',
@@ -90,7 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       validator: Validators.email,
                       enabled: !isLoading,
                     ),
-                    const SizedBox(height: AppConstants.spaceMd),
+                    SizedBox(height: AppConstants.spaceMd),
                     AppTextField(
                       label: 'Phone number',
                       controller: _phoneController,
@@ -100,14 +100,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       validator: Validators.phone,
                       enabled: !isLoading,
                     ),
-                    const SizedBox(height: AppConstants.spaceMd),
+                    SizedBox(height: AppConstants.spaceMd),
                     AppTextField.password(
                       controller: _passwordController,
                       textInputAction: TextInputAction.next,
                       validator: Validators.password,
                       enabled: !isLoading,
                     ),
-                    const SizedBox(height: AppConstants.spaceMd),
+                    SizedBox(height: AppConstants.spaceMd),
                     AppTextField.password(
                       label: 'Confirm password',
                       controller: _confirmPasswordController,
@@ -118,20 +118,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       enabled: !isLoading,
                     ),
-                    const SizedBox(height: AppConstants.spaceLg),
+                    SizedBox(height: AppConstants.spaceLg),
                     AppButton(
                       text: 'Create account',
                       isLoading: isLoading,
                       onPressed: _submit,
                     ),
-                    const SizedBox(height: AppConstants.spaceMd),
+                    SizedBox(height: AppConstants.spaceMd),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text('Already have an account?'),
+                        Text('Already have an account?'),
                         TextButton(
                           onPressed: isLoading ? null : () => context.pop(),
-                          child: const Text('Log in'),
+                          child: Text('Log in'),
                         ),
                       ],
                     ),

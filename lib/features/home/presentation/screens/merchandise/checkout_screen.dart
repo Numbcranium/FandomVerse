@@ -189,18 +189,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final currentItems = checkoutItems;
 
     return Scaffold(
-      backgroundColor: MerchColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Checkout'),
-        backgroundColor: MerchColors.background,
-        foregroundColor: MerchColors.textPrimary,
+        title: Text('Checkout'),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
       ),
       body: currentItems.isEmpty
-          ? const Center(
+          ? Center(
         child: Text(
           'Your cart is empty',
           style: TextStyle(
-            color: MerchColors.textSecondary,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
           ),
         ),
       )
@@ -209,26 +209,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Order Summary',
               style: TextStyle(
-                color: MerchColors.textPrimary,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
             ...currentItems.map(
                   (item) => _OrderItem(item: item),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: MerchColors.surface,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
@@ -237,19 +237,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     label: 'Subtotal',
                     value: subtotal,
                   ),
-                  const SizedBox(height: 12),
-                  const Divider(
-                    color: MerchColors.divider,
+                  SizedBox(height: 12),
+                  Divider(
+                    color: Theme.of(context).dividerColor,
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Row(
                     mainAxisAlignment:
                     MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Total',
                         style: TextStyle(
-                          color: MerchColors.textPrimary,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -264,29 +264,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
-            const Text(
+            Text(
               'Payment',
               style: TextStyle(
-                color: MerchColors.textPrimary,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: MerchColors.surface,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: MerchColors.primary,
                 ),
               ),
-              child: const Row(
+              child: Row(
                 children: [
                   Icon(
                     Icons.account_balance_wallet_outlined,
@@ -297,7 +297,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     child: Text(
                       'Pay from Wallet',
                       style: TextStyle(
-                        color: MerchColors.textPrimary,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -311,17 +311,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
-            const Text(
+            Text(
               'Your wallet will be charged when you place the order.',
               style: TextStyle(
-                color: MerchColors.textSecondary,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
                 fontSize: 13,
               ),
             ),
 
-            const SizedBox(height: 32),
+            SizedBox(height: 32),
 
             SizedBox(
               width: double.infinity,
@@ -339,15 +339,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                 ),
                 child: _isPlacingOrder
-                    ? const SizedBox(
+                    ? SizedBox(
                   width: 22,
                   height: 22,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                 )
-                    : const Text(
+                    : Text(
                   'Place Order',
                   style: TextStyle(
                     fontSize: 16,
@@ -376,7 +376,7 @@ class _OrderItem extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: MerchColors.surface,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -385,31 +385,31 @@ class _OrderItem extends StatelessWidget {
             width: 64,
             height: 64,
             decoration: BoxDecoration(
-              color: MerchColors.surfaceLight,
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.shopping_bag_outlined,
-              color: MerchColors.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   item.product.name,
-                  style: const TextStyle(
-                    color: MerchColors.textPrimary,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
                   'Quantity: ${item.quantity}',
-                  style: const TextStyle(
-                    color: MerchColors.textSecondary,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
                   ),
                 ),
               ],
@@ -440,8 +440,8 @@ class _SummaryRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: MerchColors.textSecondary,
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyMedium?.color,
           ),
         ),
         PriceWidget(

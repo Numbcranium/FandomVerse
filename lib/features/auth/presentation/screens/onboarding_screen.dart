@@ -39,13 +39,13 @@ class OnboardingScreen extends StatelessWidget {
                 size: 96,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              const SizedBox(height: AppConstants.spaceLg),
+              SizedBox(height: AppConstants.spaceLg),
               Text(
                 'Welcome to ${AppConstants.appName}',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
-              const SizedBox(height: AppConstants.spaceSm),
+              SizedBox(height: AppConstants.spaceSm),
               Text(
                 'A fast, reliable starting point — ready to become '
                 'whatever this competition needs.',
@@ -57,7 +57,7 @@ class OnboardingScreen extends StatelessWidget {
                 text: 'Get Started',
                 onPressed: () => _getStarted(context),
               ),
-              const SizedBox(height: AppConstants.spaceMd),
+              SizedBox(height: AppConstants.spaceMd),
             ],
           ),
         ),

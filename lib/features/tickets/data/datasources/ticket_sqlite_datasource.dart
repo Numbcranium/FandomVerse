@@ -1,5 +1,6 @@
-import 'package:sqflite/sqflite.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sqflite/sqflite.dart';
+
 import '../../../events/data/datasources/database/app_database.dart';
 import '../../models/ticket_model.dart';
 

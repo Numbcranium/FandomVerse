@@ -357,7 +357,7 @@ class _WalletScreenState extends State<WalletScreen> {
               onPressed: () {
                 Navigator.of(dialogContext).pop();
               },
-              child: const Text(
+              child: Text(
                 'Cancel',
                 style: TextStyle(
                   color: MerchColors.textSecondary,
@@ -473,23 +473,23 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget build(BuildContext context) {
     if (_loading) {
       return Scaffold(
-        backgroundColor: MerchColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: MerchColors.background,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
           centerTitle: true,
-          title: const Text(
+          title: Text(
             'Wallet',
             style: TextStyle(
-              color: MerchColors.textPrimary,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
               fontWeight: FontWeight.w700,
             ),
           ),
-          iconTheme: const IconThemeData(
-            color: MerchColors.textPrimary,
+          iconTheme: IconThemeData(
+            color: Theme.of(context).iconTheme.color,
           ),
         ),
-        body: const Center(
+        body: Center(
           child: CircularProgressIndicator(
             color: MerchColors.primary,
           ),
@@ -498,20 +498,20 @@ class _WalletScreenState extends State<WalletScreen> {
     }
 
     return Scaffold(
-      backgroundColor: MerchColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: MerchColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Wallet',
           style: TextStyle(
-            color: MerchColors.textPrimary,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.w700,
           ),
         ),
-        iconTheme: const IconThemeData(
-          color: MerchColors.textPrimary,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).iconTheme.color,
         ),
       ),
       body: SingleChildScrollView(
@@ -541,14 +541,14 @@ class _WalletScreenState extends State<WalletScreen> {
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.account_balance_wallet_outlined,
                           color: Colors.white,
                           size: 24,
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      const Text(
+                      SizedBox(width: 12),
+                      Text(
                         'Wallet Balance',
                         style: TextStyle(
                           color: Colors.white70,
@@ -558,7 +558,7 @@ class _WalletScreenState extends State<WalletScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   Text(
                     _formatMoney(_wallet.balance),
                     style: const TextStyle(
@@ -571,7 +571,7 @@ class _WalletScreenState extends State<WalletScreen> {
               ),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
             // ACTION BUTTONS
             Row(
@@ -583,7 +583,7 @@ class _WalletScreenState extends State<WalletScreen> {
                     onTap: _addMoney,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: _WalletActionButton(
                     icon: Icons.arrow_upward,
@@ -594,27 +594,28 @@ class _WalletScreenState extends State<WalletScreen> {
               ],
             ),
 
-            const SizedBox(height: 30),
+            SizedBox(height: 30),
 
-            const Text(
+            Text(
               'Wallet',
               style: TextStyle(
-                color: MerchColors.textPrimary,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
               ),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: MerchColors.surface,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Theme.of(context).dividerColor),
               ),
-              child: const Row(
+              child: Row(
                 children: [
                   Icon(
                     Icons.info_outline,
@@ -625,7 +626,7 @@ class _WalletScreenState extends State<WalletScreen> {
                     child: Text(
                       'Your wallet balance is used when you pay for merchandise orders.',
                       style: TextStyle(
-                        color: MerchColors.textSecondary,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                         fontSize: 13,
                         height: 1.4,
                       ),
@@ -635,28 +636,29 @@ class _WalletScreenState extends State<WalletScreen> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // CURRENT BALANCE INFO
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: MerchColors.surface,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Theme.of(context).dividerColor),
               ),
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.account_balance_wallet,
                     color: MerchColors.primary,
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       'Available balance: ${_formatMoney(_wallet.balance)}',
-                      style: const TextStyle(
-                        color: MerchColors.textPrimary,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
@@ -702,9 +704,10 @@ class _WalletActionButton extends StatelessWidget {
           ),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: MerchColors.surface,
-          foregroundColor: MerchColors.textPrimary,
+          backgroundColor: Theme.of(context).cardColor,
+          foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
           elevation: 0,
+          side: BorderSide(color: Theme.of(context).dividerColor),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
           ),

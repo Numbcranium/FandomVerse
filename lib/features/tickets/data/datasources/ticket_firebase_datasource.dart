@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:techwiz7_starter/features/tickets/data/datasources/ticket_sqlite_datasource.dart';
 
 import '../../models/ticket_model.dart';
 

@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import '../../../../models/user_model.dart';
 
@@ -22,6 +22,7 @@ abstract class UserRepository {
   /// afterwards.
   Future<String> uploadProfilePhoto({
     required String uid,
-    required File file,
+    required Uint8List fileBytes,
+    required String extension,
   });
 }

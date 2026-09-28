@@ -96,7 +96,7 @@ class FandomGalleryScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 15),
+              SizedBox(height: 15),
 
               // Save button
               SizedBox(
@@ -113,10 +113,10 @@ class FandomGalleryScreen extends StatelessWidget {
                       Navigator.pop(context);
                     }
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.download_rounded,
                   ),
-                  label: const Text(
+                  label: Text(
                     'Save Image',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -124,7 +124,7 @@ class FandomGalleryScreen extends StatelessWidget {
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF8FA8F5),
-                    foregroundColor: Colors.white,
+                    foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -132,17 +132,17 @@ class FandomGalleryScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
 
               // Close button
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text(
+                child: Text(
                   'Close',
                   style: TextStyle(
-                    color: Colors.white70,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
                   ),
                 ),
               ),
@@ -158,12 +158,12 @@ class FandomGalleryScreen extends StatelessWidget {
     final galleryService = FandomGalleryService();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0E2D),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0F0E2D),
-        foregroundColor: Colors.white,
-        title: const Text('Gallery'),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
+        title: Text('Gallery'),
       ),
 
       body: StreamBuilder(
@@ -172,17 +172,17 @@ class FandomGalleryScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
 
           if (snapshot.hasError) {
-            return const Center(
+            return Center(
               child: Text(
                 'Something went wrong',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
             );
@@ -191,11 +191,11 @@ class FandomGalleryScreen extends StatelessWidget {
           final gallery = snapshot.data ?? [];
 
           if (gallery.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'No images available',
                 style: TextStyle(
-                  color: Colors.white70,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                   fontSize: 16,
                 ),
               ),
@@ -239,10 +239,10 @@ class FandomGalleryScreen extends StatelessWidget {
                         stackTrace,
                         ) {
                       return Container(
-                        color: const Color(0xFF292745),
-                        child: const Icon(
+                        color: Theme.of(context).cardColor,
+                        child: Icon(
                           Icons.image_not_supported_outlined,
-                          color: Colors.white38,
+                          color: Theme.of(context).disabledColor,
                           size: 40,
                         ),
                       );

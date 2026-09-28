@@ -82,13 +82,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => context.pop(),
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_rounded,
           ),
         ),
         title: Text(
           'Event Calendar',
-          style: AppTextStyles.titleLarge,
+          style: AppTextStyles.titleLarge.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
         ),
       ),
 
@@ -98,7 +98,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           // Firebase is still loading.
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -125,7 +125,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               // Month selector.
               _buildDateSelector(),
 
-              const SizedBox(
+              SizedBox(
                 height: AppConstants.spaceLg,
               ),
 
@@ -133,10 +133,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 DateFormat(
                   'EEEE, MMMM d',
                 ).format(selectedDate),
-                style: AppTextStyles.titleLarge,
+                style: AppTextStyles.titleLarge.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
 
               // Events for the selected day.
               if (selectedEvents.isEmpty)
@@ -202,14 +202,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.primary
-                    : AppColors.surfaceDark,
+                    : Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(
                   AppConstants.radiusMd,
                 ),
                 border: Border.all(
                   color: isSelected
                       ? AppColors.primary
-                      : AppColors.borderDark,
+                      : Theme.of(context).dividerColor,
                 ),
               ),
               child: Column(
@@ -221,16 +221,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     style: AppTextStyles.bodySmall.copyWith(
                       color: isSelected
                           ? Colors.white
-                          : AppColors.textSecondaryDark,
+                          : Theme.of(context).textTheme.bodyMedium?.color,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Text(
                     '${date.day}',
                     style: AppTextStyles.titleLarge.copyWith(
                       color: isSelected
                           ? Colors.white
-                          : AppColors.textPrimaryDark,
+                          : Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                 ],
@@ -249,30 +249,30 @@ class _CalendarScreenState extends State<CalendarScreen> {
         AppConstants.spaceLg,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surfaceDark,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(
           AppConstants.radiusLg,
         ),
         border: Border.all(
-          color: AppColors.borderDark,
+          color: Theme.of(context).dividerColor,
         ),
       ),
       child: Column(
         children: [
-          const Icon(
+          Icon(
             Icons.event_busy_outlined,
             size: 44,
-            color: AppColors.textSecondaryDark,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Text(
             'No events on this date',
-            style: AppTextStyles.titleMedium,
+            style: AppTextStyles.titleMedium.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Text(
             'Try selecting another date.',
-            style: AppTextStyles.bodySmall,
+            style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
             textAlign: TextAlign.center,
           ),
         ],
@@ -291,29 +291,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
           mainAxisAlignment:
           MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.cloud_off_outlined,
               size: 48,
               color: AppColors.error,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               'Unable to load events',
-              style: AppTextStyles.titleLarge,
+              style: AppTextStyles.titleLarge.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Text(
               'Something went wrong while retrieving events.',
-              style: AppTextStyles.bodyMedium,
+              style: AppTextStyles.bodyMedium.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             ElevatedButton.icon(
               onPressed: _retry,
-              icon: const Icon(
+              icon: Icon(
                 Icons.refresh_rounded,
               ),
-              label: const Text('Try Again'),
+              label: Text('Try Again'),
             ),
           ],
         ),

@@ -30,7 +30,7 @@ class _DiscussionDetailsScreenState extends State<DiscussionDetailsScreen> {
     }
 
     try {
-      final postId = widget.post['id'];
+      final postId = widget.post['id'] as String? ?? '';
       
       // Add comment to subcollection
       await FirebaseFirestore.instance.collection('posts').doc(postId).collection('comments').add({
@@ -61,46 +61,46 @@ class _DiscussionDetailsScreenState extends State<DiscussionDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F111A), // Dark background matching app theme
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor, // Dark background matching app theme
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0F111A),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Theme.of(context).textTheme.bodyLarge?.color),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Discussion Details', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: Text('Discussion Details', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold)),
       ),
       body: Column(
         children: [
           _buildOriginalPost(),
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(16.0),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text('Comments', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+              child: Text('Comments', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 18, fontWeight: FontWeight.bold)),
             ),
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('posts')
-                  .doc(widget.post['id'])
+                  .doc(widget.post['id'] as String? ?? '')
                   .collection('comments')
                   .orderBy('createdAt', descending: false)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return const Center(child: Text('Error loading comments', style: TextStyle(color: Colors.white)));
+                  return Center(child: Text('Error loading comments', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color)));
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator());
                 }
 
                 final docs = snapshot.data?.docs ?? [];
                 if (docs.isEmpty) {
-                  return const Center(child: Text('No comments yet. Be the first!', style: TextStyle(color: Colors.white70)));
+                  return Center(child: Text('No comments yet. Be the first!', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)));
                 }
 
                 return ListView.builder(
@@ -109,10 +109,10 @@ class _DiscussionDetailsScreenState extends State<DiscussionDetailsScreen> {
                   itemBuilder: (context, index) {
                     final data = docs[index].data() as Map<String, dynamic>;
                     return _buildComment(
-                      username: data['username'] ?? 'User',
-                      avatar: data['avatar'] ?? 'https://ui-avatars.com/api/?name=User&background=random',
-                      time: 'Just now', // Ideally formatted from timestamp
-                      content: data['content'] ?? '',
+                      username: data['username'] as String? ?? 'User',
+                      avatar: data['avatar'] as String? ?? 'https://ui-avatars.com/api/?name=User&background=random',
+                      time: 'Just now',
+                      content: data['content'] as String? ?? '',
                     );
                   },
                 );
@@ -130,7 +130,7 @@ class _DiscussionDetailsScreenState extends State<DiscussionDetailsScreen> {
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1D2D),
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -140,30 +140,30 @@ class _DiscussionDetailsScreenState extends State<DiscussionDetailsScreen> {
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundImage: NetworkImage(widget.post['avatar']),
+                backgroundImage: NetworkImage(widget.post['avatar'] as String? ?? ''),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.post['username'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                  Text(widget.post['time'], style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                  Text(widget.post['username'] as String? ?? '', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold)),
+                  Text(widget.post['time'] as String? ?? '', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontSize: 12)),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          Text(widget.post['content'], style: const TextStyle(color: Colors.white, fontSize: 16)),
-          const SizedBox(height: 16),
+          SizedBox(height: 12),
+          Text(widget.post['content'] as String? ?? '', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 16)),
+          SizedBox(height: 16),
           Row(
             children: [
-              const Icon(Icons.favorite, color: Color(0xFF6C4DFF), size: 20),
-              const SizedBox(width: 4),
-              Text('${widget.post['likes']}', style: const TextStyle(color: Colors.white)),
-              const SizedBox(width: 16),
-              const Icon(Icons.chat_bubble_outline, color: Colors.white54, size: 20),
-              const SizedBox(width: 4),
-              Text('${widget.post['comments']}', style: const TextStyle(color: Colors.white54)),
+              Icon(Icons.favorite, color: Color(0xFF6C4DFF), size: 20),
+              SizedBox(width: 4),
+              Text('${widget.post['likes']}', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color)),
+              SizedBox(width: 16),
+              Icon(Icons.chat_bubble_outline, color: Theme.of(context).textTheme.bodyMedium?.color, size: 20),
+              SizedBox(width: 4),
+              Text('${widget.post['comments']}', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)),
             ],
           ),
         ],
@@ -176,7 +176,7 @@ class _DiscussionDetailsScreenState extends State<DiscussionDetailsScreen> {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1D2D),
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -188,19 +188,19 @@ class _DiscussionDetailsScreenState extends State<DiscussionDetailsScreen> {
                 radius: 16,
                 backgroundImage: NetworkImage(avatar),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(username, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
-                  Text(time, style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                  Text(username, style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold, fontSize: 14)),
+                  Text(time, style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontSize: 12)),
                 ],
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Text(content, style: const TextStyle(color: Colors.white, fontSize: 14)),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
+          Text(content, style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 14)),
+          SizedBox(height: 8),
           const Align(
             alignment: Alignment.centerRight,
             child: Text('Reply', style: TextStyle(color: Color(0xFF6C4DFF), fontWeight: FontWeight.bold)),
@@ -213,8 +213,8 @@ class _DiscussionDetailsScreenState extends State<DiscussionDetailsScreen> {
   Widget _buildCommentInput() {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: Color(0xFF1A1D2D),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
       ),
       child: Row(
         children: [
@@ -222,12 +222,12 @@ class _DiscussionDetailsScreenState extends State<DiscussionDetailsScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: const Color(0xFF0F111A),
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(24),
               ),
               child: TextField(
                 controller: _commentController,
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Add a comment...',
@@ -236,13 +236,13 @@ class _DiscussionDetailsScreenState extends State<DiscussionDetailsScreen> {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           CircleAvatar(
             backgroundColor: const Color(0xFF6C4DFF),
             child: IconButton(
               icon: _isPosting 
-                ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                : const Icon(Icons.send, color: Colors.white, size: 20),
+                ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Theme.of(context).textTheme.bodyLarge?.color, strokeWidth: 2))
+                : Icon(Icons.send, color: Theme.of(context).textTheme.bodyLarge?.color, size: 20),
               onPressed: _isPosting ? null : _postComment,
             ),
           ),

@@ -43,7 +43,7 @@ class _VideocardState extends State<Videocard> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF17163D),
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(14),
       ),
       clipBehavior: Clip.antiAlias,
@@ -74,13 +74,13 @@ class _VideocardState extends State<Videocard> {
                     _controller.value.isPlaying
                         ? Icons.pause_circle
                         : Icons.play_circle,
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                     size: 60,
                   ),
                 ),
               ],
             )
-                : const Center(
+                : Center(
               child: CircularProgressIndicator(),
             ),
           ),
@@ -89,8 +89,8 @@ class _VideocardState extends State<Videocard> {
             padding: const EdgeInsets.all(15),
             child: Text(
               widget.video.title,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
