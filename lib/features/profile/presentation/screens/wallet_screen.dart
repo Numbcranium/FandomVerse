@@ -6,6 +6,85 @@ import '../../../../../app/theme/merchandise_colors.dart';
 import '../../../../core/services/stripe_service.dart';
 import '../widgets/stripe_payment_sheet.dart';
 import '../widgets/withdraw_payout_sheet.dart';
+import '../widgets/stripe_save_card_sheet.dart';
+
+class SavedCard {
+  final String id;
+  final String last4;
+  final String brand;
+  final String expMonth;
+  final String expYear;
+  final String cardHolder;
+
+  SavedCard({
+    required this.id,
+    required this.last4,
+    required this.brand,
+    required this.expMonth,
+    required this.expYear,
+    required this.cardHolder,
+  });
+
+  factory SavedCard.fromMap(Map<String, dynamic> map) {
+    return SavedCard(
+      id: map['id'] ?? '',
+      last4: map['last4'] ?? '',
+      brand: map['brand'] ?? '',
+      expMonth: map['expMonth'] ?? '',
+      expYear: map['expYear'] ?? '',
+      cardHolder: map['cardHolder'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'last4': last4,
+      'brand': brand,
+      'expMonth': expMonth,
+      'expYear': expYear,
+      'cardHolder': cardHolder,
+    };
+  }
+}
+
+class WalletTransaction {
+  final String id;
+  final String title;
+  final String type; // 'deposit', 'withdraw', 'purchase'
+  final double amount;
+  final DateTime date;
+
+  WalletTransaction({
+    required this.id,
+    required this.title,
+    required this.type,
+    required this.amount,
+    required this.date,
+  });
+
+  factory WalletTransaction.fromMap(Map<String, dynamic> map) {
+    return WalletTransaction(
+      id: map['id'] ?? '',
+      title: map['title'] ?? '',
+      type: map['type'] ?? 'purchase',
+      amount: (map['amount'] as num?)?.toDouble() ?? 0.0,
+      date: map['date'] != null
+          ? (map['date'] as Timestamp).toDate()
+          : DateTime.now(),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'type': type,
+      'amount': amount,
+      'date': Timestamp.fromDate(date),
+    };
+  }
+}
 
 class WalletService {
   WalletService._();
@@ -21,9 +100,11 @@ class WalletService {
   static const double initialBalance = 100000.0;
 
   double _balance = 0.0;
+  List<SavedCard> _savedCards = [];
   bool _initialized = false;
 
   double get balance => _balance;
+  List<SavedCard> get savedCards => _savedCards;
 
   String get _userId {
     final user = _auth.currentUser;
@@ -73,6 +154,12 @@ class WalletService {
           SetOptions(merge: true),
         );
       }
+
+      if (data?['savedCards'] is List) {
+        _savedCards = (data!['savedCards'] as List)
+            .map((e) => SavedCard.fromMap(Map<String, dynamic>.from(e)))
+            .toList();
+      }
     }
 
     _initialized = true;
@@ -110,7 +197,72 @@ class WalletService {
         SetOptions(merge: true),
       );
     }
+
+    if (data?['savedCards'] is List) {
+      _savedCards = (data!['savedCards'] as List)
+          .map((e) => SavedCard.fromMap(Map<String, dynamic>.from(e)))
+          .toList();
+    }
   }
+
+  /// Save a new card to Firebase.
+  Future<bool> saveCard(SavedCard card) async {
+    try {
+      _savedCards.add(card);
+      await _userDocument.set(
+        {
+          'savedCards': _savedCards.map((c) => c.toMap()).toList(),
+        },
+        SetOptions(merge: true),
+      );
+      return true;
+    } catch (e) {
+      _savedCards.removeWhere((c) => c.id == card.id);
+      return false;
+    }
+  }
+
+  /// Remove a saved card from Firebase.
+  Future<bool> removeCard(String cardId) async {
+    try {
+      final cardToRemove = _savedCards.firstWhere((c) => c.id == cardId);
+      _savedCards.removeWhere((c) => c.id == cardId);
+      
+      await _userDocument.set(
+        {
+          'savedCards': _savedCards.map((c) => c.toMap()).toList(),
+        },
+        SetOptions(merge: true),
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> _logTransaction(String title, String type, double amount) async {
+    try {
+      final id = _firestore.collection('users').doc().id;
+      final tx = WalletTransaction(
+        id: id,
+        title: title,
+        type: type,
+        amount: amount,
+        date: DateTime.now(),
+      );
+      await _userDocument.collection('transactions').doc(id).set(tx.toMap());
+    } catch (_) {}
+  }
+
+  Future<List<WalletTransaction>> getTransactions() async {
+    try {
+      final query = await _userDocument.collection('transactions').orderBy('date', descending: true).limit(20).get();
+      return query.docs.map((doc) => WalletTransaction.fromMap(doc.data())).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
 
   /// Add money to the Firebase wallet.
   Future<bool> addMoney(double amount) async {
@@ -143,6 +295,8 @@ class WalletService {
 
         _balance = newBalance;
       });
+      
+      await _logTransaction('Wallet Top-Up', 'deposit', amount);
 
       return true;
     } catch (e) {
@@ -184,6 +338,8 @@ class WalletService {
 
         _balance = newBalance;
       });
+
+      await _logTransaction('Withdrawal to Bank', 'withdraw', amount);
 
       return true;
     } catch (e) {
@@ -229,6 +385,8 @@ class WalletService {
         _balance = newBalance;
       });
 
+      await _logTransaction('Merchandise Payment', 'purchase', amount);
+
       return true;
     } catch (e) {
       return false;
@@ -258,6 +416,7 @@ class _WalletScreenState extends State<WalletScreen> {
   final WalletService _wallet = WalletService.instance;
 
   bool _loading = true;
+  List<WalletTransaction>? _transactions;
 
   @override
   void initState() {
@@ -265,10 +424,20 @@ class _WalletScreenState extends State<WalletScreen> {
     _initializeWallet();
   }
 
+  Future<void> _fetchTransactions() async {
+    final txs = await _wallet.getTransactions();
+    if (mounted) {
+      setState(() {
+        _transactions = txs;
+      });
+    }
+  }
+
   Future<void> _initializeWallet() async {
     try {
       await StripeService.instance.initialize();
       await _wallet.init();
+      await _fetchTransactions();
     } catch (e) {
       if (!mounted) {
         return;
@@ -513,6 +682,10 @@ class _WalletScreenState extends State<WalletScreen> {
 
       if (!mounted) return;
 
+      if (success) {
+        await _fetchTransactions();
+      }
+
       setState(() {});
 
       if (success) {
@@ -564,6 +737,11 @@ class _WalletScreenState extends State<WalletScreen> {
     } else if (paymentMethod == 'demo') {
       final success = await _wallet.addMoney(amount);
       if (!mounted) return;
+      
+      if (success) {
+        await _fetchTransactions();
+      }
+      
       setState(() {});
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -614,6 +792,10 @@ class _WalletScreenState extends State<WalletScreen> {
 
     if (!mounted) {
       return;
+    }
+
+    if (success) {
+      await _fetchTransactions();
     }
 
     setState(() {});
@@ -683,6 +865,34 @@ class _WalletScreenState extends State<WalletScreen> {
         const SnackBar(
           content: Text('Unable to complete withdrawal.'),
           backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+  Future<void> _addCard() async {
+    final card = await StripeSaveCardSheet.show(context: context);
+    if (card != null && mounted) {
+      final success = await _wallet.saveCard(card);
+      if (mounted) {
+        setState(() {});
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(success ? 'Card saved successfully!' : 'Failed to save card.'),
+            backgroundColor: success ? MerchColors.primary : Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _removeCard(SavedCard card) async {
+    final success = await _wallet.removeCard(card.id);
+    if (mounted) {
+      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(success ? 'Card removed.' : 'Failed to remove card.'),
+          backgroundColor: success ? MerchColors.primary : Colors.red,
         ),
       );
     }
@@ -886,6 +1096,210 @@ class _WalletScreenState extends State<WalletScreen> {
                 ],
               ),
             ),
+            
+            SizedBox(height: 32),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Saved Cards',
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                TextButton.icon(
+                  onPressed: _addCard,
+                  icon: const Icon(Icons.add, size: 18),
+                  label: const Text('Add Card', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+            
+            SizedBox(height: 12),
+            
+            if (_wallet.savedCards.isEmpty)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Theme.of(context).dividerColor, style: BorderStyle.solid),
+                ),
+                child: Column(
+                  children: [
+                    Icon(Icons.credit_card_off, color: Theme.of(context).textTheme.bodyMedium?.color, size: 32),
+                    const SizedBox(height: 12),
+                    Text(
+                      'No saved cards',
+                      style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Save a card for faster checkout',
+                      style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontSize: 13),
+                    ),
+                  ],
+                ),
+              )
+            else
+              ..._wallet.savedCards.map((card) {
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Theme.of(context).dividerColor),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: MerchColors.primary.withAlpha(25),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          card.brand == 'Visa' ? Icons.credit_card : Icons.payment,
+                          color: MerchColors.primary,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${card.brand} •••• ${card.last4}',
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyLarge?.color,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              'Expires ${card.expMonth}/${card.expYear}',
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyMedium?.color,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => _removeCard(card),
+                        icon: const Icon(Icons.delete_outline, color: Colors.red),
+                        tooltip: 'Remove Card',
+                      ),
+                    ],
+                  ),
+                );
+              }),
+              
+            SizedBox(height: 32),
+            
+            Text(
+              'Transaction History',
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge?.color,
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            
+            SizedBox(height: 12),
+            
+            if (_transactions == null)
+              Center(child: CircularProgressIndicator(color: MerchColors.primary))
+            else if (_transactions!.isEmpty)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Theme.of(context).dividerColor, style: BorderStyle.solid),
+                ),
+                child: Column(
+                  children: [
+                    Icon(Icons.history, color: Theme.of(context).textTheme.bodyMedium?.color, size: 32),
+                    const SizedBox(height: 12),
+                    Text(
+                      'No transactions yet',
+                      style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
+                    ),
+                  ],
+                ),
+              )
+            else
+              ..._transactions!.map((tx) {
+                final isPositive = tx.type == 'deposit';
+                final icon = tx.type == 'deposit' 
+                    ? Icons.arrow_downward 
+                    : (tx.type == 'withdraw' ? Icons.account_balance : Icons.shopping_bag);
+                final color = tx.type == 'deposit' 
+                    ? MerchColors.success 
+                    : (tx.type == 'withdraw' ? Colors.orange : MerchColors.primary);
+                    
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Theme.of(context).dividerColor),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: color.withAlpha(30),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(icon, color: color, size: 20),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              tx.title,
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyLarge?.color,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${tx.date.day}/${tx.date.month}/${tx.date.year} • ${tx.date.hour}:${tx.date.minute.toString().padLeft(2, '0')}',
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyMedium?.color,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        '${isPositive ? '+' : '-'}₦${tx.amount.toStringAsFixed(0)}',
+                        style: TextStyle(
+                          color: isPositive ? MerchColors.success : Theme.of(context).textTheme.bodyLarge?.color,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
           ],
         ),
       ),

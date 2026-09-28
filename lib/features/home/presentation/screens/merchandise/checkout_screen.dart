@@ -8,8 +8,11 @@ import '../../../../../widgets/merchandise/price_widget.dart';
 import '../../../../auth/data/repositories/merchandise/cart_repository.dart';
 import '../../../../auth/data/repositories/merchandise/order_repository.dart';
 import '../../../../profile/presentation/screens/wallet_screen.dart';
+import '../../../../profile/presentation/widgets/stripe_payment_sheet.dart';
 import '../../widgets/merchandise/price_widget.dart';
 import 'order_details_screen.dart';
+
+enum PaymentMethod { wallet, savedCard, newCard }
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({
@@ -29,6 +32,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   late final WalletService _walletService;
 
   bool _isPlacingOrder = false;
+  bool _isLoadingWallet = true;
+  PaymentMethod _paymentMethod = PaymentMethod.wallet;
+  SavedCard? _selectedSavedCard;
 
   String get userId {
     return FirebaseAuth.instance.currentUser?.uid ?? 'guest';
@@ -62,6 +68,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
 
     _walletService = WalletService.instance;
+    _initializeWallet();
+  }
+
+  Future<void> _initializeWallet() async {
+    await _walletService.init();
+    if (mounted) {
+      setState(() {
+        _isLoadingWallet = false;
+        if (_walletService.savedCards.isNotEmpty) {
+           _paymentMethod = PaymentMethod.savedCard;
+           _selectedSavedCard = _walletService.savedCards.first;
+        }
+      });
+    }
   }
 
   Future<void> _placeOrder() async {
@@ -74,61 +94,66 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     });
 
     try {
-      // Make sure the wallet is initialized.
-      await _walletService.init();
+      if (_paymentMethod == PaymentMethod.wallet) {
+        // Get the latest wallet balance from Firestore.
+        await _walletService.refresh();
 
-      // Get the latest wallet balance from Firestore.
-      await _walletService.refresh();
+        // Check whether the wallet has enough money.
+        if (_walletService.balance < total) {
+          if (!mounted) return;
 
-      // Check whether the wallet has enough money.
-      if (_walletService.balance < total) {
-        if (!mounted) {
+          final balance = _walletService.balance;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Insufficient wallet balance. '
+                    'You need ₦${total.toStringAsFixed(2)}, '
+                    'but your wallet has ₦${balance.toStringAsFixed(2)}.',
+              ),
+              action: SnackBarAction(
+                label: 'Wallet',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (_) => const WalletScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+          setState(() => _isPlacingOrder = false);
           return;
         }
 
-        final balance = _walletService.balance;
+        // Deduct the money from the Firebase wallet.
+        final paymentSuccessful = await _walletService.pay(total);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Insufficient wallet balance. '
-                  'You need ₦${total.toStringAsFixed(2)}, '
-                  'but your wallet has ₦${balance.toStringAsFixed(2)}.',
+        if (!paymentSuccessful) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Payment failed. Please check your wallet and try again.'),
             ),
-            action: SnackBarAction(
-              label: 'Wallet',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (_) => const WalletScreen(),
-                  ),
-                );
-              },
-            ),
-          ),
-        );
-
-        return;
-      }
-
-      // Deduct the money from the Firebase wallet.
-      final paymentSuccessful = await _walletService.pay(total);
-
-      if (!paymentSuccessful) {
-        if (!mounted) {
+          );
+          setState(() => _isPlacingOrder = false);
           return;
         }
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Payment failed. Please check your wallet and try again.',
-            ),
-          ),
+      } else if (_paymentMethod == PaymentMethod.savedCard) {
+        // Simulate processing saved card
+        await Future.delayed(const Duration(seconds: 2));
+      } else if (_paymentMethod == PaymentMethod.newCard) {
+        final result = await StripePaymentSheet.show(
+          context: context,
+          amount: total,
         );
-
-        return;
+        if (result == null || !result.success) {
+          if (mounted) {
+            setState(() => _isPlacingOrder = false);
+          }
+          return;
+        }
       }
 
       // Create the order after successful payment.
@@ -277,49 +302,156 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
             SizedBox(height: 12),
 
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: MerchColors.primary,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.account_balance_wallet_outlined,
-                    color: MerchColors.primaryLight,
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      'Pay from Wallet',
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+            _isLoadingWallet 
+              ? Center(child: CircularProgressIndicator(color: MerchColors.primary))
+              : Column(
+                  children: [
+                    if (_walletService.savedCards.isNotEmpty)
+                      ..._walletService.savedCards.map((card) {
+                        final isSelected = _paymentMethod == PaymentMethod.savedCard && _selectedSavedCard?.id == card.id;
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _paymentMethod = PaymentMethod.savedCard;
+                              _selectedSavedCard = card;
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: isSelected ? MerchColors.primary : Theme.of(context).dividerColor,
+                                width: isSelected ? 1.5 : 1.0,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: MerchColors.primary.withAlpha(25),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Icon(
+                                    card.brand == 'Visa' ? Icons.credit_card : Icons.payment,
+                                    color: MerchColors.primary,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Text(
+                                    '${card.brand} •••• ${card.last4}',
+                                    style: TextStyle(
+                                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                if (isSelected)
+                                  Icon(Icons.check_circle, color: MerchColors.primary)
+                                else
+                                  Icon(Icons.circle_outlined, color: Theme.of(context).dividerColor),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                      
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _paymentMethod = PaymentMethod.wallet;
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: _paymentMethod == PaymentMethod.wallet ? MerchColors.primary : Theme.of(context).dividerColor,
+                            width: _paymentMethod == PaymentMethod.wallet ? 1.5 : 1.0,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.account_balance_wallet_outlined, color: MerchColors.primaryLight),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                'Pay from Wallet',
+                                style: TextStyle(
+                                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            if (_paymentMethod == PaymentMethod.wallet)
+                              Icon(Icons.check_circle, color: MerchColors.primary)
+                            else
+                              Icon(Icons.circle_outlined, color: Theme.of(context).dividerColor),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Icon(
-                    Icons.check_circle,
-                    color: MerchColors.primary,
-                  ),
-                ],
-              ),
-            ),
+                    
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _paymentMethod = PaymentMethod.newCard;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: _paymentMethod == PaymentMethod.newCard ? MerchColors.primary : Theme.of(context).dividerColor,
+                            width: _paymentMethod == PaymentMethod.newCard ? 1.5 : 1.0,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.add_card, color: MerchColors.primaryLight),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                'Pay with New Card',
+                                style: TextStyle(
+                                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            if (_paymentMethod == PaymentMethod.newCard)
+                              Icon(Icons.check_circle, color: MerchColors.primary)
+                            else
+                              Icon(Icons.circle_outlined, color: Theme.of(context).dividerColor),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
 
             SizedBox(height: 12),
 
-            Text(
-              'Your wallet will be charged when you place the order.',
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyMedium?.color,
-                fontSize: 13,
+            if (_paymentMethod == PaymentMethod.wallet)
+              Text(
+                'Your wallet will be charged when you place the order.',
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                  fontSize: 13,
+                ),
               ),
-            ),
 
             SizedBox(height: 32),
 

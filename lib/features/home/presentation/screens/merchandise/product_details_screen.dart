@@ -198,12 +198,7 @@ class _ProductDetailsScreenState
         ),
       );
 
-      Navigator.push(
-        context,
-        MaterialPageRoute<void>(
-          builder: (_) => const CartScreen(),
-        ),
-      );
+
     } catch (error) {
       if (!mounted) {
         return;

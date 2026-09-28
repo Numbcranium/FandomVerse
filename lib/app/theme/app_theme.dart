@@ -205,6 +205,9 @@ class AppTheme {
         fillColor: AppColors.surface,
         border: inputBorder,
         enabledBorder: inputBorder,
+        labelStyle: AppTextStyles.bodyMedium.copyWith(
+          color: AppColors.textSecondary,
+        ),
         hintStyle: AppTextStyles.bodyMedium.copyWith(
           color: AppColors.textDisabled,
         ),
