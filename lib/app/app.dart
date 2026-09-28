@@ -25,6 +25,9 @@ class App extends StatelessWidget {
       builder: (context, themeMode) {
         return MaterialApp.router(
           title: AppConstants.appName,
+          scrollBehavior: const MaterialScrollBehavior().copyWith(
+            scrollbars: false,
+          ),
           builder: (context, child) {
             return _GlobalFabOverlay(
               router: router,

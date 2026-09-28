@@ -379,7 +379,7 @@ class _EventsScreenState extends State<EventsScreen> {
           AppConstants.spaceLg,
           AppConstants.spaceLg,
           AppConstants.spaceLg,
-          AppConstants.spaceXxl,
+          80,
         ),
 
         itemCount: filteredEvents.length,

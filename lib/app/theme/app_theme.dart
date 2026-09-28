@@ -153,6 +153,12 @@ class AppTheme {
         titleTextStyle: AppTextStyles.titleLarge,
         contentTextStyle: AppTextStyles.bodyMedium,
       ),
+      scrollbarTheme: const ScrollbarThemeData(
+        thumbVisibility: WidgetStatePropertyAll(false),
+        trackVisibility: WidgetStatePropertyAll(false),
+        thickness: WidgetStatePropertyAll(0.0),
+        interactive: false,
+      ),
     );
   }
 
@@ -213,6 +219,12 @@ class AppTheme {
         contentTextStyle: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
       ),
       dialogTheme: base.dialogTheme.copyWith(backgroundColor: AppColors.surface),
+      scrollbarTheme: const ScrollbarThemeData(
+        thumbVisibility: WidgetStatePropertyAll(false),
+        trackVisibility: WidgetStatePropertyAll(false),
+        thickness: WidgetStatePropertyAll(0.0),
+        interactive: false,
+      ),
     );
   }
 }

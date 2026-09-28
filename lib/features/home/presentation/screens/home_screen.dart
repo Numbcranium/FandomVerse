@@ -105,6 +105,7 @@ class HomeScreen extends StatelessWidget {
               SizedBox(height: AppConstants.spaceLg),
               Expanded(
                 child: ListView(
+                  padding: const EdgeInsets.only(bottom: 80),
                   children: [
                     // search area for a screen with a search bar
                     GestureDetector(
