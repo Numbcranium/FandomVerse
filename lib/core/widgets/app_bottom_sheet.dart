@@ -46,7 +46,7 @@ class AppBottomSheet {
               ),
               if (title != null) ...[
                 Text(title, style: Theme.of(context).textTheme.titleLarge),
-                const SizedBox(height: AppConstants.spaceMd),
+                SizedBox(height: AppConstants.spaceMd),
               ],
               child,
             ],

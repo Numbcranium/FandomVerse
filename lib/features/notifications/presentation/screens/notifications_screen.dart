@@ -52,13 +52,13 @@ class _NotificationsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: Text('Notifications'),
         actions: [
           TextButton(
             onPressed: () => context
                 .read<NotificationBloc>()
                 .add(const NotificationMarkAllAsReadRequested()),
-            child: const Text('Mark all read'),
+            child: Text('Mark all read'),
           ),
         ],
       ),
@@ -89,7 +89,7 @@ class _NotificationsView extends StatelessWidget {
                 return ListView.separated(
                   padding: const EdgeInsets.all(AppConstants.spaceMd),
                   itemCount: state.notifications.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: AppConstants.spaceSm),
+                  separatorBuilder: (_, __) => SizedBox(height: AppConstants.spaceSm),
                   itemBuilder: (context, index) {
                     final notification = state.notifications[index];
                     return _NotificationTile(notification: notification);
@@ -124,7 +124,7 @@ class _NotificationTile extends StatelessWidget {
               width: 8,
               height: 8,
               margin: const EdgeInsets.only(top: 6, right: AppConstants.spaceSm),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.primary,
                 shape: BoxShape.circle,
               ),
@@ -139,9 +139,9 @@ class _NotificationTile extends StatelessWidget {
                         fontWeight: notification.isRead ? FontWeight.w500 : FontWeight.w700,
                       ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(notification.message, style: Theme.of(context).textTheme.bodyMedium),
-                const SizedBox(height: 6),
+                SizedBox(height: 6),
                 Text(
                   Formatters.relativeTime(notification.createdAt),
                   style: AppTextStyles.caption,

@@ -44,6 +44,9 @@ class AppTheme {
       brightness: Brightness.dark,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.backgroundDark,
+      cardColor: AppColors.surfaceDark,
+      dialogBackgroundColor: AppColors.surfaceDarkElevated,
+      iconTheme: const IconThemeData(color: AppColors.textPrimaryDark),
       textTheme: TextTheme(
         displayLarge: AppTextStyles.displayLarge,
         headlineMedium: AppTextStyles.headlineMedium,
@@ -150,6 +153,12 @@ class AppTheme {
         titleTextStyle: AppTextStyles.titleLarge,
         contentTextStyle: AppTextStyles.bodyMedium,
       ),
+      scrollbarTheme: const ScrollbarThemeData(
+        thumbVisibility: WidgetStatePropertyAll(false),
+        trackVisibility: WidgetStatePropertyAll(false),
+        thickness: WidgetStatePropertyAll(0.0),
+        interactive: false,
+      ),
     );
   }
 
@@ -172,6 +181,9 @@ class AppTheme {
       brightness: Brightness.light,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: AppColors.background,
+      cardColor: AppColors.surface,
+      dialogBackgroundColor: AppColors.surface,
+      iconTheme: const IconThemeData(color: AppColors.textPrimary),
       textTheme: base.textTheme.apply(
         bodyColor: AppColors.textPrimary,
         displayColor: AppColors.textPrimary,
@@ -180,6 +192,7 @@ class AppTheme {
         backgroundColor: AppColors.surface,
         foregroundColor: AppColors.textPrimary,
         iconTheme: const IconThemeData(color: AppColors.textPrimary),
+        titleTextStyle: AppTextStyles.titleLarge.copyWith(color: AppColors.textPrimary),
       ),
       cardTheme: base.cardTheme.copyWith(
         color: AppColors.surface,
@@ -205,7 +218,17 @@ class AppTheme {
         backgroundColor: AppColors.textPrimary,
         contentTextStyle: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
       ),
-      dialogTheme: base.dialogTheme.copyWith(backgroundColor: AppColors.surface),
+      dialogTheme: base.dialogTheme.copyWith(
+        backgroundColor: AppColors.surface,
+        titleTextStyle: AppTextStyles.titleLarge.copyWith(color: AppColors.textPrimary),
+        contentTextStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+      ),
+      scrollbarTheme: const ScrollbarThemeData(
+        thumbVisibility: WidgetStatePropertyAll(false),
+        trackVisibility: WidgetStatePropertyAll(false),
+        thickness: WidgetStatePropertyAll(0.0),
+        interactive: false,
+      ),
     );
   }
 }

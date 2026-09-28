@@ -4,12 +4,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
 import 'app/router/app_router.dart';
+import 'app/theme/theme_cubit.dart';
 import 'core/constants/app_constants.dart';
 import 'features/auth/data/datasources/auth_remote_datasource.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'firebase/firebase_service.dart';
+
+
+
+
+import 'models/user_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,12 +32,16 @@ Future<void> main() async {
     // so a value the onboarding screen writes mid-session is respected.
     isFirstLaunch: () => !(prefs.getBool(AppConstants.prefsFirstLaunchKey) ?? false),
     needsInterestsSelection: () => authBloc.state.user?.selectedFandoms.isEmpty ?? true,
+    isAdmin: () => authBloc.state.user?.role == UserRole.admin,
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
   );
 
   runApp(
-    BlocProvider.value(
-      value: authBloc,
+    MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: authBloc),
+        BlocProvider(create: (_) => ThemeCubit(prefs)),
+      ],
       child: App(router: appRouter.router),
     ),
   );

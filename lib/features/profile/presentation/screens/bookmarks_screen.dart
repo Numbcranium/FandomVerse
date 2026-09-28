@@ -21,7 +21,7 @@ class BookmarksScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Bookmarks')),
+      appBar: AppBar(title: Text('Bookmarks')),
       body: SafeArea(
         child: _mockBookmarks.isEmpty
             ? const AppEmptyState(
@@ -32,14 +32,14 @@ class BookmarksScreen extends StatelessWidget {
             : ListView.separated(
                 padding: const EdgeInsets.all(AppConstants.spaceMd),
                 itemCount: _mockBookmarks.length,
-                separatorBuilder: (_, __) => const SizedBox(height: AppConstants.spaceSm),
+                separatorBuilder: (_, __) => SizedBox(height: AppConstants.spaceSm),
                 itemBuilder: (context, index) {
                   final bookmark = _mockBookmarks[index];
                   return AppCard(
                     child: Row(
                       children: [
                         Icon(bookmark.icon, color: AppColors.primary),
-                        const SizedBox(width: AppConstants.spaceSm),
+                        SizedBox(width: AppConstants.spaceSm),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

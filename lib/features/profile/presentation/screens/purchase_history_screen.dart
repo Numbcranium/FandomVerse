@@ -34,7 +34,7 @@ class PurchaseHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Purchase history')),
+      appBar: AppBar(title: Text('Purchase history')),
       body: SafeArea(
         child: _mockOrders.isEmpty
             ? const AppEmptyState(
@@ -45,7 +45,7 @@ class PurchaseHistoryScreen extends StatelessWidget {
             : ListView.separated(
                 padding: const EdgeInsets.all(AppConstants.spaceMd),
                 itemCount: _mockOrders.length,
-                separatorBuilder: (_, __) => const SizedBox(height: AppConstants.spaceSm),
+                separatorBuilder: (_, __) => SizedBox(height: AppConstants.spaceSm),
                 itemBuilder: (context, index) {
                   final order = _mockOrders[index];
                   return AppCard(
@@ -57,9 +57,9 @@ class PurchaseHistoryScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(order.item, style: Theme.of(context).textTheme.titleMedium),
-                              const SizedBox(height: 4),
+                              SizedBox(height: 4),
                               Text(order.date, style: Theme.of(context).textTheme.bodySmall),
-                              const SizedBox(height: 6),
+                              SizedBox(height: 6),
                               StatusBadge(
                                 label: order.status,
                                 type: _badgeTypeFor(order.status),

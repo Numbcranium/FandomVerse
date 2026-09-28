@@ -29,7 +29,7 @@ class AppButton extends StatelessWidget {
     final canTap = enabled && !isLoading && onPressed != null;
 
     final child = isLoading
-        ? const SizedBox(
+        ? SizedBox(
             height: 22,
             width: 22,
             child: CircularProgressIndicator(
@@ -42,7 +42,7 @@ class AppButton extends StatelessWidget {
             children: [
               if (icon != null) ...[
                 Icon(icon, size: 20),
-                const SizedBox(width: AppConstants.spaceSm),
+                SizedBox(width: AppConstants.spaceSm),
               ],
               Text(text),
             ],
@@ -84,7 +84,7 @@ class AppOutlinedButton extends StatelessWidget {
     final canTap = enabled && !isLoading && onPressed != null;
 
     final child = isLoading
-        ? const SizedBox(
+        ? SizedBox(
             height: 22,
             width: 22,
             child: CircularProgressIndicator(
@@ -97,7 +97,7 @@ class AppOutlinedButton extends StatelessWidget {
             children: [
               if (icon != null) ...[
                 Icon(icon, size: 20),
-                const SizedBox(width: AppConstants.spaceSm),
+                SizedBox(width: AppConstants.spaceSm),
               ],
               Text(text),
             ],
