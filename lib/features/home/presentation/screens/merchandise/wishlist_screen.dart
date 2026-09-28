@@ -155,12 +155,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
         ),
       );
 
-      Navigator.push(
-        context,
-        MaterialPageRoute<void>(
-          builder: (_) => const CartScreen(),
-        ),
-      );
+
     } catch (error) {
       if (!mounted) {
         return;
