@@ -44,8 +44,9 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Flexible(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -55,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           'Your daily fandom breakdown.',
                           style: Theme.of(context).textTheme.bodyMedium,
@@ -65,40 +66,47 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () => context.go(RouteNames.profile),
-                    child: AppNetworkImage.avatar(
-                      imageUrl: user?.photoUrl,
-                      radius: 20, // Slightly smaller to save space
-                      fallbackText: user?.fullName,
-                    ),
-                  ),
-                  SizedBox(width: AppConstants.spaceSm),
-                  IconButton(
-                    onPressed: () => context.push(RouteNames.community),
-                    icon: Icon(Icons.group),
-                    tooltip: 'Community',
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                  SizedBox(width: AppConstants.spaceMd),
-                  CartBadge(
-                    top: 0,
-                    right: 4,
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CartScreen(),
-                          ),
-                        );
-                      },
-                      icon: Icon(Icons.shopping_cart_outlined),
-                      tooltip: 'Cart',
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
+                  const SizedBox(width: 8),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () => context.push(RouteNames.community),
+                        icon: const Icon(Icons.forum_outlined, size: 24),
+                        tooltip: 'Discussions',
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      ),
+                      const SizedBox(width: 14),
+                      CartBadge(
+                        top: -2,
+                        right: -2,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (_) => const CartScreen(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.shopping_cart_outlined, size: 24),
+                          tooltip: 'Cart',
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      GestureDetector(
+                        onTap: () => context.go(RouteNames.profile),
+                        child: AppNetworkImage.avatar(
+                          imageUrl: user?.photoUrl,
+                          radius: 20,
+                          fallbackText: user?.fullName,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

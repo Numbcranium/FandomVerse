@@ -218,7 +218,11 @@ class AppTheme {
         backgroundColor: AppColors.textPrimary,
         contentTextStyle: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
       ),
-      dialogTheme: base.dialogTheme.copyWith(backgroundColor: AppColors.surface),
+      dialogTheme: base.dialogTheme.copyWith(
+        backgroundColor: AppColors.surface,
+        titleTextStyle: AppTextStyles.titleLarge.copyWith(color: AppColors.textPrimary),
+        contentTextStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+      ),
       scrollbarTheme: const ScrollbarThemeData(
         thumbVisibility: WidgetStatePropertyAll(false),
         trackVisibility: WidgetStatePropertyAll(false),

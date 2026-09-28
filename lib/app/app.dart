@@ -109,7 +109,7 @@ class _GlobalFabOverlayState extends State<_GlobalFabOverlay> {
         widget.child,
         if (_showFab)
           Positioned(
-            left: 16,
+            right: 16,
             bottom: 96,
             child: SafeArea(
               child: FloatingActionButton(

@@ -69,6 +69,7 @@ dependencies:
   latlong2: ^0.10.1
   sqflite_common_ffi: ^2.4.0+3
   qr_flutter: ^4.1.0
+  flutter_stripe: ^14.1.0
 
 dev_dependencies:
   flutter_test:

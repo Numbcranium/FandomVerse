@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../app/theme/merchandise_colors.dart';
+import '../../../../core/services/stripe_service.dart';
+import '../widgets/stripe_payment_sheet.dart';
+import '../widgets/withdraw_payout_sheet.dart';
 
 class WalletService {
   WalletService._();
@@ -264,6 +267,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
   Future<void> _initializeWallet() async {
     try {
+      await StripeService.instance.initialize();
       await _wallet.init();
     } catch (e) {
       if (!mounted) {
@@ -397,39 +401,187 @@ class _WalletScreenState extends State<WalletScreen> {
   }
   Future<void> _addMoney() async {
     final amount = await _showAmountDialog(
-      title: 'Add Money',
-      buttonText: 'Add Money',
+      title: 'Top Up Wallet Balance',
+      buttonText: 'Continue to Payment',
     );
 
     if (!mounted || amount == null) {
       return;
     }
 
-    final success = await _wallet.addMoney(amount);
-
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {});
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          success
-              ? '${_formatMoney(amount)} added to your wallet.'
-              : 'Unable to add money.',
-        ),
-        backgroundColor:
-        success ? MerchColors.primary : Colors.red,
+    // Prompt user to select payment method
+    final paymentMethod = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Theme.of(context).cardColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
+      builder: (ctx) {
+        return Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Select Payment Method',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Choose how you want to add ₦${amount.toStringAsFixed(0)} to your wallet',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(color: MerchColors.primary.withAlpha(80)),
+                ),
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: MerchColors.primary.withAlpha(30),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.credit_card, color: MerchColors.primary),
+                ),
+                title: Text(
+                  'Stripe Card Payment',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                  ),
+                ),
+                subtitle: const Text('Pay securely using Visa, Mastercard, or Amex'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.pop(ctx, 'stripe'),
+              ),
+              const SizedBox(height: 12),
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(color: Theme.of(context).dividerColor),
+                ),
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.amber.withAlpha(30),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.bolt, color: Colors.amber),
+                ),
+                title: Text(
+                  'Instant Demo Credit',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                  ),
+                ),
+                subtitle: const Text('Directly credit balance without card entry'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.pop(ctx, 'demo'),
+              ),
+            ],
+          ),
+        );
+      },
     );
+
+    if (!mounted || paymentMethod == null) return;
+
+    if (paymentMethod == 'stripe') {
+      final stripeResult = await StripePaymentSheet.show(
+        context: context,
+        amount: amount,
+      );
+
+      if (!mounted || stripeResult == null || !stripeResult.success) {
+        return;
+      }
+
+      final success = await _wallet.addMoney(amount);
+
+      if (!mounted) return;
+
+      setState(() {});
+
+      if (success) {
+        showDialog<void>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            backgroundColor: Theme.of(context).cardColor,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            title: const Row(
+              children: [
+                Icon(Icons.check_circle, color: Colors.green, size: 28),
+                SizedBox(width: 10),
+                Text('Payment Successful'),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '₦${amount.toStringAsFixed(0)} has been credited to your wallet via Stripe.',
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
+                ),
+                if (stripeResult.transactionId != null) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: SelectableText(
+                      'Ref: ${stripeResult.transactionId}',
+                      style: const TextStyle(fontSize: 12, fontFamily: 'monospace'),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('OK', style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+            ],
+          ),
+        );
+      }
+    } else if (paymentMethod == 'demo') {
+      final success = await _wallet.addMoney(amount);
+      if (!mounted) return;
+      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            success
+                ? '₦${amount.toStringAsFixed(0)} added to your wallet.'
+                : 'Unable to add money.',
+          ),
+          backgroundColor: success ? MerchColors.primary : Colors.red,
+        ),
+      );
+    }
   }
 
   Future<void> _withdrawMoney() async {
     final amount = await _showAmountDialog(
       title: 'Withdraw Money',
-      buttonText: 'Withdraw',
+      buttonText: 'Continue to Payout',
     );
 
     if (!mounted || amount == null) {
@@ -448,6 +600,16 @@ class _WalletScreenState extends State<WalletScreen> {
       return;
     }
 
+    final payoutResult = await WithdrawPayoutSheet.show(
+      context: context,
+      amount: amount,
+      maxBalance: _wallet.balance,
+    );
+
+    if (!mounted || payoutResult == null || !payoutResult.success) {
+      return;
+    }
+
     final success = await _wallet.withdraw(amount);
 
     if (!mounted) {
@@ -456,17 +618,74 @@ class _WalletScreenState extends State<WalletScreen> {
 
     setState(() {});
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          success
-              ? '${_formatMoney(amount)} withdrawn successfully.'
-              : 'Unable to withdraw money.',
+    if (success) {
+      showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          backgroundColor: Theme.of(context).cardColor,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: const Row(
+            children: [
+              Icon(Icons.check_circle_outline, color: Colors.green, size: 28),
+              SizedBox(width: 10),
+              Text('Withdrawal Processed'),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '₦${amount.toStringAsFixed(2)} has been sent to your bank account.',
+                style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Bank: ${payoutResult.bankName}',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    ),
+                    Text(
+                      'Account: ${payoutResult.accountNumber} (${payoutResult.accountName})',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    if (payoutResult.referenceId != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        'Ref: ${payoutResult.referenceId}',
+                        style: const TextStyle(fontSize: 11, fontFamily: 'monospace', color: Colors.grey),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('OK', style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ],
         ),
-        backgroundColor:
-        success ? MerchColors.primary : Colors.red,
-      ),
-    );
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unable to complete withdrawal.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override

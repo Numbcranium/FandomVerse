@@ -19,7 +19,7 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
   @override
   void initState() {
     super.initState();
-    _model = FirebaseAI.googleAI().generativeModel(model: 'gemini-3.5-flash');
+    _model = FirebaseAI.googleAI().generativeModel(model: 'gemini-3.1-flash-lite');
   }
 
   void _startChat([String? initialPrompt]) {

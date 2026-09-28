@@ -136,30 +136,12 @@ builder: (_) => const CartScreen(),
 },
 icon: Icon(
 Icons.shopping_cart_outlined,
-),
-),
-),
-],
-),
-floatingActionButton: CartBadge(
-  top: -4,
-  right: -4,
-  child: FloatingActionButton(
-    heroTag: 'shopCartFab',
-    backgroundColor: MerchColors.primary,
-    foregroundColor: Colors.white,
-    onPressed: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute<void>(
-          builder: (_) => const CartScreen(),
         ),
-      );
-    },
-    child: Icon(Icons.shopping_cart_outlined),
-  ),
-),
-body: _isLoading
+      ),
+      ),
+      ],
+    ),
+    body: _isLoading
 ? Center(
 child: CircularProgressIndicator(
 color: MerchColors.primary,
