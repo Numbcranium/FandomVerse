@@ -263,40 +263,6 @@ class WalletService {
     }
   }
 
-  /// Add money to the Firebase wallet.
-  Future<bool> saveCard(SavedCard card) async {
-    try {
-      _savedCards.add(card);
-      await _userDocument.set(
-        {
-          'savedCards': _savedCards.map((c) => c.toMap()).toList(),
-        },
-        SetOptions(merge: true),
-      );
-      return true;
-    } catch (e) {
-      _savedCards.removeWhere((c) => c.id == card.id);
-      return false;
-    }
-  }
-
-  /// Remove a saved card from Firebase.
-  Future<bool> removeCard(String cardId) async {
-    try {
-      final cardToRemove = _savedCards.firstWhere((c) => c.id == cardId);
-      _savedCards.removeWhere((c) => c.id == cardId);
-      
-      await _userDocument.set(
-        {
-          'savedCards': _savedCards.map((c) => c.toMap()).toList(),
-        },
-        SetOptions(merge: true),
-      );
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
 
   /// Add money to the Firebase wallet.
   Future<bool> addMoney(double amount) async {
