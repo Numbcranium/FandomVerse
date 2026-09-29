@@ -81,6 +81,7 @@ dev_dependencies:
   # --- Testing helpers (Bloc + mocking) ---
   bloc_test: ^9.1.7
   mocktail: ^1.0.4
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
@@ -93,6 +94,7 @@ flutter:
     - assets/images/homeImages/
     - assets/images/homeSearch/
     - assets/images/quizImage/
+    - assets/images/app_logo.png
 
   # Add more paths here (assets/images/, assets/icons/) once other real
   # assets are added post-SRS.
@@ -103,3 +105,9 @@ flutter:
   #       - asset: assets/fonts/AppFont-Regular.ttf
   #       - asset: assets/fonts/AppFont-Bold.ttf
   #         weight: 700
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/app_logo.png"
+  min_sdk_android: 21

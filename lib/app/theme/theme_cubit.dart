@@ -10,9 +10,8 @@ class ThemeCubit extends Cubit<ThemeMode> {
 
   static ThemeMode _loadThemeMode(SharedPreferences prefs) {
     final savedMode = prefs.getString(_themeKey);
-    // Note: The user requested Light mode as default.
-    if (savedMode == 'dark') return ThemeMode.dark;
-    return ThemeMode.light;
+    if (savedMode == 'light') return ThemeMode.light;
+    return ThemeMode.dark;
   }
 
   void toggleTheme(bool isDark) {
