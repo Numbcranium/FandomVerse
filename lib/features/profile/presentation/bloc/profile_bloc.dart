@@ -32,10 +32,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(state.copyWith(status: ProfileStatus.submitting, errorMessage: null));
     try {
       String? photoUrl = _currentUser.photoUrl;
-      if (event.photoFile != null) {
+      if (event.photoBytes != null && event.photoExtension != null) {
         photoUrl = await _userRepository.uploadProfilePhoto(
           uid: _currentUser.id,
-          file: event.photoFile!,
+          fileBytes: event.photoBytes!,
+          extension: event.photoExtension!,
         );
       }
 

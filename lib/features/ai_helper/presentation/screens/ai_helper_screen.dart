@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_ai/firebase_ai.dart';
+import 'package:flutter/material.dart';
 
 class AiHelperScreen extends StatefulWidget {
   const AiHelperScreen({super.key});
@@ -19,7 +19,7 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
   @override
   void initState() {
     super.initState();
-    _model = FirebaseAI.googleAI().generativeModel(model: 'gemini-3.5-flash');
+    _model = FirebaseAI.googleAI().generativeModel(model: 'gemini-3.1-flash-lite');
   }
 
   void _startChat([String? initialPrompt]) {
@@ -66,12 +66,12 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F111A), // Dark background matching the image
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Theme.of(context).iconTheme.color),
           onPressed: () {
             if (_isChatMode) {
               setState(() => _isChatMode = false);
@@ -80,9 +80,9 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
             }
           },
         ),
-        title: const Text(
+        title: Text(
           'AI Fan Helper',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),
+          style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.w600, fontSize: 18),
         ),
         centerTitle: false,
       ),
@@ -108,47 +108,47 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
               shape: BoxShape.circle,
               color: Colors.blue.withOpacity(0.1),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.smart_toy_outlined,
               size: 80,
               color: Colors.blueAccent,
             ),
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: 32),
           // Greeting Text
-          const Text(
+          Text(
             "Hi! I'm your Fandom AI Helper",
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 8),
-          const Text(
-            "Ask me anything about your\nfavourite fandoms!",
+          SizedBox(height: 8),
+          Text(
+            'Ask me anything about your\nfavourite fandoms!',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white70,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
               fontSize: 15,
               height: 1.4,
             ),
           ),
-          const SizedBox(height: 48),
+          SizedBox(height: 48),
           // Buttons
           _buildPrimaryButton(
             title: 'Ask a question',
             onPressed: _startChat,
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _buildSecondaryButton(
             title: 'Suggested Questions',
             onPressed: () {
               _startChat('Can you suggest some popular questions about fandoms?');
             },
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           _buildSecondaryButton(
             title: 'FAQ',
             onPressed: () {
@@ -177,7 +177,7 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
                   margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isUser ? const Color(0xFF6C4DFF) : const Color(0xFF1A1D2D),
+                    color: isUser ? Theme.of(context).colorScheme.primary : Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   constraints: BoxConstraints(
@@ -185,7 +185,7 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
                   ),
                   child: Text(
                     msg['text'] ?? '',
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: isUser ? Colors.white : Theme.of(context).textTheme.bodyMedium?.color),
                   ),
                 ),
               );
@@ -193,7 +193,7 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
           ),
         ),
         if (_isLoading)
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(8.0),
             child: CircularProgressIndicator(),
           ),
@@ -204,12 +204,12 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
               Expanded(
                 child: TextField(
                   controller: _controller,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                   decoration: InputDecoration(
                     hintText: 'Type your question...',
-                    hintStyle: const TextStyle(color: Colors.white54),
+                    hintStyle: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
                     filled: true,
-                    fillColor: const Color(0xFF1A1D2D),
+                    fillColor: Theme.of(context).cardColor,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(24),
                       borderSide: BorderSide.none,
@@ -219,12 +219,12 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
                   onSubmitted: (_) => _sendMessage(),
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               FloatingActionButton(
                 mini: true,
-                backgroundColor: const Color(0xFF6C4DFF),
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 onPressed: _isLoading ? null : _sendMessage,
-                child: const Icon(Icons.send, color: Colors.white),
+                child: Icon(Icons.send, color: Theme.of(context).textTheme.bodyLarge?.color),
               )
             ],
           ),
@@ -237,7 +237,7 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF6C4DFF), // Purple color
+        backgroundColor: Theme.of(context).colorScheme.primary,
         padding: const EdgeInsets.symmetric(vertical: 18),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -246,8 +246,8 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
       ),
       child: Text(
         title,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyLarge?.color,
           fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
@@ -259,7 +259,7 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF1A1D2D), // Slightly lighter dark background
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         padding: const EdgeInsets.symmetric(vertical: 18),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -268,8 +268,8 @@ class _AiHelperScreenState extends State<AiHelperScreen> {
       ),
       child: Text(
         title,
-        style: const TextStyle(
-          color: Colors.white70,
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyMedium?.color,
           fontSize: 16,
           fontWeight: FontWeight.w500,
         ),

@@ -19,59 +19,59 @@ class TriviaResultCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: const Color(0xFF17163D),
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
+            Icon(
               Icons.emoji_events,
               color: Color(0xFFFFC107),
               size: 60,
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
 
-            const Text(
+            Text(
               'Trivia Complete!',
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 fontSize: 23,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             Text(
               '$score / $total',
-              style: const TextStyle(
+              style: TextStyle(
                 color: Color(0xFF8FA8F5),
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
 
             Text(
               _getMessage(),
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white70,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyMedium?.color,
                 fontSize: 14,
               ),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
 
             SizedBox(
               width: double.infinity,
               height: 48,
               child: ElevatedButton(
                 onPressed: onDone,
-                child: const Text('Done'),
+                child: Text('Done'),
               ),
             ),
           ],

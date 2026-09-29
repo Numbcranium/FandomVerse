@@ -134,7 +134,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       return Colors.redAccent;
     }
 
-    return MerchColors.textSecondary;
+    return Theme.of(context).textTheme.bodyMedium?.color ?? Colors.grey;
   }
 
   IconData _statusIcon(String status) {
@@ -161,12 +161,12 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MerchColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: MerchColors.background,
-        foregroundColor: MerchColors.textPrimary,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'Order History',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -179,7 +179,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(
           color: MerchColors.primary,
         ),
@@ -196,7 +196,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
 
     return RefreshIndicator(
       color: MerchColors.primary,
-      backgroundColor: MerchColors.surface,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       onRefresh: _loadOrders,
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -218,7 +218,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       decoration: BoxDecoration(
-        color: MerchColors.surface,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
           color: MerchColors.primary.withOpacity(0.08),
@@ -243,12 +243,12 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                         color: MerchColors.primary.withOpacity(0.12),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.shopping_bag_outlined,
                         color: MerchColors.primaryLight,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment:
@@ -258,59 +258,59 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                             'Order #${order.id}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: MerchColors.textPrimary,
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4),
                           Text(
                             _formatDate(order.createdAt),
-                            style: const TextStyle(
-                              color: MerchColors.textSecondary,
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.bodyMedium?.color,
                               fontSize: 12,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const Icon(
+                    Icon(
                       Icons.chevron_right,
-                      color: MerchColors.textSecondary,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                     ),
                   ],
                 ),
 
-                const SizedBox(height: 18),
+                SizedBox(height: 18),
 
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.inventory_2_outlined,
                       size: 18,
-                      color: MerchColors.textSecondary,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Text(
                       '${order.productIds.length} product'
                           '${order.productIds.length == 1 ? '' : 's'}',
-                      style: const TextStyle(
-                        color: MerchColors.textSecondary,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                         fontSize: 13,
                       ),
                     ),
                   ],
                 ),
 
-                const SizedBox(height: 14),
+                SizedBox(height: 14),
 
                 Divider(
                   height: 1,
-                  color: MerchColors.textSecondary.withOpacity(0.15),
+                  color: (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.grey).withValues(alpha: 0.15),
                 ),
 
-                const SizedBox(height: 14),
+                SizedBox(height: 14),
 
                 Row(
                   mainAxisAlignment:
@@ -320,17 +320,17 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                       crossAxisAlignment:
                       CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Total',
                           style: TextStyle(
-                            color: MerchColors.textSecondary,
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
                             fontSize: 12,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4),
                         Text(
                           '₦${order.totalAmount.toStringAsFixed(0)}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: MerchColors.primaryLight,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -375,7 +375,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
             size: 15,
             color: color,
           ),
-          const SizedBox(width: 5),
+          SizedBox(width: 5),
           Text(
             status,
             style: TextStyle(
@@ -392,7 +392,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   Widget _buildEmptyState() {
     return RefreshIndicator(
       color: MerchColors.primary,
-      backgroundColor: MerchColors.surface,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       onRefresh: _loadOrders,
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -400,7 +400,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
           SizedBox(
             height:
             MediaQuery.of(context).size.height * 0.65,
-            child: const Center(
+            child: Center(
               child: Padding(
                 padding: EdgeInsets.all(24),
                 child: Column(
@@ -409,14 +409,14 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                   children: [
                     Icon(
                       Icons.receipt_long_outlined,
-                      color: MerchColors.textSecondary,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                       size: 64,
                     ),
                     SizedBox(height: 18),
                     Text(
                       'No orders yet',
                       style: TextStyle(
-                        color: MerchColors.textPrimary,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -426,7 +426,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                       'Your orders will appear here after you make a purchase.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: MerchColors.textSecondary,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                         fontSize: 13,
                         height: 1.5,
                       ),
@@ -449,28 +449,28 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
           mainAxisAlignment:
           MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.error_outline,
-              color: MerchColors.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
               size: 52,
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
             Text(
               _errorMessage!,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: MerchColors.textSecondary,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyMedium?.color,
                 fontSize: 14,
               ),
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: 18),
             ElevatedButton(
               onPressed: _loadOrders,
               style: ElevatedButton.styleFrom(
                 backgroundColor: MerchColors.primary,
                 foregroundColor: Colors.white,
               ),
-              child: const Text('Try Again'),
+              child: Text('Try Again'),
             ),
           ],
         ),

@@ -162,10 +162,10 @@ class _TriviaLeaderboardScreenState
 
   Widget _defaultAvatar() {
     return Container(
-      color: const Color(0xFF18245C),
-      child: const Icon(
+      color: Theme.of(context).cardColor,
+      child: Icon(
         Icons.person,
-        color: Colors.white70,
+        color: Theme.of(context).textTheme.bodyMedium?.color,
         size: 27,
       ),
     );
@@ -176,16 +176,16 @@ class _TriviaLeaderboardScreenState
   // ----------------------------------------------------------
 
   Widget _buildRank(int rank) {
-    if (rank == 1) return const Icon(Icons.emoji_events, color: Color(0xFFFFD43B), size: 25);
-    if (rank == 2) return const Icon(Icons.emoji_events, color: Color(0xFFC9D0DD), size: 25);
-    if (rank == 3) return const Icon(Icons.emoji_events, color: Color(0xFFE99B43), size: 25);
+    if (rank == 1) return Icon(Icons.emoji_events, color: Color(0xFFFFD43B), size: 25);
+    if (rank == 2) return Icon(Icons.emoji_events, color: Color(0xFFC9D0DD), size: 25);
+    if (rank == 3) return Icon(Icons.emoji_events, color: Color(0xFFE99B43), size: 25);
 
     return SizedBox(
       width: 30,
       child: Text(
         '$rank',
         textAlign: TextAlign.center,
-        style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+        style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 18, fontWeight: FontWeight.w600),
       ),
     );
   }
@@ -220,32 +220,32 @@ class _TriviaLeaderboardScreenState
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-        color: isCurrentUser ? const Color(0xFF17104D) : const Color(0xFF07143D),
+        color: isCurrentUser ? const Color(0xFF17104D) : Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(13),
         border: Border.all(
-          color: isCurrentUser ? const Color(0xFF8A35FF) : const Color(0xFF142D68),
+          color: isCurrentUser ? const Color(0xFF8A35FF) : Theme.of(context).cardColor,
           width: isCurrentUser ? 2 : 1,
         ),
       ),
       child: Row(
         children: [
           SizedBox(width: 35, child: _buildRank(user.rank)),
-          const SizedBox(width: 7),
+          SizedBox(width: 7),
           _buildAvatar(isCurrentUser ? (currentUserPhotoUrl ?? user.avatar) : user.avatar),
-          const SizedBox(width: 14),
+          SizedBox(width: 14),
           Expanded(
             child: Text(
               nameToDisplay,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
+              style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 15, fontWeight: FontWeight.w600),
             ),
           ),
           Text(
             '${user.points} pts',
-            style: const TextStyle(color: Color(0xFFFFC83D), fontSize: 14, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Color(0xFFFFC83D), fontSize: 14, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(width: 5),
+          SizedBox(width: 5),
         ],
       ),
     );
@@ -259,14 +259,14 @@ class _TriviaLeaderboardScreenState
     final String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF030927),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0xFF030927), Color(0xFF02061E), Color(0xFF07103A)],
+              colors: [Theme.of(context).cardColor, Theme.of(context).cardColor, Theme.of(context).cardColor],
             ),
           ),
           child: Column(
@@ -278,17 +278,17 @@ class _TriviaLeaderboardScreenState
                   children: [
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
+                      icon: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).textTheme.bodyLarge?.color, size: 22),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Center(
                         child: Text(
                           'Leaderboard',
-                          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 48),
+                    SizedBox(width: 48),
                   ],
                 ),
               ),
@@ -299,24 +299,24 @@ class _TriviaLeaderboardScreenState
                   height: 47,
                   padding: const EdgeInsets.all(2),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF06113A),
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(22),
-                    border: Border.all(color: const Color(0xFF1D4389)),
+                    border: Border.all(color: Theme.of(context).cardColor),
                   ),
                   child: Row(children: [_buildTab(0), _buildTab(1), _buildTab(2)]),
                 ),
               ),
-              const SizedBox(height: 22),
+              SizedBox(height: 22),
               // LIST
               Expanded(
                 child: StreamBuilder<List<QuizAttempt>>(
                   stream: _service.getAttempts(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator(color: Color(0xFF7027FF)));
+                      return Center(child: CircularProgressIndicator(color: Color(0xFF7027FF)));
                     }
                     if (snapshot.hasError) {
-                      return const Center(child: Text('Unable to load leaderboard', style: TextStyle(color: Colors.white70)));
+                      return Center(child: Text('Unable to load leaderboard', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)));
                     }
 
                     final attempts = snapshot.data ?? [];
@@ -324,7 +324,7 @@ class _TriviaLeaderboardScreenState
                     final leaderboard = _buildLeaderboard(filtered);
 
                     if (leaderboard.isEmpty) {
-                      return const Center(child: Text('No quiz plays yet.', style: TextStyle(color: Colors.white70, fontSize: 15)));
+                      return Center(child: Text('No quiz plays yet.', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontSize: 15)));
                     }
 
                     // Prepare UIDs for the current view to fetch real names
@@ -360,9 +360,9 @@ class _TriviaLeaderboardScreenState
                                   currentUser?.photoUrl
                             )),
                             if (currentUserEntry != null && !userAlreadyInTopTen) ...[
-                              const SizedBox(height: 20),
+                              SizedBox(height: 20),
                               const Divider(color: Colors.white24),
-                              const SizedBox(height: 10),
+                              SizedBox(height: 10),
                               _buildLeaderboardRow(
                                   currentUserEntry, 
                                   fetchedNames, 
@@ -371,7 +371,7 @@ class _TriviaLeaderboardScreenState
                                   currentUser?.photoUrl
                               ),
                             ],
-                            const SizedBox(height: 25),
+                            SizedBox(height: 25),
                           ],
                         );
                       }
@@ -402,7 +402,7 @@ class _TriviaLeaderboardScreenState
           child: Text(
             tabs[index],
             style: TextStyle(
-              color: Colors.white,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
               fontSize: 13,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w400,
             ),

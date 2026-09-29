@@ -12,9 +12,9 @@ class EmptyMerchandiseState extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 56, color: MerchColors.textSecondary),
-          const SizedBox(height: 12),
-          Text(message, style: const TextStyle(color: MerchColors.textSecondary, fontSize: 14)),
+          Icon(icon, size: 56, color: Theme.of(context).textTheme.bodyMedium?.color),
+          SizedBox(height: 12),
+          Text(message, style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color, fontSize: 14)),
         ],
       ),
     );

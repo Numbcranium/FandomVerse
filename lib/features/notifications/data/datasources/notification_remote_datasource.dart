@@ -25,17 +25,28 @@ class FirestoreNotificationRemoteDataSource implements NotificationRemoteDataSou
   Query<Map<String, dynamic>> _forUser(String userId) {
     return _notificationsRef
         .where('userId', isEqualTo: userId)
-        .orderBy(FirebaseConstants.fieldCreatedAt, descending: true)
         .limit(AppConstants.defaultPageSize);
   }
 
   @override
   Stream<List<NotificationModel>> watchNotifications(String userId) {
-    return _forUser(userId).snapshots().map(
-          (snapshot) => snapshot.docs
-              .map((doc) => NotificationModel.fromMap(doc.data(), doc.id))
-              .toList(),
-        );
+    if (userId.isEmpty) {
+      return Stream.value([]);
+    }
+    return _forUser(userId)
+        .snapshots()
+        .map(
+          (snapshot) {
+            final list = snapshot.docs
+                .map((doc) => NotificationModel.fromMap(doc.data(), doc.id))
+                .toList();
+            list.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+            return list;
+          },
+        )
+        .handleError((dynamic error) {
+          return <NotificationModel>[];
+        });
   }
 
   @override

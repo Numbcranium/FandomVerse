@@ -124,7 +124,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     final event = _event!;
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
           _buildAppBar(event),
@@ -146,7 +146,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   Widget _buildAppBar(EventModel event) {
     return SliverAppBar(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       surfaceTintColor: Colors.transparent,
       expandedHeight: 300,
       pinned: true,
@@ -155,16 +155,16 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         padding: const EdgeInsets.all(AppConstants.spaceSm),
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.backgroundDark.withValues(
+            color: Theme.of(context).scaffoldBackgroundColor.withValues(
               alpha: 0.75,
             ),
             shape: BoxShape.circle,
           ),
           child: IconButton(
             onPressed: () => context.pop(),
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back,
-              color: AppColors.textPrimaryDark,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
             ),
           ),
         ),
@@ -185,7 +185,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    AppColors.backgroundDark.withValues(
+                    Theme.of(context).scaffoldBackgroundColor.withValues(
                       alpha: 0.85,
                     ),
                   ],
@@ -208,12 +208,12 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
   Widget _buildEventImage(EventModel event) {
     if (event.imageUrl.isEmpty) {
       return Container(
-        color: AppColors.surfaceDark,
-        child: const Center(
+        color: Theme.of(context).cardColor,
+        child: Center(
           child: Icon(
             Icons.event,
             size: 64,
-            color: AppColors.textSecondaryDark,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
           ),
         ),
       );
@@ -225,12 +225,12 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
       errorBuilder: (_, __, ___) {
         return Container(
-          color: AppColors.surfaceDark,
-          child: const Center(
+          color: Theme.of(context).cardColor,
+          child: Center(
             child: Icon(
               Icons.broken_image_outlined,
               size: 48,
-              color: AppColors.textSecondaryDark,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
         );
@@ -242,8 +242,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         }
 
         return Container(
-          color: AppColors.surfaceDark,
-          child: const Center(
+          color: Theme.of(context).cardColor,
+          child: Center(
             child: CircularProgressIndicator(
               color: AppColors.primary,
             ),
@@ -270,7 +270,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         child: Text(
           category,
           style: AppTextStyles.bodySmall.copyWith(
-            color: Colors.white,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -299,51 +299,51 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             style: AppTextStyles.titleLarge,
           ),
 
-          const SizedBox(
+          SizedBox(
             height: AppConstants.spaceSm,
           ),
 
           // Organizer.
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.person_outline,
                 size: 18,
                 color: AppColors.primaryMuted,
               ),
-              const SizedBox(
+              SizedBox(
                 width: AppConstants.spaceSm,
               ),
               Expanded(
                 child: Text(
                   'Organized by ${event.organizerName}',
                   style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textSecondaryDark,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
                   ),
                 ),
               ),
             ],
           ),
 
-          const SizedBox(
+          SizedBox(
             height: AppConstants.spaceLg,
           ),
 
           _buildEventInformation(event),
 
-          const SizedBox(
+          SizedBox(
             height: AppConstants.spaceLg,
           ),
 
           _buildDescription(event),
 
-          const SizedBox(
+          SizedBox(
             height: AppConstants.spaceLg,
           ),
 
           _buildLocation(event),
 
-          const SizedBox(
+          SizedBox(
             height: AppConstants.spaceLg,
           ),
 
@@ -363,12 +363,12 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         AppConstants.spaceMd,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surfaceDark,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(
           AppConstants.radiusLg,
         ),
         border: Border.all(
-          color: AppColors.borderDark,
+          color: Theme.of(context).dividerColor,
         ),
       ),
       child: Column(
@@ -379,7 +379,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             value: _formatDate(event.date),
           ),
 
-          const SizedBox(
+          SizedBox(
             height: AppConstants.spaceMd,
           ),
 
@@ -389,7 +389,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             value: event.time,
           ),
 
-          const SizedBox(
+          SizedBox(
             height: AppConstants.spaceMd,
           ),
 
@@ -430,7 +430,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           ),
         ),
 
-        const SizedBox(
+        SizedBox(
           width: AppConstants.spaceMd,
         ),
 
@@ -441,15 +441,16 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               Text(
                 title,
                 style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.textSecondaryDark,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: AppConstants.spaceXs,
               ),
               Text(
                 value,
                 style: AppTextStyles.bodyMedium.copyWith(
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -470,17 +471,17 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       children: [
         Text(
           'About this event',
-          style: AppTextStyles.bodySmall,
+          style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
         ),
 
-        const SizedBox(
+        SizedBox(
           height: AppConstants.spaceSm,
         ),
 
         Text(
           event.description,
           style: AppTextStyles.bodyMedium.copyWith(
-            color: AppColors.textSecondaryDark,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
             height: 1.6,
           ),
         ),
@@ -498,12 +499,12 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         AppConstants.spaceMd,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surfaceDark,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(
           AppConstants.radiusLg,
         ),
         border: Border.all(
-          color: AppColors.borderDark,
+          color: Theme.of(context).dividerColor,
         ),
       ),
       child: Column(
@@ -511,23 +512,23 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         children: [
           Text(
             'Location',
-            style: AppTextStyles.bodySmall,
+            style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
           ),
 
-          const SizedBox(
+          SizedBox(
             height: AppConstants.spaceMd,
           ),
 
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(
+              Icon(
                 Icons.location_on,
                 color: AppColors.primary,
                 size: 22,
               ),
 
-              const SizedBox(
+              SizedBox(
                 width: AppConstants.spaceSm,
               ),
 
@@ -538,18 +539,19 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     Text(
                       event.locationName,
                       style: AppTextStyles.bodyMedium.copyWith(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
 
-                    const SizedBox(
+                    SizedBox(
                       height: AppConstants.spaceXs,
                     ),
 
                     Text(
                       event.address,
                       style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.textSecondaryDark,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                       ),
                     ),
                   ],
@@ -558,7 +560,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             ],
           ),
 
-          const SizedBox(
+          SizedBox(
             height: AppConstants.spaceMd,
           ),
 
@@ -574,10 +576,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   },
                 );
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.map_outlined,
               ),
-              label: const Text('View on Map'),
+              label: Text('View on Map'),
             ),
           ),
         ],
@@ -596,7 +598,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         Text(
           'Ticket Price',
           style: AppTextStyles.bodyMedium.copyWith(
-            color: AppColors.textSecondaryDark,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
           ),
         ),
 
@@ -627,8 +629,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           AppConstants.spaceLg,
           AppConstants.spaceMd,
         ),
-        decoration: const BoxDecoration(
-          color: AppColors.backgroundDark,
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
         ),
         child: SizedBox(
           width: double.infinity,
@@ -639,12 +641,12 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 : () => _handleGetTicket(event),
 
             child: _isPurchasingTicket
-                ? const SizedBox(
+                ? SizedBox(
               width: 22,
               height: 22,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                color: Colors.white,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
               ),
             )
                 : Text(
@@ -779,7 +781,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          backgroundColor: AppColors.surfaceDark,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
               AppConstants.radiusLg,
@@ -787,7 +789,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           ),
           title: Text(
             'Confirm Ticket',
-            style: AppTextStyles.bodySmall,
+            style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -795,11 +797,12 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               Text(
                 event.title,
                 style: AppTextStyles.bodyMedium.copyWith(
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                   fontWeight: FontWeight.w600,
                 ),
               ),
 
-              const SizedBox(
+              SizedBox(
                 height: AppConstants.spaceLg,
               ),
 
@@ -808,7 +811,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 value: _formatCurrency(event.price),
               ),
 
-              const SizedBox(
+              SizedBox(
                 height: AppConstants.spaceSm,
               ),
 
@@ -817,9 +820,9 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 value: _formatCurrency(balance),
               ),
 
-              const Divider(
+              Divider(
                 height: AppConstants.spaceLg,
-                color: AppColors.borderDark,
+                color: Theme.of(context).dividerColor,
               ),
 
               _PurchaseRow(
@@ -834,14 +837,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               onPressed: () {
                 Navigator.of(dialogContext).pop(false);
               },
-              child: const Text('Cancel'),
+              child: Text('Cancel'),
             ),
 
             ElevatedButton(
               onPressed: () {
                 Navigator.of(dialogContext).pop(true);
               },
-              child: const Text('Confirm'),
+              child: Text('Confirm'),
             ),
           ],
         );
@@ -861,7 +864,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          backgroundColor: AppColors.surfaceDark,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
               AppConstants.radiusLg,
@@ -869,17 +872,17 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           ),
           title: Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.account_balance_wallet_outlined,
                 color: AppColors.warning,
               ),
-              const SizedBox(
+              SizedBox(
                 width: AppConstants.spaceSm,
               ),
               Expanded(
                 child: Text(
                   'Insufficient Balance',
-                  style: AppTextStyles.bodySmall,
+                  style: AppTextStyles.bodySmall.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
                 ),
               ),
             ],
@@ -892,7 +895,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 value: _formatCurrency(eventPrice),
               ),
 
-              const SizedBox(
+              SizedBox(
                 height: AppConstants.spaceSm,
               ),
 
@@ -902,14 +905,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 valueColor: AppColors.error,
               ),
 
-              const SizedBox(
+              SizedBox(
                 height: AppConstants.spaceMd,
               ),
 
               Text(
                 'Please add money to your wallet before purchasing this ticket.',
                 style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.textSecondaryDark,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
             ],
@@ -919,7 +922,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               onPressed: () {
                 Navigator.of(dialogContext).pop();
               },
-              child: const Text('Close'),
+              child: Text('Close'),
             ),
           ],
         );
@@ -937,7 +940,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       barrierDismissible: false,
       builder: (dialogContext) {
         return AlertDialog(
-          backgroundColor: AppColors.surfaceDark,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
               AppConstants.radiusLg,
@@ -950,18 +953,18 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 padding: const EdgeInsets.all(
                   AppConstants.spaceMd,
                 ),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: AppColors.success,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.check,
-                  color: Colors.white,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                   size: 32,
                 ),
               ),
 
-              const SizedBox(
+              SizedBox(
                 height: AppConstants.spaceLg,
               ),
 
@@ -971,7 +974,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 textAlign: TextAlign.center,
               ),
 
-              const SizedBox(
+              SizedBox(
                 height: AppConstants.spaceSm,
               ),
 
@@ -981,11 +984,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     : 'Your payment was successful and your ticket is ready.',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.textSecondaryDark,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
 
-              const SizedBox(
+              SizedBox(
                 height: AppConstants.spaceMd,
               ),
 
@@ -995,7 +998,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                   vertical: AppConstants.spaceSm,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.backgroundDark,
+                  color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(
                     AppConstants.radiusMd,
                   ),
@@ -1018,7 +1021,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 onPressed: () {
                   Navigator.of(dialogContext).pop();
                 },
-                child: const Text('View Ticket'),
+                child: Text('View Ticket'),
               ),
             ),
           ],
@@ -1046,7 +1049,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          backgroundColor: AppColors.surfaceDark,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
               AppConstants.radiusLg,
@@ -1054,11 +1057,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           ),
           title: Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.error_outline,
                 color: AppColors.error,
               ),
-              const SizedBox(
+              SizedBox(
                 width: AppConstants.spaceSm,
               ),
               Text(
@@ -1070,7 +1073,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           content: Text(
             message,
             style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.textSecondaryDark,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
           actions: [
@@ -1078,7 +1081,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               onPressed: () {
                 Navigator.of(dialogContext).pop();
               },
-              child: const Text('Close'),
+              child: Text('Close'),
             ),
           ],
         );
@@ -1091,8 +1094,8 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
   // ---------------------------------------------------------------------------
 
   Widget _buildLoadingScreen() {
-    return const Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: CircularProgressIndicator(
           color: AppColors.primary,
@@ -1103,12 +1106,12 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   Widget _buildErrorScreen() {
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundDark,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         leading: IconButton(
           onPressed: () => context.pop(),
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back),
         ),
       ),
       body: Center(
@@ -1119,13 +1122,13 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.event_busy_outlined,
                 size: 52,
-                color: AppColors.textSecondaryDark,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
               ),
 
-              const SizedBox(
+              SizedBox(
                 height: AppConstants.spaceLg,
               ),
 
@@ -1133,17 +1136,17 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 _errorMessage ?? 'Event not found.',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.textSecondaryDark,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
 
-              const SizedBox(
+              SizedBox(
                 height: AppConstants.spaceLg,
               ),
 
               ElevatedButton(
                 onPressed: _loadEvent,
-                child: const Text('Try Again'),
+                child: Text('Try Again'),
               ),
             ],
           ),
@@ -1222,17 +1225,17 @@ class _PurchaseRow extends StatelessWidget {
           child: Text(
             label,
             style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.textSecondaryDark,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
         ),
-        const SizedBox(
+        SizedBox(
           width: AppConstants.spaceMd,
         ),
         Text(
           value,
           style: AppTextStyles.bodySmall.copyWith(
-            color: valueColor ?? AppColors.textPrimaryDark,
+            color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.w600,
           ),
         ),

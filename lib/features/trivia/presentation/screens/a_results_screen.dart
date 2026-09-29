@@ -32,20 +32,20 @@ class AResultsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor:
-      const Color(0xFF05052B),
+      Theme.of(context).cardColor,
 
       body: SafeArea(
         child: Container(
           decoration:
-          const BoxDecoration(
+          BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
 
               colors: [
-                Color(0xFF07082F),
-                Color(0xFF05052B),
-                Color(0xFF101052),
+                Theme.of(context).cardColor,
+                Theme.of(context).cardColor,
+                Theme.of(context).cardColor,
               ],
             ),
           ),
@@ -72,9 +72,9 @@ class AResultsScreen extends StatelessWidget {
                         Navigator.pop(context);
                       },
 
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.arrow_back_ios_new,
-                        color: Colors.white,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         size: 23,
                       ),
                     ),
@@ -114,11 +114,10 @@ class AResultsScreen extends StatelessWidget {
                         },
 
                         icon:
-                        const Icon(
+                        Icon(
                           Icons
                               .leaderboard_outlined,
-                          color:
-                          Colors.white,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           size: 23,
                         ),
                       ),
@@ -141,7 +140,7 @@ class AResultsScreen extends StatelessWidget {
 
                   child: Column(
                     children: [
-                      const SizedBox(height: 5),
+                      SizedBox(height: 5),
 
                       // ==================================================
                       // TROPHY
@@ -175,7 +174,7 @@ class AResultsScreen extends StatelessWidget {
                             height: 58,
 
                             decoration:
-                            const BoxDecoration(
+                            BoxDecoration(
                               shape:
                               BoxShape.circle,
 
@@ -186,7 +185,7 @@ class AResultsScreen extends StatelessWidget {
                             ),
 
                             child:
-                            const Icon(
+                            Icon(
                               Icons
                                   .emoji_events,
 
@@ -201,26 +200,25 @@ class AResultsScreen extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
 
                       // ==================================================
                       // TITLE
                       // ==================================================
 
-                      const Text(
+                      Text(
                         'Quiz Completed!',
 
                         style:
                         TextStyle(
-                          color:
-                          Colors.white,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontSize: 25,
                           fontWeight:
                           FontWeight.bold,
                         ),
                       ),
 
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
 
                       // ==================================================
                       // SCORE CARD
@@ -276,7 +274,7 @@ class AResultsScreen extends StatelessWidget {
                                       .start,
 
                                   children: [
-                                    const Text(
+                                    Text(
                                       'Your Score',
 
                                       style:
@@ -289,7 +287,7 @@ class AResultsScreen extends StatelessWidget {
                                       ),
                                     ),
 
-                                    const SizedBox(
+                                    SizedBox(
                                       height: 4,
                                     ),
 
@@ -297,7 +295,7 @@ class AResultsScreen extends StatelessWidget {
                                       '$score / $total',
 
                                       style:
-                                      const TextStyle(
+                                      TextStyle(
                                         color:
                                         Colors
                                             .white,
@@ -352,7 +350,7 @@ class AResultsScreen extends StatelessWidget {
                                     '$percentageValue%',
 
                                     style:
-                                    const TextStyle(
+                                    TextStyle(
                                       color:
                                       Colors
                                           .white,
@@ -367,7 +365,7 @@ class AResultsScreen extends StatelessWidget {
                               ],
                             ),
 
-                            const SizedBox(
+                            SizedBox(
                               height: 18,
                             ),
 
@@ -397,7 +395,7 @@ class AResultsScreen extends StatelessWidget {
                                   ),
                                 ),
 
-                                const SizedBox(
+                                SizedBox(
                                   width: 10,
                                 ),
 
@@ -421,7 +419,7 @@ class AResultsScreen extends StatelessWidget {
                                   ),
                                 ),
 
-                                const SizedBox(
+                                SizedBox(
                                   width: 10,
                                 ),
 
@@ -453,7 +451,7 @@ class AResultsScreen extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(
+                      SizedBox(
                         height: 10,
                       ),
 
@@ -499,13 +497,12 @@ class AResultsScreen extends StatelessWidget {
                               .start,
 
                           children: [
-                            const Text(
+                            Text(
                               'Performance',
 
                               style:
                               TextStyle(
-                                color:
-                                Colors.white,
+                                color: Theme.of(context).textTheme.bodyLarge?.color,
                                 fontSize:
                                 15,
                                 fontWeight:
@@ -513,7 +510,7 @@ class AResultsScreen extends StatelessWidget {
                               ),
                             ),
 
-                            const SizedBox(
+                            SizedBox(
                               height: 14,
                             ),
 
@@ -549,7 +546,7 @@ class AResultsScreen extends StatelessWidget {
                               ),
                             ),
 
-                            const SizedBox(
+                            SizedBox(
                               height: 18,
                             ),
 
@@ -565,7 +562,7 @@ class AResultsScreen extends StatelessWidget {
                                     .center,
 
                                 style:
-                                const TextStyle(
+                                TextStyle(
                                   color:
                                   Colors
                                       .white70,
@@ -578,7 +575,7 @@ class AResultsScreen extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(
+                      SizedBox(
                         height: 25,
                       ),
 
@@ -619,13 +616,12 @@ class AResultsScreen extends StatelessWidget {
                           ),
 
                           child:
-                          const Text(
+                          Text(
                             'Play Again',
 
                             style:
                             TextStyle(
-                              color:
-                              Colors.white,
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
                               fontSize:
                               16,
                               fontWeight:
@@ -635,7 +631,7 @@ class AResultsScreen extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(
+                      SizedBox(
                         height: 12,
                       ),
 
@@ -681,13 +677,12 @@ class AResultsScreen extends StatelessWidget {
                           ),
 
                           child:
-                          const Text(
+                          Text(
                             'Back to Home',
 
                             style:
                             TextStyle(
-                              color:
-                              Colors.white,
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
                               fontSize:
                               16,
                               fontWeight:
@@ -697,7 +692,7 @@ class AResultsScreen extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(
+                      SizedBox(
                         height: 25,
                       ),
                     ],
@@ -767,7 +762,7 @@ class _StatBox extends StatelessWidget {
       decoration:
       BoxDecoration(
         color:
-        const Color(0xFF081344),
+        Theme.of(context).cardColor,
 
         borderRadius:
         BorderRadius.circular(
@@ -777,7 +772,7 @@ class _StatBox extends StatelessWidget {
         border:
         Border.all(
           color:
-          const Color(0xFF1C3A79),
+          Theme.of(context).cardColor,
         ),
       ),
 
@@ -793,7 +788,7 @@ class _StatBox extends StatelessWidget {
             size: 24,
           ),
 
-          const SizedBox(
+          SizedBox(
             height: 7,
           ),
 
@@ -812,7 +807,7 @@ class _StatBox extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(
+          SizedBox(
             height: 4,
           ),
 

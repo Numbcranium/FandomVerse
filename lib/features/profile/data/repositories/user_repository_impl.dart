@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import '../../../../core/constants/firebase_constants.dart';
 import '../../../../core/errors/app_exception.dart';
@@ -46,14 +46,14 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<String> uploadProfilePhoto({
     required String uid,
-    required File file,
+    required Uint8List fileBytes,
+    required String extension,
   }) async {
     try {
-      final extension = file.path.split('.').last;
       return await _storageService.uploadFile(
         folder: FirebaseConstants.storageProfileImages,
         fileName: '$uid.$extension',
-        file: file,
+        fileBytes: fileBytes,
       );
     } catch (e) {
       throw AppException.from(e);

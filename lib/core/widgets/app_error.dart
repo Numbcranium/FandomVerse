@@ -25,19 +25,19 @@ class AppError extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
+            Icon(
               Icons.error_outline,
               size: 48,
               color: AppColors.error,
             ),
-            const SizedBox(height: AppConstants.spaceMd),
+            SizedBox(height: AppConstants.spaceMd),
             Text(
               message,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             if (onRetry != null) ...[
-              const SizedBox(height: AppConstants.spaceLg),
+              SizedBox(height: AppConstants.spaceLg),
               AppOutlinedButton(
                 text: 'Try again',
                 onPressed: onRetry,

@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:techwiz7_starter/models/merchandise/order_model.dart';
 
@@ -7,6 +7,7 @@ import 'db_helper.dart';
 
 class OrderSqliteService {
   Future<List<OrderModel>> getOrders() async {
+    if (kIsWeb) return [];
     final db = await DbHelper.instance.database;
 
     final result = await db.query(
@@ -32,6 +33,7 @@ class OrderSqliteService {
   Future<OrderModel?> getOrderById(
       String orderId,
       ) async {
+    if (kIsWeb) return null;
     final db = await DbHelper.instance.database;
 
     final result = await db.query(
@@ -61,6 +63,7 @@ class OrderSqliteService {
   Future<void> saveOrder(
       OrderModel order,
       ) async {
+    if (kIsWeb) return;
     final db = await DbHelper.instance.database;
 
     await db.insert(
@@ -81,6 +84,7 @@ class OrderSqliteService {
   Future<void> updateOrder(
       OrderModel order,
       ) async {
+    if (kIsWeb) return;
     final db = await DbHelper.instance.database;
 
     await db.update(
@@ -101,6 +105,7 @@ class OrderSqliteService {
   Future<void> deleteOrder(
       String orderId,
       ) async {
+    if (kIsWeb) return;
     final db = await DbHelper.instance.database;
 
     await db.delete(

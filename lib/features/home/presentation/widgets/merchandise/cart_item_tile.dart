@@ -24,7 +24,7 @@ class CartItemTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: MerchColors.surface,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -36,7 +36,7 @@ class CartItemTile extends StatelessWidget {
               imageUrl: item.product.imageUrl,
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment:
@@ -46,12 +46,12 @@ class CartItemTile extends StatelessWidget {
                   item.product.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: MerchColors.textPrimary,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 PriceWidget(
                   price: item.subtotal,
                   fontSize: 13,
@@ -64,10 +64,10 @@ class CartItemTile extends StatelessWidget {
             onChanged: onQuantityChanged,
           ),
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.close,
               size: 18,
-              color: MerchColors.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
             onPressed: onRemove,
           ),

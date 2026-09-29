@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 
@@ -13,15 +13,17 @@ class ProfileUpdateSubmitted extends ProfileEvent {
   const ProfileUpdateSubmitted({
     required this.fullName,
     required this.phone,
-    this.photoFile,
+    this.photoBytes,
+    this.photoExtension,
   });
 
   final String fullName;
   final String phone;
-  final File? photoFile;
+  final Uint8List? photoBytes;
+  final String? photoExtension;
 
   @override
-  List<Object?> get props => [fullName, phone, photoFile];
+  List<Object?> get props => [fullName, phone, photoBytes, photoExtension];
 }
 
 class ProfileErrorCleared extends ProfileEvent {

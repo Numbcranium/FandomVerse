@@ -25,11 +25,11 @@ return '$day/$month/${date.year}';
 @override
 Widget build(BuildContext context) {
 return Scaffold(
-backgroundColor: MerchColors.background,
+backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 appBar: AppBar(
-title: const Text('Order Details'),
-backgroundColor: MerchColors.background,
-foregroundColor: MerchColors.textPrimary,
+title: Text('Order Details'),
+backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+foregroundColor: Theme.of(context).textTheme.bodyLarge?.color,
 ),
 body: SingleChildScrollView(
 padding: const EdgeInsets.all(16),
@@ -40,53 +40,53 @@ Container(
 width: double.infinity,
 padding: const EdgeInsets.all(20),
 decoration: BoxDecoration(
-color: MerchColors.surface,
+color: Theme.of(context).cardColor,
 borderRadius: BorderRadius.circular(16),
 ),
 child: Column(
 children: [
-const Icon(
+Icon(
 Icons.check_circle,
 color: MerchColors.primary,
 size: 60,
 ),
-const SizedBox(height: 12),
-const Text(
+SizedBox(height: 12),
+Text(
 'Order Placed',
 style: TextStyle(
-color: MerchColors.textPrimary,
+color: Theme.of(context).textTheme.bodyLarge?.color,
 fontSize: 22,
 fontWeight: FontWeight.bold,
 ),
 ),
-const SizedBox(height: 6),
+SizedBox(height: 6),
 Text(
 order.id,
-style: const TextStyle(
-color: MerchColors.textSecondary,
+style: TextStyle(
+color: Theme.of(context).textTheme.bodyMedium?.color,
 ),
 ),
 ],
 ),
 ),
 
-const SizedBox(height: 24),
+SizedBox(height: 24),
 
-const Text(
+Text(
 'Order Information',
 style: TextStyle(
-color: MerchColors.textPrimary,
+color: Theme.of(context).textTheme.bodyLarge?.color,
 fontSize: 20,
 fontWeight: FontWeight.bold,
 ),
 ),
 
-const SizedBox(height: 12),
+SizedBox(height: 12),
 
 Container(
 padding: const EdgeInsets.all(16),
 decoration: BoxDecoration(
-color: MerchColors.surface,
+color: Theme.of(context).cardColor,
 borderRadius: BorderRadius.circular(16),
 ),
 child: Column(
@@ -95,12 +95,12 @@ _InfoRow(
 label: 'Status',
 value: order.status,
 ),
-const SizedBox(height: 12),
+SizedBox(height: 12),
 _InfoRow(
 label: 'Date',
 value: _formatDate(order.createdAt),
 ),
-const SizedBox(height: 12),
+SizedBox(height: 12),
 _InfoRow(
 label: 'Items',
 value: '${products.length}',
@@ -109,31 +109,31 @@ value: '${products.length}',
 ),
 ),
 
-const SizedBox(height: 24),
+SizedBox(height: 24),
 
-const Text(
+Text(
 'Products',
 style: TextStyle(
-color: MerchColors.textPrimary,
+color: Theme.of(context).textTheme.bodyLarge?.color,
 fontSize: 20,
 fontWeight: FontWeight.bold,
 ),
 ),
 
-const SizedBox(height: 12),
+SizedBox(height: 12),
 
 if (products.isEmpty)
 Container(
 width: double.infinity,
 padding: const EdgeInsets.all(16),
 decoration: BoxDecoration(
-color: MerchColors.surface,
+color: Theme.of(context).cardColor,
 borderRadius: BorderRadius.circular(14),
 ),
-child: const Text(
+child: Text(
 'Product information is no longer available.',
 style: TextStyle(
-color: MerchColors.textSecondary,
+color: Theme.of(context).textTheme.bodyMedium?.color,
 ),
 ),
 )
@@ -143,7 +143,7 @@ else
 margin: const EdgeInsets.only(bottom: 10),
 padding: const EdgeInsets.all(14),
 decoration: BoxDecoration(
-color: MerchColors.surface,
+color: Theme.of(context).cardColor,
 borderRadius: BorderRadius.circular(14),
 ),
 child: Row(
@@ -152,22 +152,22 @@ Container(
 width: 55,
 height: 55,
 decoration: BoxDecoration(
-color: MerchColors.surfaceLight,
+color: Theme.of(context).cardColor,
 borderRadius: BorderRadius.circular(10),
 ),
-child: const Icon(
+child: Icon(
 Icons.shopping_bag_outlined,
-color: MerchColors.textSecondary,
+color: Theme.of(context).textTheme.bodyMedium?.color,
 ),
 ),
 
-const SizedBox(width: 12),
+SizedBox(width: 12),
 
 Expanded(
 child: Text(
 product.name,
-style: const TextStyle(
-color: MerchColors.textPrimary,
+style: TextStyle(
+color: Theme.of(context).textTheme.bodyLarge?.color,
 fontWeight: FontWeight.w600,
 ),
 ),
@@ -175,7 +175,7 @@ fontWeight: FontWeight.w600,
 
 Text(
 '₦${product.price.toStringAsFixed(0)}',
-style: const TextStyle(
+style: TextStyle(
 color: MerchColors.primaryLight,
 fontWeight: FontWeight.bold,
 ),
@@ -185,29 +185,29 @@ fontWeight: FontWeight.bold,
 ),
 ),
 
-const SizedBox(height: 12),
+SizedBox(height: 12),
 
 Container(
 width: double.infinity,
 padding: const EdgeInsets.all(18),
 decoration: BoxDecoration(
-color: MerchColors.surface,
+color: Theme.of(context).cardColor,
 borderRadius: BorderRadius.circular(16),
 ),
 child: Row(
 mainAxisAlignment: MainAxisAlignment.spaceBetween,
 children: [
-const Text(
+Text(
 'Total',
 style: TextStyle(
-color: MerchColors.textPrimary,
+color: Theme.of(context).textTheme.bodyLarge?.color,
 fontSize: 18,
 fontWeight: FontWeight.bold,
 ),
 ),
 Text(
 '₦${order.totalAmount.toStringAsFixed(0)}',
-style: const TextStyle(
+style: TextStyle(
 color: MerchColors.primaryLight,
 fontSize: 18,
 fontWeight: FontWeight.bold,
@@ -217,7 +217,7 @@ fontWeight: FontWeight.bold,
 ),
 ),
 
-const SizedBox(height: 28),
+SizedBox(height: 28),
 
 SizedBox(
 width: double.infinity,
@@ -237,7 +237,7 @@ shape: RoundedRectangleBorder(
 borderRadius: BorderRadius.circular(14),
 ),
 ),
-child: const Text(
+child: Text(
 'Back to Shop',
 style: TextStyle(
 fontWeight: FontWeight.bold,
@@ -268,14 +268,14 @@ mainAxisAlignment: MainAxisAlignment.spaceBetween,
 children: [
 Text(
 label,
-style: const TextStyle(
-color: MerchColors.textSecondary,
+style: TextStyle(
+color: Theme.of(context).textTheme.bodyMedium?.color,
 ),
 ),
 Text(
 value,
-style: const TextStyle(
-color: MerchColors.textPrimary,
+style: TextStyle(
+color: Theme.of(context).textTheme.bodyLarge?.color,
 fontWeight: FontWeight.w600,
 ),
 ),

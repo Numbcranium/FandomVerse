@@ -63,17 +63,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: AppConstants.spaceXxl),
+                    SizedBox(height: AppConstants.spaceXxl),
                     Text(
                       'Welcome back',
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                    const SizedBox(height: AppConstants.spaceSm),
+                    SizedBox(height: AppConstants.spaceSm),
                     Text(
                       'Log in to continue.',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    const SizedBox(height: AppConstants.spaceXl),
+                    SizedBox(height: AppConstants.spaceXl),
                     AppTextField(
                       label: 'Email',
                       hint: 'you@example.com',
@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       validator: Validators.email,
                       enabled: !isLoading,
                     ),
-                    const SizedBox(height: AppConstants.spaceMd),
+                    SizedBox(height: AppConstants.spaceMd),
                     AppTextField.password(
                       controller: _passwordController,
                       textInputAction: TextInputAction.done,
@@ -97,25 +97,25 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: isLoading
                             ? null
                             : () => context.push(RouteNames.forgotPassword),
-                        child: const Text('Forgot password?'),
+                        child: Text('Forgot password?'),
                       ),
                     ),
-                    const SizedBox(height: AppConstants.spaceMd),
+                    SizedBox(height: AppConstants.spaceMd),
                     AppButton(
                       text: 'Log in',
                       isLoading: isLoading,
                       onPressed: _submit,
                     ),
-                    const SizedBox(height: AppConstants.spaceLg),
+                    SizedBox(height: AppConstants.spaceLg),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Don't have an account?"),
+                        Text("Don't have an account?"),
                         TextButton(
                           onPressed: isLoading
                               ? null
                               : () => context.push(RouteNames.register),
-                          child: const Text('Register'),
+                          child: Text('Register'),
                         ),
                       ],
                     ),

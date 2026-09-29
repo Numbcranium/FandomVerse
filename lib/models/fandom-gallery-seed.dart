@@ -1,5 +1,5 @@
-import 'fandom_gallery.dart';
 import 'fandom-gallery-service.dart';
+import 'fandom_gallery.dart';
 
 class FandomGallerySeed {
   final FandomGalleryService _galleryService =

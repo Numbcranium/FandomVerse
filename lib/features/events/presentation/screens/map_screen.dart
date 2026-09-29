@@ -86,13 +86,13 @@ class _MapScreenState extends State<MapScreen> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => context.pop(),
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_rounded,
           ),
         ),
         title: Text(
           'Event Map',
-          style: AppTextStyles.titleLarge,
+          style: AppTextStyles.titleLarge.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
         ),
       ),
 
@@ -101,7 +101,7 @@ class _MapScreenState extends State<MapScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -175,13 +175,13 @@ class _MapScreenState extends State<MapScreen> {
                                 shape:
                                 BoxShape.circle,
                                 border: Border.all(
-                                  color: Colors.white,
+                                  color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black,
                                   width: 2,
                                 ),
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.event,
-                                color: Colors.white,
+                                color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black,
                                 size: 24,
                               ),
                             ),
@@ -205,29 +205,29 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                   decoration: BoxDecoration(
                     color:
-                    AppColors.surfaceDark,
+                    Theme.of(context).cardColor,
                     borderRadius:
                     BorderRadius.circular(
                       AppConstants.radiusLg,
                     ),
                     border: Border.all(
                       color:
-                      AppColors.borderDark,
+                      Theme.of(context).dividerColor,
                     ),
                   ),
                   child: Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.location_on_outlined,
                         color:
                         AppColors.primaryMuted,
                       ),
-                      const SizedBox(width: 10),
+                      SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           '${events.length} event${events.length == 1 ? '' : 's'} on the map',
                           style:
-                          AppTextStyles.bodyMedium,
+                          AppTextStyles.bodyMedium.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
                         ),
                       ),
                     ],
@@ -247,8 +247,7 @@ class _MapScreenState extends State<MapScreen> {
       ) {
     showModalBottomSheet(
       context: context,
-      backgroundColor:
-      AppColors.surfaceDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(
@@ -269,18 +268,18 @@ class _MapScreenState extends State<MapScreen> {
               Text(
                 event.title,
                 style:
-                AppTextStyles.titleLarge,
+                AppTextStyles.titleLarge.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
 
               Text(
                 event.locationName,
                 style:
-                AppTextStyles.bodyMedium,
+                AppTextStyles.bodyMedium.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
               ),
 
-              const SizedBox(height: 18),
+              SizedBox(height: 18),
 
               SizedBox(
                 width: double.infinity,
@@ -295,7 +294,7 @@ class _MapScreenState extends State<MapScreen> {
                       },
                     );
                   },
-                  child: const Text(
+                  child: Text(
                     'View Event',
                   ),
                 ),

@@ -26,10 +26,9 @@ class PopularFandoms extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
 
-              const Text(
+              Text(
                 'Popular Fandoms',
-                style: TextStyle(
-                  color: Colors.white,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -39,7 +38,7 @@ class PopularFandoms extends StatelessWidget {
                 onTap: () {
                   context.push('/fandoms');
                 },
-                child: const Row(
+                child: Row(
                   children: [
                     Text(
                       'See All',
@@ -64,7 +63,7 @@ class PopularFandoms extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
 
 
         // FANDOM CARDS
@@ -91,7 +90,7 @@ class PopularFandoms extends StatelessWidget {
                   margin: const EdgeInsets.only(right: 14),
 
                   decoration: BoxDecoration(
-                    color: const Color(0xFF17163D),
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(14),
                   ),
 
@@ -115,8 +114,8 @@ class PopularFandoms extends StatelessWidget {
                         alignment: Alignment.center,
                         child: Text(
                           fandom['name']!,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),

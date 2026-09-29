@@ -32,18 +32,18 @@ class TriviaResultCard extends StatelessWidget {
         total - score;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF05052B),
+      backgroundColor: Theme.of(context).cardColor,
 
       body: SafeArea(
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xFF07082F),
-                Color(0xFF05052B),
-                Color(0xFF101052),
+                Theme.of(context).cardColor,
+                Theme.of(context).cardColor,
+                Theme.of(context).cardColor,
               ],
             ),
           ),
@@ -66,9 +66,9 @@ class TriviaResultCard extends StatelessWidget {
                         Navigator.pop(context);
                       },
 
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.arrow_back_ios_new,
-                        color: Colors.white,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         size: 23,
                       ),
                     ),
@@ -81,7 +81,7 @@ class TriviaResultCard extends StatelessWidget {
                       height: 45,
 
                       decoration: BoxDecoration(
-                        color: const Color(0xFF111B55),
+                        color: Theme.of(context).cardColor,
                         shape: BoxShape.circle,
 
                         border: Border.all(
@@ -95,9 +95,9 @@ class TriviaResultCard extends StatelessWidget {
                         onPressed: () {
                           context.push(RouteNames.triviaLeaderboard);
                         },
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.leaderboard_outlined,
-                          color: Colors.white,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           size: 23,
                         ),
                       ),
@@ -118,7 +118,7 @@ class TriviaResultCard extends StatelessWidget {
 
                   child: Column(
                     children: [
-                      const SizedBox(height: 5),
+                      SizedBox(height: 5),
 
                       // =================================================
                       // TROPHY
@@ -145,12 +145,12 @@ class TriviaResultCard extends StatelessWidget {
                             width: 58,
                             height: 58,
 
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Color(0xFF171B65),
+                              color: Theme.of(context).cardColor,
                             ),
 
-                            child: const Icon(
+                            child: Icon(
                               Icons.emoji_events,
                               color: Color(0xFFFFB72B),
                               size: 39,
@@ -159,22 +159,22 @@ class TriviaResultCard extends StatelessWidget {
                         ],
                       ),
 
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
 
                       // =================================================
                       // TITLE
                       // =================================================
 
-                      const Text(
+                      Text(
                         'Quiz Completed!',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
 
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
 
                       // =================================================
                       // SCORE CARD
@@ -186,7 +186,7 @@ class TriviaResultCard extends StatelessWidget {
                         padding: const EdgeInsets.all(18),
 
                         decoration: BoxDecoration(
-                          color: const Color(0xFF08144A),
+                          color: Theme.of(context).cardColor,
 
                           borderRadius:
                           BorderRadius.circular(20),
@@ -214,22 +214,21 @@ class TriviaResultCard extends StatelessWidget {
                                   CrossAxisAlignment.start,
 
                                   children: [
-                                    const Text(
+                                    Text(
                                       'Your Score',
                                       style: TextStyle(
-                                        color:
-                                        Colors.white70,
+                                        color: Theme.of(context).textTheme.bodyMedium?.color,
                                         fontSize: 16,
                                       ),
                                     ),
 
-                                    const SizedBox(height: 4),
+                                    SizedBox(height: 4),
 
                                     Text(
                                       '$score / $total',
                                       style:
-                                      const TextStyle(
-                                        color: Colors.white,
+                                      TextStyle(
+                                        color: Theme.of(context).textTheme.bodyLarge?.color,
                                         fontSize: 35,
                                         fontWeight:
                                         FontWeight.bold,
@@ -269,8 +268,8 @@ class TriviaResultCard extends StatelessWidget {
                                   child: Text(
                                     '$percentageValue%',
                                     style:
-                                    const TextStyle(
-                                      color: Colors.white,
+                                    TextStyle(
+                                      color: Theme.of(context).textTheme.bodyLarge?.color,
                                       fontSize: 19,
                                       fontWeight:
                                       FontWeight.bold,
@@ -280,7 +279,7 @@ class TriviaResultCard extends StatelessWidget {
                               ],
                             ),
 
-                            const SizedBox(height: 18),
+                            SizedBox(height: 18),
 
                             // -------------------------------------------
                             // STATISTICS
@@ -307,7 +306,7 @@ class TriviaResultCard extends StatelessWidget {
                                   ),
                                 ),
 
-                                const SizedBox(width: 10),
+                                SizedBox(width: 10),
 
                                 // INCORRECT
                                 Expanded(
@@ -328,7 +327,7 @@ class TriviaResultCard extends StatelessWidget {
                                   ),
                                 ),
 
-                                const SizedBox(width: 10),
+                                SizedBox(width: 10),
 
                                 // TIME
                                 Expanded(
@@ -351,7 +350,7 @@ class TriviaResultCard extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
 
                       // =================================================
                       // PERFORMANCE
@@ -363,7 +362,7 @@ class TriviaResultCard extends StatelessWidget {
                         padding: const EdgeInsets.all(18),
 
                         decoration: BoxDecoration(
-                          color: const Color(0xFF08144A),
+                          color: Theme.of(context).cardColor,
 
                           borderRadius:
                           BorderRadius.circular(20),
@@ -380,17 +379,17 @@ class TriviaResultCard extends StatelessWidget {
                           CrossAxisAlignment.start,
 
                           children: [
-                            const Text(
+                            Text(
                               'Performance',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Theme.of(context).textTheme.bodyLarge?.color,
                                 fontSize: 15,
                                 fontWeight:
                                 FontWeight.w600,
                               ),
                             ),
 
-                            const SizedBox(height: 14),
+                            SizedBox(height: 14),
 
                             // PERFORMANCE BAR
                             ClipRRect(
@@ -416,7 +415,7 @@ class TriviaResultCard extends StatelessWidget {
                               ),
                             ),
 
-                            const SizedBox(height: 18),
+                            SizedBox(height: 18),
 
                             Center(
                               child: Text(
@@ -428,9 +427,8 @@ class TriviaResultCard extends StatelessWidget {
                                 TextAlign.center,
 
                                 style:
-                                const TextStyle(
-                                  color:
-                                  Colors.white70,
+                                TextStyle(
+                                  color: Theme.of(context).textTheme.bodyMedium?.color,
                                   fontSize: 14,
                                 ),
                               ),
@@ -439,7 +437,7 @@ class TriviaResultCard extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 25),
+                      SizedBox(height: 25),
 
                       // =================================================
                       // PLAY AGAIN
@@ -470,10 +468,10 @@ class TriviaResultCard extends StatelessWidget {
                             ),
                           ),
 
-                          child: const Text(
+                          child: Text(
                             'Play Again',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
                               fontSize: 16,
                               fontWeight:
                               FontWeight.bold,
@@ -482,7 +480,7 @@ class TriviaResultCard extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
 
                       // =================================================
                       // BACK TO HOME
@@ -517,10 +515,10 @@ class TriviaResultCard extends StatelessWidget {
                             ),
                           ),
 
-                          child: const Text(
+                          child: Text(
                             'Back to Home',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
                               fontSize: 16,
                               fontWeight:
                               FontWeight.w600,
@@ -529,7 +527,7 @@ class TriviaResultCard extends StatelessWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 25),
+                      SizedBox(height: 25),
                     ],
                   ),
                 ),
@@ -594,13 +592,13 @@ class _StatBox extends StatelessWidget {
       ),
 
       decoration: BoxDecoration(
-        color: const Color(0xFF081344),
+        color: Theme.of(context).cardColor,
 
         borderRadius:
         BorderRadius.circular(12),
 
         border: Border.all(
-          color: const Color(0xFF1C3A79),
+          color: Theme.of(context).cardColor,
         ),
       ),
 
@@ -615,7 +613,7 @@ class _StatBox extends StatelessWidget {
             size: 24,
           ),
 
-          const SizedBox(height: 7),
+          SizedBox(height: 7),
 
           Text(
             title,
@@ -629,7 +627,7 @@ class _StatBox extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
 
           Text(
             value,

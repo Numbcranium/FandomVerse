@@ -4,14 +4,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/app.dart';
 import 'app/router/app_router.dart';
+import 'app/theme/theme_cubit.dart';
 import 'core/constants/app_constants.dart';
 import 'features/auth/data/datasources/auth_remote_datasource.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'firebase/firebase_service.dart';
-import 'models/fandom-gallery-seed.dart';
-import 'models/fandom_trivia_seed.dart';
 
 
 
@@ -38,8 +37,11 @@ Future<void> main() async {
   );
 
   runApp(
-    BlocProvider.value(
-      value: authBloc,
+    MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: authBloc),
+        BlocProvider(create: (_) => ThemeCubit(prefs)),
+      ],
       child: App(router: appRouter.router),
     ),
   );

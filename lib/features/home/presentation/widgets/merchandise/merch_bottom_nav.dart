@@ -18,9 +18,9 @@ class MerchBottomNav extends StatelessWidget {
     ];
 
     return Container(
-      decoration: const BoxDecoration(
-        color: MerchColors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -32,7 +32,7 @@ class MerchBottomNav extends StatelessWidget {
             onTap: () => onTap(i),
             child: Icon(
               selected ? item.filled : item.outline,
-              color: selected ? MerchColors.primary : MerchColors.textSecondary,
+              color: selected ? MerchColors.primary : Theme.of(context).textTheme.bodyMedium?.color,
               size: 24,
             ),
           );

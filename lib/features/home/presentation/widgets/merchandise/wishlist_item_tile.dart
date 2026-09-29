@@ -25,7 +25,7 @@ class WishlistItemTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: MerchColors.surface,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16),
         ),
         clipBehavior: Clip.antiAlias,
@@ -42,13 +42,13 @@ class WishlistItemTile extends StatelessWidget {
               right: 6,
               child: GestureDetector(
                 onTap: onRemove,
-                child: const CircleAvatar(
+                child: CircleAvatar(
                   radius: 13,
-                  backgroundColor: Colors.black45,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   child: Icon(
                     Icons.close,
                     size: 14,
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                 ),
               ),
@@ -59,7 +59,7 @@ class WishlistItemTile extends StatelessWidget {
               bottom: 0,
               child: Container(
                 padding: const EdgeInsets.all(8),
-                color: Colors.black87,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 child: Column(
                   crossAxisAlignment:
                   CrossAxisAlignment.start,
@@ -68,13 +68,13 @@ class WishlistItemTile extends StatelessWidget {
                       item.product.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     Row(
                       mainAxisAlignment:
                       MainAxisAlignment.spaceBetween,
@@ -85,7 +85,7 @@ class WishlistItemTile extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: onMoveToCart,
-                          child: const Icon(
+                          child: Icon(
                             Icons.add_shopping_cart,
                             size: 16,
                             color: MerchColors.primaryLight,

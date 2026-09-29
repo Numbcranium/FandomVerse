@@ -78,17 +78,17 @@ class _InterestsScreenState extends State<InterestsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: AppConstants.spaceXl),
+              SizedBox(height: AppConstants.spaceXl),
               Text(
                 'What are you into?',
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
-              const SizedBox(height: AppConstants.spaceSm),
+              SizedBox(height: AppConstants.spaceSm),
               Text(
                 'Pick your fandoms — this shapes what shows up first.',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(height: AppConstants.spaceLg),
+              SizedBox(height: AppConstants.spaceLg),
               Wrap(
                 spacing: AppConstants.spaceSm,
                 runSpacing: AppConstants.spaceSm,
@@ -119,7 +119,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                 ],
               ),
               if (_errorMessage != null) ...[
-                const SizedBox(height: AppConstants.spaceMd),
+                SizedBox(height: AppConstants.spaceMd),
                 Text(
                   _errorMessage!,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -133,7 +133,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                 isLoading: _isSubmitting,
                 onPressed: _continue,
               ),
-              const SizedBox(height: AppConstants.spaceMd),
+              SizedBox(height: AppConstants.spaceMd),
             ],
           ),
         ),

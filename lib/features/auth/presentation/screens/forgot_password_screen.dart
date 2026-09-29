@@ -39,7 +39,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Reset password')),
+      appBar: AppBar(title: Text('Reset password')),
       body: SafeArea(
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
@@ -60,20 +60,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.mark_email_read_outlined, size: 64),
-                    const SizedBox(height: AppConstants.spaceMd),
+                    Icon(Icons.mark_email_read_outlined, size: 64),
+                    SizedBox(height: AppConstants.spaceMd),
                     Text(
                       'Check your inbox',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    const SizedBox(height: AppConstants.spaceSm),
+                    SizedBox(height: AppConstants.spaceSm),
                     Text(
                       "We've sent a password reset link to "
                       '${_emailController.text.trim()}.',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    const SizedBox(height: AppConstants.spaceLg),
+                    SizedBox(height: AppConstants.spaceLg),
                     AppButton(
                       text: 'Back to login',
                       fullWidth: false,
@@ -92,11 +92,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      "Enter the email associated with your account and "
+                      'Enter the email associated with your account and '
                       "we'll send a link to reset your password.",
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    const SizedBox(height: AppConstants.spaceLg),
+                    SizedBox(height: AppConstants.spaceLg),
                     AppTextField(
                       label: 'Email',
                       hint: 'you@example.com',
@@ -107,7 +107,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       validator: Validators.email,
                       enabled: !isLoading,
                     ),
-                    const SizedBox(height: AppConstants.spaceLg),
+                    SizedBox(height: AppConstants.spaceLg),
                     AppButton(
                       text: 'Send reset link',
                       isLoading: isLoading,

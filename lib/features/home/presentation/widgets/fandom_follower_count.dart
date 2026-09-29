@@ -22,8 +22,8 @@ class FandomFollowerCount extends StatelessWidget {
 
         return Text(
           '$count Followers',
-          style: const TextStyle(
-            color: Colors.white70,
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyMedium?.color,
             fontSize: 14,
           ),
         );

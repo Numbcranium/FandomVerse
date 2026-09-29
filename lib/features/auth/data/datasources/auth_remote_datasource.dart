@@ -27,6 +27,10 @@ abstract class AuthRemoteDataSource {
 
   Future<void> sendPasswordResetEmail(String email);
 
+  Future<void> updatePassword(String newPassword);
+
+  Future<void> deleteAccount();
+
   /// Writes the initial `users/{uid}` profile document right after
   /// registration.
   Future<void> createUserDocument(UserModel user);
@@ -81,6 +85,26 @@ class FirebaseAuthRemoteDataSource implements AuthRemoteDataSource {
   @override
   Future<void> sendPasswordResetEmail(String email) {
     return _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
+  @override
+  Future<void> updatePassword(String newPassword) async {
+    final user = _firebaseAuth.currentUser;
+    if (user != null) {
+      await user.updatePassword(newPassword);
+    }
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    final user = _firebaseAuth.currentUser;
+    if (user != null) {
+      final uid = user.uid;
+      // Delete user's firestore document
+      await _usersRef.doc(uid).delete();
+      // Delete auth account
+      await user.delete();
+    }
   }
 
   @override

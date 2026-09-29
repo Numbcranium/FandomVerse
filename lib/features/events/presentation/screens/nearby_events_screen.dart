@@ -114,13 +114,13 @@ class _NearbyEventsScreenState
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => context.pop(),
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_rounded,
           ),
         ),
         title: Text(
           'Nearby Events',
-          style: AppTextStyles.titleLarge,
+          style: AppTextStyles.titleLarge.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
         ),
       ),
 
@@ -129,7 +129,7 @@ class _NearbyEventsScreenState
         builder: (context, snapshot) {
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }

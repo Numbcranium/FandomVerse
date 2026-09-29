@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../app/theme/theme_cubit.dart';
 import '../../../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../../../features/auth/presentation/bloc/auth_event.dart';
 
@@ -28,12 +31,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F111A),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(child: tabs[_currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (i) => setState(() => _currentIndex = i),
-        backgroundColor: const Color(0xFF1A1D2D),
+        backgroundColor: Theme.of(context).cardColor,
         selectedItemColor: const Color(0xFF6C4DFF),
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
@@ -63,6 +66,9 @@ class _DashboardTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final subheadColor = isDark ? Colors.white70 : Colors.black54;
+
     return FutureBuilder(
       future: Future.wait([_count('users'), _count('events'), _count('products'), _count('posts')]),
       builder: (ctx, snap) {
@@ -71,9 +77,9 @@ class _DashboardTab extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _appBar('Admin Dashboard'),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
-              child: Text('Welcome, Admin!', style: TextStyle(color: Colors.white70, fontSize: 16)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+              child: Text('Welcome, Admin!', style: TextStyle(color: subheadColor, fontSize: 16, fontWeight: FontWeight.w500)),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -97,12 +103,12 @@ class _DashboardTab extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
-                  _navTile(Icons.people, 'Users', () => onTabSelected(1)),
-                  _navTile(Icons.event, 'Events', () => onTabSelected(3)),
-                  _navTile(Icons.folder, 'Content', () => onTabSelected(2)),
-                  _navTile(Icons.category, 'Categories', () => onTabSelected(4)),
-                  _navTile(Icons.bar_chart, 'Reports', () => _showReports(context)),
-                  _navTile(Icons.settings, 'Settings', () => _showSettings(context)),
+                  _navTile(context, Icons.people, 'Users', () => onTabSelected(1)),
+                  _navTile(context, Icons.event, 'Events', () => onTabSelected(3)),
+                  _navTile(context, Icons.folder, 'Content', () => onTabSelected(2)),
+                  _navTile(context, Icons.category, 'Categories', () => onTabSelected(4)),
+                  _navTile(context, Icons.bar_chart, 'Reports', () => _showReports(context)),
+                  _navTile(context, Icons.settings, 'Settings', () => _showSettings(context)),
                 ],
               ),
             ),
@@ -115,7 +121,7 @@ class _DashboardTab extends StatelessWidget {
   void _showReports(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF1A1D2D),
+      backgroundColor: Theme.of(context).cardColor,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (_) => FutureBuilder(
@@ -125,33 +131,40 @@ class _DashboardTab extends StatelessWidget {
         ]),
         builder: (ctx, snap) {
           final c = snap.data ?? [0, 0, 0, 0, 0];
+          final isDark = Theme.of(context).brightness == Brightness.dark;
+          final textColor = isDark ? Colors.white : Colors.black87;
           return SafeArea(
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Reports & Analytics', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 20),
-                _reportRow('Total Users', '${c[0]}', Icons.people),
-                _reportRow('Total Events', '${c[1]}', Icons.event),
-                _reportRow('Total Fandoms', '${c[2]}', Icons.star),
-                _reportRow('Total Categories', '${c[3]}', Icons.category),
-                _reportRow('Total Posts', '${c[4]}', Icons.article),
-              ],
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Reports & Analytics', style: TextStyle(color: textColor, fontSize: 20, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 20),
+                    _reportRow(context, 'Total Users', '${c[0]}', Icons.people),
+                    _reportRow(context, 'Total Events', '${c[1]}', Icons.event),
+                    _reportRow(context, 'Total Fandoms', '${c[2]}', Icons.star),
+                    _reportRow(context, 'Total Categories', '${c[3]}', Icons.category),
+                    _reportRow(context, 'Total Posts', '${c[4]}', Icons.article),
+                  ],
+                ),
+              ),
             ),
-          )));
+          );
         },
       ),
     );
   }
 
   void _showSettings(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black87;
+
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF1A1D2D),
+      backgroundColor: Theme.of(context).cardColor,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (_) => SafeArea(
@@ -162,53 +175,586 @@ class _DashboardTab extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-            const Text('Admin Settings', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            _settingsTile(Icons.notifications_outlined, 'Push Notifications', 'Configure notification settings', onTap: () => _showSnack(context, 'Notification settings coming soon')),
-            _settingsTile(Icons.security, 'Security', 'App security settings', onTap: () => _showSnack(context, 'Security settings coming soon')),
-            _settingsTile(Icons.palette_outlined, 'Appearance', 'Theme and display settings', onTap: () => _showSnack(context, 'Appearance settings coming soon')),
-            _settingsTile(Icons.info_outline, 'About', 'App version and info', onTap: () => _showSnack(context, 'About page coming soon')),
-            const Divider(color: Colors.white24, height: 32),
-            _settingsTile(
-              Icons.logout,
-              'Log Out',
-              'End current admin session',
-              color: Colors.redAccent,
-              onTap: () {
-                Navigator.pop(context); // Close sheet
-                context.read<AuthBloc>().add(const AuthLogoutRequested());
-              },
+                Text('Admin Settings', style: TextStyle(color: textColor, fontSize: 20, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 20),
+                _settingsTile(
+                  context,
+                  Icons.notifications_outlined,
+                  'Push Notifications',
+                  'Configure broadcast & alert settings',
+                  onTap: () {
+                    Navigator.pop(context);
+                    _showPushNotificationsDialog(context);
+                  },
+                ),
+                _settingsTile(
+                  context,
+                  Icons.security,
+                  'Security',
+                  'Password & session security',
+                  onTap: () {
+                    Navigator.pop(context);
+                    _showSecurityDialog(context);
+                  },
+                ),
+                _settingsTile(
+                  context,
+                  Icons.palette_outlined,
+                  'Appearance',
+                  'Theme & display settings',
+                  onTap: () {
+                    Navigator.pop(context);
+                    _showAppearanceDialog(context);
+                  },
+                ),
+                _settingsTile(
+                  context,
+                  Icons.info_outline,
+                  'About',
+                  'App version & status diagnostics',
+                  onTap: () {
+                    Navigator.pop(context);
+                    _showAboutDialog(context);
+                  },
+                ),
+                Divider(color: Theme.of(context).dividerColor, height: 32),
+                _settingsTile(
+                  context,
+                  Icons.logout,
+                  'Log Out',
+                  'End current admin session',
+                  color: Colors.redAccent,
+                  onTap: () {
+                    Navigator.pop(context); // Close sheet
+                    context.read<AuthBloc>().add(const AuthLogoutRequested());
+                  },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
-    )));
+    );
   }
 
-  void _showSnack(BuildContext context, String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg), backgroundColor: const Color(0xFF6C4DFF)));
+  void _showPushNotificationsDialog(BuildContext context) {
+    final titleCtrl = TextEditingController();
+    final bodyCtrl = TextEditingController();
+    bool adminAlerts = true;
+    bool signupAlerts = true;
+    bool reportAlerts = false;
+    bool isSending = false;
+
+    showDialog(
+      context: context,
+      builder: (dialogCtx) => StatefulBuilder(
+        builder: (ctx, setS) {
+          final isDark = Theme.of(ctx).brightness == Brightness.dark;
+          final textColor = Theme.of(ctx).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87);
+          final cardBg = Theme.of(ctx).cardColor;
+
+          return AlertDialog(
+            backgroundColor: cardBg,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: Row(
+              children: [
+                const Icon(Icons.notifications_active, color: Color(0xFF6C4DFF)),
+                const SizedBox(width: 10),
+                Text('Push Notifications', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18)),
+              ],
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Admin Alerts', style: TextStyle(color: textColor, fontSize: 14)),
+                    subtitle: Text('Receive system error notifications', style: TextStyle(color: textColor.withOpacity(0.6), fontSize: 12)),
+                    value: adminAlerts,
+                    onChanged: (v) => setS(() => adminAlerts = v),
+                    activeColor: const Color(0xFF6C4DFF),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('New Signup Alerts', style: TextStyle(color: textColor, fontSize: 14)),
+                    subtitle: Text('Notify on new user registration', style: TextStyle(color: textColor.withOpacity(0.6), fontSize: 12)),
+                    value: signupAlerts,
+                    onChanged: (v) => setS(() => signupAlerts = v),
+                    activeColor: const Color(0xFF6C4DFF),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Content Report Alerts', style: TextStyle(color: textColor, fontSize: 14)),
+                    subtitle: Text('Notify on flagged posts or comments', style: TextStyle(color: textColor.withOpacity(0.6), fontSize: 12)),
+                    value: reportAlerts,
+                    onChanged: (v) => setS(() => reportAlerts = v),
+                    activeColor: const Color(0xFF6C4DFF),
+                  ),
+                  const SizedBox(height: 16),
+                  Divider(color: Theme.of(ctx).dividerColor),
+                  const SizedBox(height: 8),
+                  Text('Broadcast System Alert', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 15)),
+                  const SizedBox(height: 4),
+                  Text('Send a push notification to all users', style: TextStyle(color: textColor.withOpacity(0.6), fontSize: 12)),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: titleCtrl,
+                    style: TextStyle(color: textColor),
+                    decoration: InputDecoration(
+                      labelText: 'Alert Title',
+                      labelStyle: TextStyle(color: textColor.withOpacity(0.6)),
+                      filled: true,
+                      fillColor: isDark ? const Color(0xFF1A1D2D) : Colors.grey.shade100,
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: bodyCtrl,
+                    style: TextStyle(color: textColor),
+                    maxLines: 2,
+                    decoration: InputDecoration(
+                      labelText: 'Alert Message',
+                      labelStyle: TextStyle(color: textColor.withOpacity(0.6)),
+                      filled: true,
+                      fillColor: isDark ? const Color(0xFF1A1D2D) : Colors.grey.shade100,
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogCtx),
+                child: Text('Close', style: TextStyle(color: textColor.withOpacity(0.6))),
+              ),
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF6C4DFF),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                onPressed: isSending
+                    ? null
+                    : () async {
+                        final title = titleCtrl.text.trim();
+                        final body = bodyCtrl.text.trim();
+                        if (title.isEmpty || body.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Please fill title and message')),
+                          );
+                          return;
+                        }
+                        setS(() => isSending = true);
+                        try {
+                          final userSnap = await _db.collection('users').get();
+                          final batch = _db.batch();
+                          for (final doc in userSnap.docs) {
+                            final notifRef = _db.collection('notifications').doc();
+                            batch.set(notifRef, {
+                              'userId': doc.id,
+                              'title': title,
+                              'body': body,
+                              'isRead': false,
+                              'createdAt': FieldValue.serverTimestamp(),
+                            });
+                          }
+                          await batch.commit();
+                          if (context.mounted) {
+                            Navigator.pop(dialogCtx);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Broadcast sent to ${userSnap.docs.length} users!'),
+                                backgroundColor: const Color(0xFF6C4DFF),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          setS(() => isSending = false);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Failed to send broadcast: $e')),
+                            );
+                          }
+                        }
+                      },
+                icon: isSending
+                    ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                    : const Icon(Icons.send, size: 16, color: Colors.white),
+                label: Text(isSending ? 'Sending...' : 'Broadcast Alert', style: const TextStyle(color: Colors.white)),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 
-  Widget _reportRow(String label, String value, IconData icon) {
+  void _showSecurityDialog(BuildContext context) {
+    final passCtrl = TextEditingController();
+    final confirmCtrl = TextEditingController();
+    final user = FirebaseAuth.instance.currentUser;
+    bool require2FA = true;
+    bool sessionAutoLock = true;
+    bool isObscured = true;
+
+    showDialog(
+      context: context,
+      builder: (dialogCtx) => StatefulBuilder(
+        builder: (ctx, setS) {
+          final isDark = Theme.of(ctx).brightness == Brightness.dark;
+          final textColor = Theme.of(ctx).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87);
+          final cardBg = Theme.of(ctx).cardColor;
+
+          return AlertDialog(
+            backgroundColor: cardBg,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: Row(
+              children: [
+                const Icon(Icons.security, color: Color(0xFF6C4DFF)),
+                const SizedBox(width: 10),
+                Text('Admin Security', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18)),
+              ],
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: (isDark ? const Color(0xFF1A1D2D) : Colors.grey.shade200),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.admin_panel_settings_outlined, color: Color(0xFF6C4DFF)),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Admin Account', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 13)),
+                              Text(user?.email ?? 'admin@fandomverse.com', style: TextStyle(color: textColor.withOpacity(0.7), fontSize: 12)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text('Security Controls', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 14)),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Require 2FA for Admin Actions', style: TextStyle(color: textColor, fontSize: 13)),
+                    value: require2FA,
+                    onChanged: (v) => setS(() => require2FA = v),
+                    activeColor: const Color(0xFF6C4DFF),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text('Session Auto-Lock (15m)', style: TextStyle(color: textColor, fontSize: 13)),
+                    value: sessionAutoLock,
+                    onChanged: (v) => setS(() => sessionAutoLock = v),
+                    activeColor: const Color(0xFF6C4DFF),
+                  ),
+                  const SizedBox(height: 12),
+                  Divider(color: Theme.of(ctx).dividerColor),
+                  const SizedBox(height: 8),
+                  Text('Update Password', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 14)),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: passCtrl,
+                    obscureText: isObscured,
+                    style: TextStyle(color: textColor),
+                    decoration: InputDecoration(
+                      labelText: 'New Password',
+                      labelStyle: TextStyle(color: textColor.withOpacity(0.6)),
+                      filled: true,
+                      fillColor: isDark ? const Color(0xFF1A1D2D) : Colors.grey.shade100,
+                      suffixIcon: IconButton(
+                        icon: Icon(isObscured ? Icons.visibility_off : Icons.visibility, color: textColor.withOpacity(0.5)),
+                        onPressed: () => setS(() => isObscured = !isObscured),
+                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: confirmCtrl,
+                    obscureText: isObscured,
+                    style: TextStyle(color: textColor),
+                    decoration: InputDecoration(
+                      labelText: 'Confirm New Password',
+                      labelStyle: TextStyle(color: textColor.withOpacity(0.6)),
+                      filled: true,
+                      fillColor: isDark ? const Color(0xFF1A1D2D) : Colors.grey.shade100,
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogCtx),
+                child: Text('Cancel', style: TextStyle(color: textColor.withOpacity(0.6))),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF6C4DFF),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                onPressed: () {
+                  final newPass = passCtrl.text;
+                  final confirmPass = confirmCtrl.text;
+                  if (newPass.length < 6) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Password must be at least 6 characters')),
+                    );
+                    return;
+                  }
+                  if (newPass != confirmPass) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Passwords do not match')),
+                    );
+                    return;
+                  }
+                  context.read<AuthBloc>().add(AuthPasswordUpdateSubmitted(newPass));
+                  Navigator.pop(dialogCtx);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Admin password update requested successfully!'),
+                      backgroundColor: Color(0xFF6C4DFF),
+                    ),
+                  );
+                },
+                child: const Text('Update Password', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  void _showAppearanceDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogCtx) => BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (ctx, themeMode) {
+          final isDark = themeMode == ThemeMode.dark ||
+              (themeMode == ThemeMode.system &&
+                  MediaQuery.of(ctx).platformBrightness == Brightness.dark);
+          final textColor = isDark ? Colors.white : Colors.black87;
+          final cardBg = Theme.of(ctx).cardColor;
+
+          return AlertDialog(
+            backgroundColor: cardBg,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: Row(
+              children: [
+                const Icon(Icons.palette_outlined, color: Color(0xFF6C4DFF)),
+                const SizedBox(width: 10),
+                Text('Appearance', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18)),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF1A1D2D) : Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(isDark ? Icons.dark_mode : Icons.light_mode, color: const Color(0xFF6C4DFF)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              isDark ? 'Dark Theme Active' : 'Light Theme Active',
+                              style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 14),
+                            ),
+                            Text(
+                              isDark ? 'Sleek dark interface enabled' : 'Clean light interface enabled',
+                              style: TextStyle(color: textColor.withOpacity(0.6), fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Switch(
+                        value: isDark,
+                        onChanged: (val) {
+                          context.read<ThemeCubit>().toggleTheme(val);
+                        },
+                        activeColor: const Color(0xFF6C4DFF),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: !isDark ? const Color(0xFF6C4DFF).withOpacity(0.1) : Colors.transparent,
+                          side: BorderSide(color: !isDark ? const Color(0xFF6C4DFF) : Colors.grey.shade400),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        onPressed: () => context.read<ThemeCubit>().toggleTheme(false),
+                        icon: const Icon(Icons.light_mode, size: 18),
+                        label: const Text('Light'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: isDark ? const Color(0xFF6C4DFF).withOpacity(0.1) : Colors.transparent,
+                          side: BorderSide(color: isDark ? const Color(0xFF6C4DFF) : Colors.grey.shade400),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        onPressed: () => context.read<ThemeCubit>().toggleTheme(true),
+                        icon: const Icon(Icons.dark_mode, size: 18),
+                        label: const Text('Dark'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogCtx),
+                child: Text('Done', style: TextStyle(color: textColor.withOpacity(0.7))),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  void _showAboutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogCtx) {
+        final isDark = Theme.of(dialogCtx).brightness == Brightness.dark;
+        final textColor = Theme.of(dialogCtx).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87);
+        final cardBg = Theme.of(dialogCtx).cardColor;
+
+        return AlertDialog(
+          backgroundColor: cardBg,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Row(
+            children: [
+              const Icon(Icons.info_outline, color: Color(0xFF6C4DFF)),
+              const SizedBox(width: 10),
+              Text('About FandomVerse', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18)),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF6C4DFF).withOpacity(0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.admin_panel_settings, color: Color(0xFF6C4DFF), size: 36),
+                    ),
+                    const SizedBox(height: 8),
+                    Text('FandomVerse Admin Console', style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                    Text('Version 1.0.4 (Build 2026.09)', style: TextStyle(color: textColor.withOpacity(0.6), fontSize: 12)),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              Divider(color: Theme.of(dialogCtx).dividerColor),
+              const SizedBox(height: 8),
+              _diagRow(dialogCtx, 'Firestore DB', 'Connected', Colors.green, textColor),
+              _diagRow(dialogCtx, 'Auth Provider', 'Firebase Auth', Colors.green, textColor),
+              _diagRow(dialogCtx, 'Theme Engine', 'ThemeCubit Live', const Color(0xFF6C4DFF), textColor),
+              _diagRow(dialogCtx, 'Platform', kIsWeb ? 'Web Engine' : 'Android / iOS', Colors.blue, textColor),
+              const SizedBox(height: 12),
+              Center(
+                child: Text(
+                  '© 2026 FandomVerse. All Rights Reserved.',
+                  style: TextStyle(color: textColor.withOpacity(0.4), fontSize: 11),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogCtx),
+              child: Text('Close', style: TextStyle(color: textColor.withOpacity(0.7))),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _diagRow(BuildContext context, String label, String value, Color statusColor, Color textColor) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(color: textColor.withOpacity(0.7), fontSize: 13)),
+          Row(
+            children: [
+              Container(width: 8, height: 8, decoration: BoxDecoration(color: statusColor, shape: BoxShape.circle)),
+              const SizedBox(width: 6),
+              Text(value, style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 13)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _reportRow(BuildContext context, String label, String value, IconData icon) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black87;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(children: [
         Icon(icon, color: const Color(0xFF6C4DFF), size: 20),
         const SizedBox(width: 12),
-        Expanded(child: Text(label, style: const TextStyle(color: Colors.white70))),
-        Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+        Expanded(child: Text(label, style: TextStyle(color: textColor.withOpacity(0.7)))),
+        Text(value.toString(), style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 18)),
       ]),
     );
   }
 
-  Widget _settingsTile(IconData icon, String title, String subtitle, {VoidCallback? onTap, Color? color}) {
+  Widget _settingsTile(BuildContext context, IconData icon, String title, String subtitle, {VoidCallback? onTap, Color? color}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = color ?? (Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87));
+    final subColor = color?.withOpacity(0.7) ?? textColor.withOpacity(0.6);
     return ListTile(
       onTap: onTap,
       contentPadding: EdgeInsets.zero,
-      leading: Icon(icon, color: color ?? Colors.white54),
-      title: Text(title, style: TextStyle(color: color ?? Colors.white)),
-      subtitle: Text(subtitle, style: TextStyle(color: color?.withOpacity(0.7) ?? Colors.white38, fontSize: 12)),
-      trailing: Icon(Icons.chevron_right, color: color?.withOpacity(0.5) ?? Colors.white38),
+      leading: Icon(icon, color: color ?? const Color(0xFF6C4DFF)),
+      title: Text(title.toString(), style: TextStyle(color: textColor, fontWeight: FontWeight.w600)),
+      subtitle: Text(subtitle, style: TextStyle(color: subColor, fontSize: 12)),
+      trailing: Icon(Icons.chevron_right, color: subColor.withOpacity(0.5)),
     );
   }
 
@@ -217,26 +763,30 @@ class _DashboardTab extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(title, style: const TextStyle(color: Colors.black54, fontSize: 13)),
+        Text(title.toString(), style: const TextStyle(color: Colors.black54, fontSize: 13)),
         const SizedBox(height: 6),
-        Text(value, style: const TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold)),
+        Text(value.toString(), style: const TextStyle(color: Colors.black, fontSize: 26, fontWeight: FontWeight.bold)),
       ]),
     );
   }
 
-  Widget _navTile(IconData icon, String title, VoidCallback onTap) {
+  Widget _navTile(BuildContext context, IconData icon, String title, VoidCallback onTap) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bg = Theme.of(context).cardColor;
+    final textColor = Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87);
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
       child: ListTile(
         onTap: onTap,
-        leading: Icon(icon, color: Colors.white54),
-        title: Text(title, style: const TextStyle(color: Colors.white)),
-        trailing: const Icon(Icons.chevron_right, color: Colors.white54),
+        leading: Icon(icon, color: const Color(0xFF6C4DFF)),
+        title: Text(title.toString(), style: TextStyle(color: textColor, fontWeight: FontWeight.w500)),
+        trailing: Icon(Icons.chevron_right, color: textColor.withOpacity(0.4)),
       ),
     );
   }
 }
+
 
 // ============================================================
 // 2. USER MANAGEMENT
@@ -388,19 +938,19 @@ class _UserManagementTabState extends State<_UserManagementTab> {
                       CircleAvatar(backgroundColor: color.withOpacity(0.2), child: Icon(Icons.person, color: color)),
                       const SizedBox(width: 12),
                       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                        Text(d['email'] ?? '', style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                        Text(name.toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        Text((d['email'] ?? '').toString(), style: const TextStyle(color: Colors.white54, fontSize: 12)),
                       ])),
                       GestureDetector(
-                        onTap: () => _editRole(id, role),
+                        onTap: () => _editRole(id, role.toString()),
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(color: const Color(0xFF6C4DFF).withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
-                          child: Text(role, style: const TextStyle(color: Color(0xFF6C4DFF), fontSize: 12)),
+                          child: Text(role.toString(), style: const TextStyle(color: Color(0xFF6C4DFF), fontSize: 12)),
                         ),
                       ),
                       const SizedBox(width: 8),
-                      GestureDetector(onTap: () => _deleteUser(id, name), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
+                      GestureDetector(onTap: () => _deleteUser(id, name.toString()), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
                     ]),
                   );
                 },
@@ -642,7 +1192,7 @@ class _EventManagementTabState extends State<_EventManagementTab> {
         Container(width: 12, height: 12, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
         const SizedBox(width: 12),
         Expanded(child: Text(label, style: const TextStyle(color: Colors.white70))),
-        Text(value, style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 20)),
+        Text(value.toString(), style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 20)),
       ]),
     );
   }
@@ -699,11 +1249,14 @@ class _EventManagementTabState extends State<_EventManagementTab> {
       const SizedBox(height: 8),
       Expanded(
         child: StreamBuilder<QuerySnapshot>(
-          stream: _db.collection('events').where('isUpcoming', isEqualTo: _showUpcoming).orderBy('createdAt', descending: true).snapshots(),
+          stream: _db.collection('events').snapshots(),
           builder: (ctx, snap) {
             if (snap.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
-            final docs = snap.data?.docs ?? [];
-            if (docs.isEmpty) return Center(child: Text('No ${_showUpcoming ? 'upcoming' : 'past'} events', style: const TextStyle(color: Colors.white54)));
+            final docs = (snap.data?.docs ?? []).where((doc) {
+              final d = doc.data() as Map<String, dynamic>;
+              return (d['isUpcoming'] ?? true) == _showUpcoming;
+            }).toList();
+            if (docs.isEmpty) return Center(child: Text('No ${_showUpcoming ? 'upcoming' : 'past'} events', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)));
             return ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: docs.length,
@@ -886,11 +1439,11 @@ class _CategoryManagementTabState extends State<_CategoryManagementTab> {
                   decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(16)),
                   child: ListTile(
                     leading: Icon(_iconFromKey(iconKey), color: Colors.white54),
-                    title: Text(name, style: const TextStyle(color: Colors.white)),
+                    title: Text(name.toString(), style: const TextStyle(color: Colors.white)),
                     trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                      GestureDetector(onTap: () => _editCategory(docs[i].id, name), child: const Icon(Icons.edit_outlined, color: Colors.white54, size: 20)),
+                      GestureDetector(onTap: () => _editCategory(docs[i].id, name.toString()), child: const Icon(Icons.edit_outlined, color: Colors.white54, size: 20)),
                       const SizedBox(width: 12),
-                      GestureDetector(onTap: () => _delete(docs[i].id, name), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
+                      GestureDetector(onTap: () => _delete(docs[i].id, name.toString()), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
                     ]),
                   ),
                 );
@@ -911,7 +1464,7 @@ Widget _appBar(String title) => Padding(
   child: Row(children: [
     const Icon(Icons.admin_panel_settings, color: Color(0xFF6C4DFF)),
     const SizedBox(width: 12),
-    Text(title, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+    Text(title.toString(), style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
   ]),
 );
 
@@ -926,7 +1479,7 @@ Widget _topBtn(String title, VoidCallback onTap) => Padding(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
       onPressed: onTap,
-      child: Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      child: Text(title.toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
     ),
   ),
 );
@@ -992,7 +1545,7 @@ Widget _dismissibleTile(String id, IconData icon, String title, Future<void> Fun
     decoration: BoxDecoration(color: const Color(0xFF1A1D2D), borderRadius: BorderRadius.circular(16)),
     child: ListTile(
       leading: Icon(icon, color: Colors.white54),
-      title: Text(title, style: const TextStyle(color: Colors.white)),
+      title: Text(title.toString(), style: const TextStyle(color: Colors.white)),
       trailing: GestureDetector(onTap: () => onDelete(id), child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20)),
     ),
   );

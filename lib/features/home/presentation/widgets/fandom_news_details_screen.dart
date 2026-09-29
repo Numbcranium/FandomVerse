@@ -18,11 +18,11 @@ class FandomNewsDetailsScreen extends StatelessWidget {
     final newsService = FandomNewsService();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0D0C24),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0D0C24),
-        foregroundColor: Colors.white,
-        title: const Text('News'),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        iconTheme: IconThemeData(color: Theme.of(context).iconTheme.color),
+        title: Text('News', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color)),
       ),
       body: FutureBuilder<FandomNews?>(
         future: newsService.getNewsById(
@@ -32,7 +32,7 @@ class FandomNewsDetailsScreen extends StatelessWidget {
         builder: (context, snapshot) {
           // Loading
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -42,8 +42,8 @@ class FandomNewsDetailsScreen extends StatelessWidget {
             return Center(
               child: Text(
                 'Something went wrong.',
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
             );
@@ -53,11 +53,11 @@ class FandomNewsDetailsScreen extends StatelessWidget {
           final news = snapshot.data;
 
           if (news == null) {
-            return const Center(
+            return Center(
               child: Text(
                 'News not found.',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                   fontSize: 16,
                 ),
               ),
@@ -85,9 +85,9 @@ class FandomNewsDetailsScreen extends StatelessWidget {
                       width: double.infinity,
                       height: 240,
                       color: const Color(0xFF292745),
-                      child: const Icon(
+                      child: Icon(
                         Icons.image_not_supported_outlined,
-                        color: Colors.white54,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                         size: 50,
                       ),
                     );
@@ -103,55 +103,55 @@ class FandomNewsDetailsScreen extends StatelessWidget {
                       // Category
                       Text(
                         news.category,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Color(0xFF8FA8F5),
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
 
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
 
                       // Title
                       Text(
                         news.title,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
 
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
 
                       // Date
                       Text(
                         _formatDate(news.publishedAt),
-                        style: const TextStyle(
-                          color: Colors.white54,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
                           fontSize: 13,
                         ),
                       ),
 
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
 
                       // Short description
                       Text(
                         news.description,
-                        style: const TextStyle(
-                          color: Colors.white70,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
 
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20),
 
                       // Full news content
                       Text(
                         news.content,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontSize: 16,
                           height: 1.7,
                         ),

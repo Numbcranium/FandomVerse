@@ -20,8 +20,20 @@ class AppDialog {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
+        backgroundColor: Theme.of(context).cardColor,
+        title: Text(
+          title,
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyLarge?.color,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        content: Text(
+          message,
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyMedium?.color,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -50,8 +62,20 @@ class AppDialog {
     return showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
+        backgroundColor: Theme.of(context).cardColor,
+        title: Text(
+          title,
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyLarge?.color,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        content: Text(
+          message,
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyMedium?.color,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -71,12 +95,20 @@ class AppDialog {
       builder: (context) => PopScope(
         canPop: false,
         child: AlertDialog(
+          backgroundColor: Theme.of(context).cardColor,
           content: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               const CircularProgressIndicator(strokeWidth: 2.5),
-              const SizedBox(width: 20),
-              Flexible(child: Text(message ?? 'Please wait…')),
+              SizedBox(width: 20),
+              Flexible(
+                child: Text(
+                  message ?? 'Please wait…',
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

@@ -19,7 +19,7 @@ class FandomFollowButton extends StatelessWidget {
 
     // User is not logged in
     if (user == null) {
-      return const SizedBox();
+      return SizedBox();
     }
 
     final userId = user.uid;

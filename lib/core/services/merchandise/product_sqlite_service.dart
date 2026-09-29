@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:techwiz7_starter/models/merchandise/product_model.dart';
 
@@ -5,6 +6,7 @@ import 'db_helper.dart';
 
 class ProductSqliteService {
   Future<List<ProductModel>> getProducts() async {
+    if (kIsWeb) return [];
     final db = await DbHelper.instance.database;
 
     final result = await db.query('products');
@@ -19,6 +21,7 @@ class ProductSqliteService {
   Future<ProductModel?> getProductById(
       String productId,
       ) async {
+    if (kIsWeb) return null;
     final db = await DbHelper.instance.database;
 
     final result = await db.query(
@@ -38,6 +41,7 @@ class ProductSqliteService {
   Future<void> saveProduct(
       ProductModel product,
       ) async {
+    if (kIsWeb) return;
     final db = await DbHelper.instance.database;
 
     await db.insert(
@@ -50,6 +54,7 @@ class ProductSqliteService {
   Future<void> saveProducts(
       List<ProductModel> products,
       ) async {
+    if (kIsWeb) return;
     final db = await DbHelper.instance.database;
 
     final batch = db.batch();
@@ -68,6 +73,7 @@ class ProductSqliteService {
   Future<void> deleteProduct(
       String productId,
       ) async {
+    if (kIsWeb) return;
     final db = await DbHelper.instance.database;
 
     await db.delete(
@@ -78,6 +84,7 @@ class ProductSqliteService {
   }
 
   Future<void> clearProducts() async {
+    if (kIsWeb) return;
     final db = await DbHelper.instance.database;
 
     await db.delete('products');

@@ -138,7 +138,7 @@ class _HomesliderScreenState extends State<HomesliderScreen> {
           // SPACE BETWEEN CAROUSEL AND DOTS
           // ====================================================
 
-          const SizedBox(
+          SizedBox(
             height: 16,
           ),
 

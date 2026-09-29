@@ -11,18 +11,18 @@ class TriviaCard extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-
       margin: const EdgeInsets.symmetric(horizontal: 6),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(22),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           colors: [
-            Color(0xFFE21111),
-            Color(0xFF192A56),
+            const Color(0xFFE21111).withOpacity(0.3), // Toned down, gentle red
+            Theme.of(context).cardColor, // Blends into the card background
           ],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          stops: const [0.1, 0.9],
         ),
       ),
       child: Stack(
@@ -51,26 +51,26 @@ class TriviaCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min, // Prevents column from expanding vertically infinitely
                     children: [
-                      const Text(
+                      Text(
                         'Trivia Pop',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 3),
-                      const Text(
+                      SizedBox(height: 3),
+                      Text(
                         'Test your knowledge\nHow well do you know your fandoms??',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
                           height: 1.3,
                         ),
                         softWrap: true, // Allows natural text wrapping
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       ElevatedButton(
                         onPressed: () {
                           context.go(RouteNames.trivia);
@@ -89,7 +89,7 @@ class TriviaCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Play Now',
                           style: TextStyle(
                             fontSize: 10,

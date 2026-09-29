@@ -13,6 +13,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthRegisterSubmitted>(_onRegisterSubmitted);
     on<AuthLogoutRequested>(_onLogoutRequested);
     on<AuthPasswordResetSubmitted>(_onPasswordResetSubmitted);
+    on<AuthPasswordUpdateSubmitted>(_onPasswordUpdateSubmitted);
+    on<AuthAccountDeleted>(_onAccountDeleted);
     on<AuthErrorCleared>(_onErrorCleared);
   }
 
@@ -111,6 +113,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(
         state.copyWith(
           status: AuthStatus.unauthenticated,
+          errorMessage: AppException.from(e).message,
+        ),
+      );
+    }
+  }
+
+  Future<void> _onPasswordUpdateSubmitted(
+    AuthPasswordUpdateSubmitted event,
+    Emitter<AuthState> emit,
+  ) async {
+    try {
+      await _authRepository.updatePassword(event.newPassword);
+    } catch (e) {
+      emit(state.copyWith(errorMessage: AppException.from(e).message));
+    }
+  }
+
+  Future<void> _onAccountDeleted(
+    AuthAccountDeleted event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(state.copyWith(status: AuthStatus.authenticating, clearError: true));
+    try {
+      await _authRepository.deleteAccount();
+      // The authStateChanges stream handles switching to unauthenticated state.
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: AuthStatus.authenticated, // revert auth state
           errorMessage: AppException.from(e).message,
         ),
       );

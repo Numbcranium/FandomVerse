@@ -17,21 +17,21 @@ class FandomVideoScreen extends StatelessWidget {
     final videoService = FandomVideoService();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0B0A24),
+      backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0B0A24),
+        backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
-        title: const Text(
+        title: Text(
           'Videos',
           style: TextStyle(
-            color: Colors.white,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -41,17 +41,17 @@ class FandomVideoScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
 
           if (snapshot.hasError) {
-            return const Center(
+            return Center(
               child: Text(
                 'Unable to load video',
                 style: TextStyle(
-                  color: Colors.white70,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
             );
@@ -60,11 +60,11 @@ class FandomVideoScreen extends StatelessWidget {
           final videos = snapshot.data ?? [];
 
           if (videos.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'No video available',
                 style: TextStyle(
-                  color: Colors.white54,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
             );

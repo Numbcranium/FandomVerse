@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:techwiz7_starter/models/merchandise/wishlist_item_model.dart';
 
@@ -7,6 +7,7 @@ import 'db_helper.dart';
 
 class WishlistSqliteService {
   Future<List<WishlistItemModel>> getWishlist() async {
+    if (kIsWeb) return [];
     final db = await DbHelper.instance.database;
 
     final result = await db.query('wishlist');
@@ -27,6 +28,7 @@ class WishlistSqliteService {
   Future<void> saveWishlistItem(
       WishlistItemModel item,
       ) async {
+    if (kIsWeb) return;
     final db = await DbHelper.instance.database;
 
     await db.insert(
@@ -45,6 +47,7 @@ class WishlistSqliteService {
   Future<void> deleteWishlistItem(
       String itemId,
       ) async {
+    if (kIsWeb) return;
     final db = await DbHelper.instance.database;
 
     await db.delete(
@@ -55,6 +58,7 @@ class WishlistSqliteService {
   }
 
   Future<void> clearWishlist() async {
+    if (kIsWeb) return;
     final db = await DbHelper.instance.database;
 
     await db.delete('wishlist');

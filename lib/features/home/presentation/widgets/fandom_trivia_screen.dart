@@ -76,24 +76,24 @@ class _FandomTriviaScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0B0A24),
+      backgroundColor: Theme.of(context).cardColor,
 
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0B0A24),
+        backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
 
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
 
-        title: const Text(
+        title: Text(
           'Trivia',
           style: TextStyle(
-            color: Colors.white,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -105,17 +105,17 @@ class _FandomTriviaScreenState
         builder: (context, snapshot) {
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
 
           if (snapshot.hasError) {
-            return const Center(
+            return Center(
               child: Text(
                 'Unable to load trivia',
                 style: TextStyle(
-                  color: Colors.white70,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
             );
@@ -124,11 +124,11 @@ class _FandomTriviaScreenState
           final trivia = snapshot.data ?? [];
 
           if (trivia.length < 5) {
-            return const Center(
+            return Center(
               child: Text(
                 'Trivia is not available yet.',
                 style: TextStyle(
-                  color: Colors.white54,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
             );
@@ -144,25 +144,25 @@ class _FandomTriviaScreenState
               children: [
                 Text(
                   'Question ${currentQuestion + 1} of 5',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Color(0xFF8FA8F5),
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
 
                 Text(
                   question.question,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
 
-                const SizedBox(height: 30),
+                SizedBox(height: 30),
 
                 ...question.options.map(
                       (option) {
@@ -182,7 +182,7 @@ class _FandomTriviaScreenState
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? const Color(0xFF5865D8)
-                                : const Color(0xFF17163D),
+                                : Theme.of(context).cardColor,
                             borderRadius:
                             BorderRadius.circular(12),
                             border: Border.all(
@@ -193,8 +193,8 @@ class _FandomTriviaScreenState
                           ),
                           child: Text(
                             option,
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
                               fontSize: 15,
                             ),
                           ),

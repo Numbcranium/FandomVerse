@@ -72,7 +72,7 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -92,7 +92,7 @@ class _IntroScreenState extends State<IntroScreen> {
               child: TextButton(
                 onPressed: _advance,
                 style: TextButton.styleFrom(foregroundColor: Colors.white),
-                child: const Text('Skip'),
+                child: Text('Skip'),
               ),
             ),
           ),

@@ -63,11 +63,11 @@ class EventCard extends StatelessWidget {
                     errorBuilder: (_, __, ___) {
                       return Container(
                         height: 185,
-                        color: AppColors.surfaceDarkElevated,
-                        child: const Center(
+                        color: Theme.of(context).dialogBackgroundColor,
+                        child: Center(
                           child: Icon(
                             Icons.image_outlined,
-                            color: AppColors.textSecondaryDark,
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
                             size: 40,
                           ),
                         ),
@@ -93,7 +93,7 @@ class EventCard extends StatelessWidget {
                     child: Text(
                       event.category,
                       style: AppTextStyles.caption.copyWith(
-                        color: AppColors.textPrimaryDark,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -105,18 +105,18 @@ class EventCard extends StatelessWidget {
                   right: AppConstants.spaceSm,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.backgroundDark.withValues(
+                      color: Theme.of(context).scaffoldBackgroundColor.withValues(
                         alpha: 0.75,
                       ),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
                       onPressed: () {},
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.favorite_border_rounded,
                         size: 20,
                       ),
-                      color: AppColors.textPrimaryDark,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                 ),
@@ -134,62 +134,62 @@ class EventCard extends StatelessWidget {
                     event.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.titleMedium,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
 
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
 
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.calendar_today_outlined,
                         size: 15,
                         color: AppColors.primaryMuted,
                       ),
-                      const SizedBox(width: 7),
+                      SizedBox(width: 7),
                       Expanded(
                         child: Text(
                           _formatDate(event.date),
-                          style: AppTextStyles.bodySmall,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
                     ],
                   ),
 
-                  const SizedBox(height: 7),
+                  SizedBox(height: 7),
 
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.location_on_outlined,
                         size: 16,
                         color: AppColors.primaryMuted,
                       ),
-                      const SizedBox(width: 7),
+                      SizedBox(width: 7),
                       Expanded(
                         child: Text(
                           event.locationName,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: AppTextStyles.bodySmall,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
                     ],
                   ),
 
-                  const SizedBox(height: 7),
+                  SizedBox(height: 7),
 
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.access_time_rounded,
                         size: 16,
                         color: AppColors.primaryMuted,
                       ),
-                      const SizedBox(width: 7),
+                      SizedBox(width: 7),
                       Text(
                         event.time,
-                        style: AppTextStyles.bodySmall,
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
                   ),

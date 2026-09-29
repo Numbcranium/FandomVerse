@@ -78,30 +78,30 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0B0A25),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       // ==========================================
       // APP BAR
       // ==========================================
 
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0B0A25),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
 
         leading: IconButton(
           onPressed: () {
             context.pop();
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
           ),
         ),
 
-        title: const Text(
+        title: Text(
           'Search',
           style: TextStyle(
-            color: Colors.white,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -124,8 +124,8 @@ class _SearchScreenState extends State<SearchScreen> {
             TextField(
               controller: _searchController,
 
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge?.color,
               ),
 
               // Show search button on keyboard
@@ -148,13 +148,13 @@ class _SearchScreenState extends State<SearchScreen> {
                 hintText:
                 'Search fandoms, anime, events, movies...',
 
-                hintStyle: const TextStyle(
-                  color: Colors.white54,
+                hintStyle: TextStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
 
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   Icons.search,
-                  color: Colors.white70,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
 
                 // Clear button
@@ -167,16 +167,16 @@ class _SearchScreenState extends State<SearchScreen> {
                       searchText = '';
                     });
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.close,
-                    color: Colors.white54,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
                   ),
                 )
                     : null,
 
                 filled: true,
 
-                fillColor: const Color(0xFF17163D),
+                fillColor: Theme.of(context).cardColor,
 
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
@@ -185,7 +185,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // ======================================
             // NOTHING SEARCHED YET
@@ -193,12 +193,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
             if (searchText.isEmpty)
 
-              const Expanded(
+              Expanded(
                 child: Center(
                   child: Text(
                     'Search for a fandom',
                     style: TextStyle(
-                      color: Colors.white54,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                       fontSize: 16,
                     ),
                   ),
@@ -224,7 +224,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
                     if (snapshot.connectionState ==
                         ConnectionState.waiting) {
-                      return const Center(
+                      return Center(
                         child: CircularProgressIndicator(),
                       );
                     }
@@ -238,8 +238,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         child: Text(
                           'Something went wrong:\n${snapshot.error}',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                         ),
                       );
@@ -280,11 +280,11 @@ class _SearchScreenState extends State<SearchScreen> {
                     // --------------------------------
 
                     if (results.isEmpty) {
-                      return const Center(
+                      return Center(
                         child: Text(
                           'No fandoms found',
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: Theme.of(context).textTheme.bodyMedium?.color,
                             fontSize: 16,
                           ),
                         ),
@@ -335,7 +335,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             padding: const EdgeInsets.all(10),
 
                             decoration: BoxDecoration(
-                              color: const Color(0xFF17163D),
+                              color: Theme.of(context).cardColor,
 
                               borderRadius:
                               BorderRadius.circular(14),
@@ -374,18 +374,17 @@ class _SearchScreenState extends State<SearchScreen> {
                                         color:
                                         Colors.grey.shade800,
 
-                                        child: const Icon(
+                                        child: Icon(
                                           Icons
                                               .image_not_supported,
-                                          color:
-                                          Colors.white54,
+                                          color: Theme.of(context).textTheme.bodyMedium?.color,
                                         ),
                                       );
                                     },
                                   ),
                                 ),
 
-                                const SizedBox(width: 14),
+                                SizedBox(width: 14),
 
 
                                 // NAME + CATEGORY
@@ -402,21 +401,21 @@ class _SearchScreenState extends State<SearchScreen> {
                                         name,
 
                                         style:
-                                        const TextStyle(
-                                          color: Colors.white,
+                                        TextStyle(
+                                          color: Theme.of(context).textTheme.bodyLarge?.color,
                                           fontSize: 17,
                                           fontWeight:
                                           FontWeight.bold,
                                         ),
                                       ),
 
-                                      const SizedBox(height: 5),
+                                      SizedBox(height: 5),
 
                                       Text(
                                         category,
 
                                         style:
-                                        const TextStyle(
+                                        TextStyle(
                                           color: Colors.white60,
                                           fontSize: 13,
                                         ),
@@ -425,9 +424,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                   ),
                                 ),
 
-                                const Icon(
+                                Icon(
                                   Icons.chevron_right,
-                                  color: Colors.white54,
+                                  color: Theme.of(context).textTheme.bodyMedium?.color,
                                 ),
                               ],
                             ),
